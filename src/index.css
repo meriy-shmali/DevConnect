@@ -5,10 +5,37 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@font-face {
+  font-family: 'Cairo';
+  src: url('src\assets\Fonts\Cairo\static\Cairo-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Cairo';
+  src: url('src\assets\Fonts\Cairo\static\Cairo-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('src\assets\Fonts\Roboto\static\Roboto_Condensed-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('src\assets\Fonts\Roboto\static\Roboto_Condensed-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
 @layer utilities {
   .bg-gradient-background {
     background: linear-gradient(140deg, #416080 0%, #675593 17%, #791A78 44%, #943B53 64%, #897C71 100%);
   }
+}
+html{
+  font-family:'Roboto',sans-serif;
+}
+html[lang='ar']{
+  font-family: 'Cairo',sans-serif;
 }
 @theme inline {
   /*-project color-*/
