@@ -1,0 +1,42 @@
+import React from 'react'
+import Buttons from './ui/ButtonGroup'
+
+function Welcomepage() {
+  return (
+    <>
+      <div className='bg-gradient-background w-screen h-screen p-5'>
+        <div className='w-fit ml-4 pt-4'>
+          <Buttons type='translate' />
+        </div>
+        <div className='flex flex-col-reverse md:flex-row md:space-x-20 space-y-10 md:space-y-0'>
+
+          <div className='mt-4 md:mt-40 w-[450px] ml-36 md:w-[800px] px-5 md:ml-16'>
+            <img 
+              src='/src/images/welcome.png' 
+            />
+          </div>
+
+          <div className='text-white flex flex-col mt-10  space-y-10'>
+            <div className='font-bold leading-28 text-center md:text-left'>
+              <p className='text-6xl md:text-[96px]'>welcome to</p>
+              <span className='text-7xl md:text-[128px]'>DevConnect</span>
+            </div>
+
+            <div className='text-lg md:text-[28px] md:w-[700px] font-extralight text-center md:text-center px-5 md:px-0'>
+              join thousands of programmers, share your projects and learn from the experiences of others.
+            </div>
+
+            <div className='flex justify-center md:justify-center'>
+              <Buttons type='start now' />
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </>
+  )
+}
+
+export default Welcomepage

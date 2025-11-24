@@ -54,6 +54,7 @@ html[lang='ar']{
   --color-ai-assistant:#2B3EAC;
   --color-light-placeholder:#D9D9D9;
   --color-text-placeholder:#959595;
+  --color-hover-startnow:#547DF1;
   --color-dark-main-background:#1E1E1E;
   --color-dark-text:#ffffff;
   --color-dark-placeholder-background:#ffffff;
@@ -98,6 +99,12 @@ html[lang='ar']{
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100%;
+}
+
 
 :root {
  
