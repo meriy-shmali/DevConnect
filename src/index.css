@@ -55,6 +55,7 @@ html[lang='ar']{
   --color-light-placeholder:#D9D9D9;
   --color-text-placeholder:#959595;
   --color-hover-startnow:#547DF1;
+  --color-hover-purple:#C361C2;
   --color-dark-main-background:#1E1E1E;
   --color-dark-text:#ffffff;
   --color-dark-placeholder-background:#ffffff;
@@ -107,7 +108,6 @@ html, body, #root {
 
 
 :root {
- 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
