@@ -5,15 +5,18 @@ import { MdOutlineGTranslate } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import { FaRobot } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 const Buttons = ({ type }) => {
+  const { i18n,t } = useTranslation();
   if (type === "start now") {
+    
     return (
       <Button
         className='bg-blue-button text-text-button md:text-[25px] hover:bg-hover-startnow md:p-6 md:h-10 md:px-6 '
         variant='secondary'
         /*size='lg'*/
       >
-        start now <FaArrowRightLong className='text-text-button' />
+        {t('start')}<FaArrowRightLong className='text-text-button' />
       </Button>
     );
   }
@@ -23,10 +26,11 @@ const Buttons = ({ type }) => {
       <Button
         variant='link'
         className='text-text-button text-2xl'
+        onClick={() => i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")}
         
       >
         <MdOutlineGTranslate className='text-text-button  size-8' />
-        Translate
+        {t("translate")}
       </Button>
     );
   }
@@ -34,14 +38,14 @@ const Buttons = ({ type }) => {
     return(
       <Button variant='secondary'
       className='bg-follow-button text-text-button text-[24px] hover:bg-hover-purple'
-      size='sm'>Follow</Button>
+      size='sm'>{t("follow")}</Button>
     )
   }
    if(type=='edit'){
     return(
       <Button variant='secondary'
       className='bg-follow-button text-text-button text-[24px] hover:bg-hover-purple'
-      size='sm'>Edit<MdEdit className='size-[22px]' /></Button>
+      size='sm'>{t('edit')}<MdEdit className='size-[22px]' /></Button>
     )
   }
   if(type=='cancel'){
@@ -49,43 +53,43 @@ const Buttons = ({ type }) => {
       <Button variant='default'
       className='bg-cancel-button text-text-button text-[24px]'
       size='default'>
-Cancel
+{t('cancel')}
       </Button>
     )
   }
   if(type=='logout'){
     return(
-      <Button className='bg-cancel-button text-text-button text-[24px]' size='lg'>Logout <FiLogOut className='size-[22px]' /></Button>
+      <Button className='bg-cancel-button text-text-button text-[24px]' size='lg'>{t('logout')} <FiLogOut className='size-[22px]' /></Button>
     )
   }
   if(type=='login'){
     return(
   <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default' size='lg'>
-    Login
+    {t('login')}
   </Button>)}
   if(type=='send'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>Send</Button>
+      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('send')}</Button>
     )
   }
  if(type=='post'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>Post</Button>
+      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('post')}</Button>
     )
   }
    if(type=='use'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>Use</Button>
+      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('use')}</Button>
     )
   }
    if(type=='save'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>Save</Button>
+      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('save')}</Button>
     )
   }
   if(type=='ai'){
     return(
-      <Button className='border-ai-assistant text-ai-assistant bg-white text-[22px]' variant='outline'><FaRobot className='text-ai-assistant size-[28px]' size='lg'/>AI Assistant </Button>
+      <Button className='border-ai-assistant text-ai-assistant bg-white text-[22px]' variant='outline'><FaRobot className='text-ai-assistant size-[28px]' size='lg'/>{t('ai')}</Button>
     )
   }
 
