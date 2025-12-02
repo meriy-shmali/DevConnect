@@ -31,6 +31,15 @@
     background: linear-gradient(140deg, #416080 0%, #675593 17%, #791A78 44%, #943B53 64%, #897C71 100%);
   }
 }
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(140deg, #416080 0%, #675593 17%, #791A78 44%, #943B53 64%, #897C71 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
 html{
   font-family:'Roboto',sans-serif;
 }
