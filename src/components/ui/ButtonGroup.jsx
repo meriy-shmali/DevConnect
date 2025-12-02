@@ -6,7 +6,9 @@ import { MdEdit } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import { FaRobot } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from 'react-router-dom';
 const Buttons = ({ type }) => {
+  const navigate=useNavigate();
   const { i18n,t } = useTranslation();
   if (type === "start now") {
     
@@ -14,6 +16,7 @@ const Buttons = ({ type }) => {
       <Button
         className='bg-blue-button text-text-button md:text-[25px] hover:bg-hover-startnow md:p-6 md:h-10 md:px-6 '
         variant='secondary'
+        onClick={()=>navigate('/login') }
         /*size='lg'*/
       >
         {t('start')}<FaArrowRightLong className='text-text-button' />
@@ -64,7 +67,7 @@ const Buttons = ({ type }) => {
   }
   if(type=='login'){
     return(
-  <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default' size='lg'>
+  <Button type='submit' className='bg-blue-button text-text-button text-[20px] md:text-[25px] ' variant='default' size='lg' >
     {t('login')}
   </Button>)}
   if(type=='send'){

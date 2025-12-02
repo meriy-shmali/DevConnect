@@ -29,7 +29,7 @@ function Welcomepage() {
             </div>
 
             <div className='flex justify-center md:justify-center'>
-              <Buttons type='ai' />
+              <Buttons type='start now' />
             </div>
 
           </div>
