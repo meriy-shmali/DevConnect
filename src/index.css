@@ -51,7 +51,9 @@ html[lang='ar']{
 
   --color-blue-button:#0733AD;
   --color-post-button:#B468B4;
+  --color-cancel:rgba(180, 104, 180, 0.35);
   --color-main-cancel-button:#c5295A;
+  
   --color-cancel-button:#AF2F51;
   --color-follow-button:#82266A;
   --color-edit-button:#82266A;
