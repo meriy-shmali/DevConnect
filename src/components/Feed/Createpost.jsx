@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { RiImageAddFill } from "react-icons/ri";
@@ -7,64 +7,104 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { BsStars } from "react-icons/bs";
 import AIAssistant from "./AIAssistant";
+import { useimprovepost,usesummarizecode,usegeneratepost,
+  useaddtags,usecategory} from "@/hook/UseMutationAi";
 import { motion, AnimatePresence } from "framer-motion";
+import { usecreatepost } from "@/hook/UseMutationCreatepost";
+import{parsecontent} from '@/Utils/ParsedContent';
+import Buttons from "../ui/ButtonGroup";
+import { AiAction } from "@/hook/AiAction";
 const Createpost = () => {
+  const createpostmutation=usecreatepost();
+  //ai mutation
+  const improveMutation=useimprovepost();
+  const generateMutation=usegeneratepost();
+  const summarizeMutation=usesummarizecode();
+  const addtagMutation=useaddtags();
+  const categoryMutation=usecategory();
   const { t } = useTranslation();
   const [text, setText] = useState("");
-  const [file, setFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [images, setimages] = useState([]);
+  const [previewUrl, setPreviewUrl] = useState([]);
   const[show,setshow]=useState(false);
+// ai assistant
+const[aiResult,setaiResult]=useState('');
+const[aiType,setaiType]=useState(null);
+const[showModel,setshowModel]=useState(false);
+const[tags,setTag]=useState([]);
+const[category,setCategory]=useState("")
   const uploadRef = useRef(null); 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setFile(file);
-
-    if (file.type.startsWith("image/")) {
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-    } else {
-      setPreviewUrl(null);
-    }
-
-  };
-
-  // cleanup memory links
-  useEffect(() => {
-    return () => previewUrl && URL.revokeObjectURL(previewUrl);
-  }, [previewUrl]);
-
-  // ---------- REMOVE FILE ----------
-  const removeFile = () => {
-    setFile(null);
-    setPreviewUrl(null);
-  };
-
+  const handleImageUpload = (e) => {
+    const selected=Array.from(e.target.files||[]);
+    if (selected.length==0) return;
+     const onlyImages = selected.filter((f) => f.type.startsWith("image/"));
+     setimages((prev)=>[...prev,...onlyImages]);
+     const newpreviews=onlyImages.map((img)=>URL.createObjectURL(img));
+     setPreviewUrl((prev)=>[...prev,...newpreviews]);
+     e.target.value=null;
+    
+  }
+  //handle extracttags
+  const extractTagsFromText = (text) => {
+  const matches = text.match(/#\w+/g) || [];
+  return [...new Set(matches.map((t) => t.slice(1)))];
+};
+     //remove images
+     const removeImage=(index)=>{
+     if(previewUrl[index])
+     {
+      URL.revokeObjectURL(previewUrl[index]);
+     }
+   setimages((prev)=>prev.filter((__dirname,i)=>i!==index));
+  setPreviewUrl((prev)=>prev.filter((__dirname,i)=>i!==index));};
+ //---------parseconent-------
+ 
+ const parsedcontent=useMemo(()=>
+  parsecontent(text)
+ ,[text])
+//handle useai
+const handleUseAi=()=>{
+if(aiType=="improve"){
+  setText(aiResult);
+}
+else if(aiType=="summarize"){
+  setText(parsedcontent.text+aiResult);
+}
+}
   // ---------- SEND POST ----------
-  const handlePost = async () => {
-    try {
+  const handlePost = () => {
+    
       const formData = new FormData();
-      formData.append("content", text);
-      if (file) formData.append("file", file);
+    formData.append("text",parsedcontent.text);
+    formData.append("code",parsedcontent.code);
+    formData.append("category",category)
+    const finalTags =
+  tags.length > 0 ? tags : extractTagsFromText(text);
 
-      await axios.post("/posts/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+finalTags.forEach((tag) =>
+  formData.append("tags[]", tag)
+);
 
-      // Reset form
+    images.forEach((img)=>formData.append("images",img))
+     createpostmutation.mutate(formData,{
+       onSuccess: ()=>{
       setText("");
-      setFile(null);
-      setPreviewUrl(null);
-
-      alert("Post Created!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to create post");
-    }
+      previewUrl.forEach((u) => u && URL.revokeObjectURL(u));
+      setPreviewUrl([]);
+      setimages([]);
+     setshow(false);}
+     })
   };
+   const aiaction=AiAction({improveMutation,
+  generateMutation,
+  summarizeMutation,
+  addtagMutation,
+  categoryMutation,
+  setText,
+  setaiResult,
+  setaiType,
+  setshowModel,
+  parsedcontent,})
 
   return (
     <div>
@@ -79,24 +119,34 @@ const Createpost = () => {
             onChange={(e) => setText(e.target.value)}
             className="bg-white"
           />
-
+        
+         {/*showmodel */}
+         {
+          showModel&&(
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div className="bg-white p-6 rounded-xl w-[500px]">
+      <Textarea value={aiResult} />
+    <Button className='bg-blue-button text-text-button md:text-[25px]' onClick={handleUseAi}>{t('use')}</Button>
+    <Button className='bg-cancel-button text-text-button text-[24px]'onClick={()=>setshowModel(false)}>{t('cancel')}</Button>
+    </div>
+  </div>
+          )
+         }
           {/* PREVIEW AREA */}
-          {file && (
-            <div className="flex items-center gap-4 bg-white p-3 rounded-lg shadow">
-              {previewUrl ? (
+          {previewUrl.length>0 && (
+            <div className="flex items-center gap-4 p-3 rounded-lg shadow">
+              {previewUrl.map ((src,index)=>(
+              <div key={index}>
                 <img
-                  src={previewUrl}
+                  src={src}
                   className="w-20 h-20 object-cover rounded"
                 />
-              ) : (
-                <FaFileAlt className="text-gray-600 text-[40px]" />
-              )}
-
-              <span>{file.name}</span>
-
-              <button onClick={removeFile}>
-                <FaRegTrashAlt className="text-red-500 hover:text-red-700 text-[25px]" />
+<button onClick={()=>removeImage(index)}>
+                <FaRegTrashAlt className="text-red-500 hover:text-red-700 text-[25px] mt-2 text-center" />
               </button>
+              </div>
+              ) )
+              }        
             </div>
           )}
 
@@ -105,8 +155,8 @@ const Createpost = () => {
             type="file"
             ref={uploadRef}
             className="hidden"
-            onChange={handleFileUpload}
-            accept="image/*, .pdf, .doc, .docx, .txt, .zip"
+            onChange={handleImageUpload}
+            accept="image/*"
           />
 
           {/* BUTTONS */}
@@ -130,7 +180,7 @@ const Createpost = () => {
                 className="text-white bg-cancel w-[100px] h-[41px] text-[24px]"
                 onClick={() => {
                   setText("");
-                  removeFile();
+                  removeImage();
                 }}
               >
                 {t("cancel")}
@@ -138,7 +188,6 @@ const Createpost = () => {
             )}
           </div>
 
-          
           <div className="text-white text-[24px] text-center leading-11">
             {t("help")}
             <Button className="text-[22px] border-2 rounded-[50px] ml-4 pt-1 pb-1" onClick={()=>setshow(!show)}>
@@ -151,7 +200,8 @@ const Createpost = () => {
                             animate={{ opacity: 1, y: 0 }}
                            exit={{ opacity: 0, y: -20 }}
                            transition={{ duration: 0.2 }}>
-              <AIAssistant/>
+              <AIAssistant improve={aiaction.improve} generate={aiaction.generate}
+              summarize={aiaction.summarize} addtags={()=>aiaction.addTags(text)} category={()=>aiaction.categorize(text)}/>
               </motion.div>
             )
             }</AnimatePresence>
@@ -160,6 +210,6 @@ const Createpost = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Createpost;
