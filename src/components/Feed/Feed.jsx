@@ -2,7 +2,7 @@ import React from 'react'
 import Header from './Header'
 import Createpost from './Createpost'
 import AIAssistant from './AIAssistant'
-
+import { Navigate } from 'react-router-dom'
 const Feed = () => {
   return (
     <>

@@ -4,6 +4,8 @@ import Welcomepage from "./components/Welcomepage.jsx";
 import Login from "./components/login/Login.jsx";
 import Register from "./components/Register/Register.jsx";
 import Feed from "./components/Feed/Feed.jsx";
+import CreatepostMobile from "./components/Feed/CreatepostMobile.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,7 +22,12 @@ Component:Register,
   {
     path:'/feed',
     Component:Feed,
-  }
+  },
+  {
+    path:'/post-mobile',
+    Component:CreatepostMobile
+  },
+ 
 ]);
 
 export default router;
