@@ -3,22 +3,21 @@ import { improvepostreq,
         generatepostreq,
      summarizecoderewq,categoriesreq,addtagsreq } from "@/api/AiAssistantapi";
      export const useimprovepost=()=>{
-        useMutation({mutationFn:improvepostreq,
-            onMutate:()=>{},
+      return  useMutation({mutationFn:improvepostreq,
+           
             onSuccess:()=>{},
             onError:()=>{},
         });
      };
      export const usegeneratepost=()=>{
-        useMutation({
+        return useMutation({
             mutationFn:generatepostreq,
-              onMutate:()=>{},
             onSuccess:()=>{},
             onError:()=>{},
         })
      };
      export const usesummarizecode=()=>{
-        useMutation({
+       return  useMutation({
             mutationFn:summarizecoderewq,
               onMutate:()=>{},
             onSuccess:()=>{},
@@ -26,17 +25,17 @@ import { improvepostreq,
         })
      };
      export const useaddtags=()=>{
-        useMutation({
+       return useMutation({
             mutationFn:addtagsreq,
-              onMutate:()=>{},
+            
             onSuccess:()=>{},
             onError:()=>{},
         })
      };
      export const usecategory=()=>{
-        useMutation({
+       return useMutation({
             mutationFn:categoriesreq,
-              onMutate:()=>{},
+             
             onSuccess:()=>{},
             onError:()=>{},
         })

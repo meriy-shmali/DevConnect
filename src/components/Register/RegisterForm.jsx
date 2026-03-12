@@ -13,6 +13,7 @@ import { MailIcon ,LockIcon, User, PhoneCall, Phone } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   InputGroup,
   InputGroupAddon,
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/input-group"
 import Buttons from '../ui/ButtonGroup';
 import { fi } from 'zod/v4/locales';
+import { useregister } from '@/hook/UseMutationRegister';
 
 const RegisterForm = () => {
     const form = useForm({
@@ -37,10 +39,35 @@ const RegisterForm = () => {
     },
     
   });
+  const registerMutation=useregister();
   const navigate=useNavigate();
     const onSubmit = async (data) => {
+const toastId = toast.loading("Creating account...");
 
-    navigate("/feed");
+  registerMutation.mutate(data, {
+
+    onSuccess: () => {
+
+      toast.success("Account created successfully", {
+        id: toastId,
+        icon: "✅"
+      });
+     form.reset();
+      navigate("/feed");
+
+    },
+
+    onError: () => {
+
+      toast.error("Registration failed", {
+        id: toastId,
+        icon: "❌"
+      });
+
+    }
+
+  });
+   
   };
   const { t } = useTranslation();
   return (
@@ -58,7 +85,7 @@ const RegisterForm = () => {
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="firstname"
+                type="text"
                 placeholder="first name"
                 className="placeholder:text-[22px] mt-2"
               />
@@ -82,7 +109,7 @@ const RegisterForm = () => {
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="lastname"
+                type="text"
                 placeholder="last name"
                 className="placeholder:text-[22px] mt-2"
               />
@@ -106,7 +133,7 @@ const RegisterForm = () => {
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="username"
+                type="text"
                 placeholder="username"
                 className="placeholder:text-[22px] mt-2"
               />
@@ -154,7 +181,7 @@ const RegisterForm = () => {
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="password"
+                type="number"
                 placeholder="•••••••"
                 className="placeholder:text-[22px] mt-3"
               />
@@ -177,7 +204,7 @@ const RegisterForm = () => {
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="confirmpassword"
+                type="number"
                 placeholder="•••••••"
                 className="placeholder:text-[22px] mt-3"
               />
@@ -200,7 +227,7 @@ const RegisterForm = () => {
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="age"
+                type="number"
                 placeholder=""
                 className="placeholder:text-[22px] mt-3"
               />
@@ -220,7 +247,8 @@ const RegisterForm = () => {
           <FormLabel className=" text-[30px] md:text-[48px]">{t('gender')}</FormLabel>
           <FormControl>
             <div className='ml-2'>
-           <RadioGroup defaultValue="male">
+           <RadioGroup onValueChange={field.onChange}
+  defaultValue={field.value}>
   <div className="flex items-center space-x-2 ">
     <RadioGroupItem value="male" id="male" />
     <Label htmlFor="male" className='text-gray-500 text-[20px]'>{t('male')}</Label>
@@ -248,7 +276,7 @@ const RegisterForm = () => {
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="phone"
+                type="tel"
                 placeholder="phone"
                 className="placeholder:text-[22px] mt-3"
               />

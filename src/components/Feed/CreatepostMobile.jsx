@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AIAssistant from "./AIAssistant";
 import { RiImageAddFill } from "react-icons/ri";
 import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
+
 const CreatepostMobile = () => {
     const post=CreatepostLogic();
     const {t}=useTranslation();

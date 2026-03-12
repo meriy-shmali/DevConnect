@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import axios from "axios";
-
-
+import {Messages} from '../Messages/Messages'
 import AIAssistant from "@/components/Feed/AIAssistant";
 import { useimprovepost,usesummarizecode,usegeneratepost,
   useaddtags,usecategory} from "@/hook/UseMutationAi";
@@ -10,6 +9,7 @@ import { usecreatepost } from "./UseMutationCreatepost";
 import{parsecontent} from '@/Utils/ParsedContent';
 
 import { AiAction } from "@/hook/AiAction";
+import toast from "react-hot-toast";
 
 const CreatepostLogic = () => {
  const createpostmutation = usecreatepost();
@@ -87,9 +87,9 @@ const handleUseAi = () => {
 };
 
 const handlePost = () => {
-
+const toastId=toast.loading();
  const formData = new FormData();
-
+console.log('hi')
  formData.append("text",parsedcontent.text);
  formData.append("code",parsedcontent.code);
  formData.append("category",category);
@@ -108,11 +108,13 @@ const handlePost = () => {
  createpostmutation.mutate(formData,{
    onSuccess: ()=>{
      setText("");
+     toast(Messages.login_success,{id:toastId});
+     
 
      previewUrl.forEach((u)=>
        u && URL.revokeObjectURL(u)
      );
-
+     setText("");
      setPreviewUrl([]);
      setimages([]);
      setshow(false);

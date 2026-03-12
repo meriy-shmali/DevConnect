@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CreatepostLogic from "@/hook/CreatepostLogic";
 import { useNavigate } from "react-router-dom";
 import CreatepostMobile from "./CreatepostMobile";
+import { MdPostAdd } from "react-icons/md";
 const Createpost = () => {
   const navigate=useNavigate();
   const post=CreatepostLogic();
@@ -120,7 +121,7 @@ const Createpost = () => {
       </div>
     </div>
     <div className="md:hidden flex justify-center">
-    <div onClick={()=>navigate("/post-mobile")} className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500">{t('create')}</div>
+    <div onClick={()=>navigate("/post-mobile")} className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500 flex align-middle">{t('create')}</div>
     
  
     </div>

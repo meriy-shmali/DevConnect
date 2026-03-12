@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import loginschema from '@/components/Schema/LoginSchema.jsx';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
@@ -16,6 +17,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import Buttons from '../ui/ButtonGroup';
+import { uselogin } from '@/hook/UseMutaionLogin';
 
 const LoginForm=()=>{
     const navigate=useNavigate();
@@ -27,11 +29,36 @@ const form = useForm({
     },
     
   });
+  const loginMutaion=uselogin();
    const onSubmit = async (data) => {
+const toastId = toast.loading("Logging in...");
 
-    if (!data.email || !data.password) return;
+  loginMutaion.mutate(data, {
 
-    navigate("/feed");
+    onSuccess: () => {
+
+      toast.success("Login successful", {
+        id: toastId,
+        icon: "✅"
+      });
+      form.reset();
+      navigate("/feed");
+
+    },
+
+    onError: () => {
+
+      toast.error("Invalid email or password", {
+        id: toastId,
+        icon: "❌"
+      });
+
+    }
+
+  });
+   
+
+    
   };
   const { t } = useTranslation();
  return (
