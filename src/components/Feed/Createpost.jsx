@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
-import axios from "axios";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { RiImageAddFill } from "react-icons/ri";
 import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
@@ -17,7 +16,7 @@ const Createpost = () => {
   const post=CreatepostLogic();
   const { t } = useTranslation();
   return (
-    <div>
+    <div className=" sticky">
     <div className="hidden md:block">
       <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45 ">
         <div className="flex-col justify-center items-center mt-8 p-8 space-y-14 pb-36">

@@ -42,7 +42,7 @@ i18n.use(initReactI18next).init({
         rephrase:"Rephrase Post",
         improve:"Improve Post",
         summarize:"Summarize Code",
-        tags:"Add Tags",
+        add_tags:"Add Tags",
         categorize:"Categorize Post",
         use:"Use",
         notification:"Notification",
@@ -70,6 +70,13 @@ i18n.use(initReactI18next).init({
         arabic:"Arabic",
         current_pass:"Current Password",
         new_pass:"New Password",
+        people:"People",
+        tags:"Tags",
+        posts:'Posts',
+        recent_serches:"Recent searches",
+        results:"Results",
+        show:"Show more results",
+        View:"View thread",
 
 
 
@@ -115,7 +122,7 @@ i18n.use(initReactI18next).init({
         rephrase:"صياغة منشور",
         improve:"تحسين منشور",
         summarize:"تلخيص كود",
-        tags:"اضافة وسوم",
+        add_tags:"اضافة وسوم",
         categorize:"تصنيف منشور",
         use:"استخدام",
         notification:"الاشعارات",
@@ -143,6 +150,13 @@ i18n.use(initReactI18next).init({
         arabic:"عربي",
         current_pass:"كلمة المرور الحالية",
         new_pass:"كلمة المرور الجديدة",
+        people:"اشخاص",
+        tags:"وسوم",
+        posts:'منشورات',
+        recent_serches:"عمليات البحث الأخيرة ",
+        results:"النتائج",
+        show:"عرض المزيد من النتائج",
+        View:"عرض السلسلة",
 
       }
     }
