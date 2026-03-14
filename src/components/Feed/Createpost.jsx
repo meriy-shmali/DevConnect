@@ -11,13 +11,14 @@ import CreatepostLogic from "@/hook/CreatepostLogic";
 import { useNavigate } from "react-router-dom";
 import CreatepostMobile from "./CreatepostMobile";
 import { MdPostAdd } from "react-icons/md";
+import AiModal from './AiModal';
 const Createpost = () => {
   const navigate=useNavigate();
   const post=CreatepostLogic();
   const { t } = useTranslation();
   return (
     <div className=" sticky">
-    <div className="hidden md:block">
+    <div className="hidden md:block"  onClick={()=>post.setshow(!post.show)}>
       <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45 ">
         <div className="flex-col justify-center items-center mt-8 p-8 space-y-14 pb-36">
           <p className="text-white text-[48px] text-center">{t("create")}</p>
@@ -98,7 +99,7 @@ const Createpost = () => {
             )}
           </div>
 
-          <div className="text-white text-[24px] text-center leading-11">
+          <div className="text-white text-[24px] text-center leading-11 ">
             {t("help")}
             <Button className="text-[22px] border-2 rounded-[50px] ml-4 pt-1 pb-1" onClick={()=>post.setshow(!post.show)}>
               {t("ai")} <BsStars className="size-[22px] text-amber-300" />
@@ -124,6 +125,10 @@ const Createpost = () => {
     
  
     </div>
+    <AiModal open={post.showModel}
+     result={post.aiResult}
+     onuse={post.handleUseAi}
+     onclose={()=>post.setshowModel(false)} />
     </div>
   );
 }

@@ -51,7 +51,7 @@ const Buttons = ({ type ,onClick,...props }) => {
       size='sm'>{t('edit')}<MdEdit className='size-[22px]' /></Button>
     )
   }
-  if(type=='cancel'){
+  if(type=='onClick={onClick}'){
     return(
       <Button variant='default'
       className='bg-cancel-button text-text-button text-[24px]'
@@ -83,7 +83,7 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
    if(type=='use'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('use')}</Button>
+      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default' onClick={onClick}>{t('use')}</Button>
     )
   }
    if(type=='save'){
