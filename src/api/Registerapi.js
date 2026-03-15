@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./Api";
 export const registerreq=(data)=>{
-    axios.post("",data);
+    api.post("",data);
 }

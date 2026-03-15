@@ -1,16 +1,16 @@
-import axios from "axios";
+import api from "./Api";
 export const improvepostreq=(text)=>{
-   return axios.post("",{text});
+   return api.post("",{text});
 }
 export const generatepostreq=(text)=>{
-    return axios.post("",{text});
+    return api.post("",{text});
 }
 export const summarizecoderewq=(code)=>{
-   return  axios.post("",{code});
+   return  api.post("",{code});
 }
 export const addtagsreq=(text)=>{
-   return  axios.post("",{text});
+   return  api.post("",{text});
 }
 export const categoriesreq=(text)=>{
-  return  axios.post("",{text});
+  return  api.post("",{text});
 }

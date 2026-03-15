@@ -35,7 +35,10 @@ const toastId = toast.loading("Logging in...");
 
   loginMutaion.mutate(data, {
 
-    onSuccess: () => {
+    onSuccess: (res) => {
+      //لحفظ التوكين بعد القيام بتسجيل الدخول
+      const token=res.data.token
+      localStorage.setItem("token",token)
 
       toast.success("Login successful", {
         id: toastId,

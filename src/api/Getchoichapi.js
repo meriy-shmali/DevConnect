@@ -1,6 +1,6 @@
-import axios from "axios";
+import api from "./Api";
 export const getchoichreq=async(category)=>{
-   const res=await axios.get("",{
+   const res=await api.get("",{
         params:{
             category:category
         }

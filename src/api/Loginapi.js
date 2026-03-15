@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./Api";
 export const Loginreq=(data)=>{
-    return axios.post("",data);
+    return api.post("",data);
 };
