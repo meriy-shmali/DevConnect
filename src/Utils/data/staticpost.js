@@ -3,9 +3,9 @@ export const staticposts=[
     {
      id:1,
      user:{
-    name:"Samer",
+    name:"Samer_hili",
     avatar:"/public/images/photo3.jpg",
-    isfollowing:"false"
+    isfollowing:true
      },
      date:"2 hours ago" ,
      category:"question",
@@ -22,9 +22,9 @@ export const staticposts=[
     {
      id:2,
      user:{
-     name:'Sara',
+     name:'Sara98',
      avatar:'/public/images/photo1.jpg',
-     isfollowing:"true" 
+     isfollowing:false 
      },
      date:"1 day",
      category:"project",
@@ -40,9 +40,9 @@ export const staticposts=[
     {
      id:3,
      user:{
-     name:'Tarek',
+     name:'Tarek peter',
      avatar:'/public/images/photo3.jpg' ,
-     isfollowing:"false"  
+     isfollowing:false  
      },
      date:"7 hours ago",
      category:"problem",
@@ -50,7 +50,12 @@ export const staticposts=[
      images:[] ,
      code:`const fetchData = async () => {
  const res = await axios.get("/api");
- console.log(res.data);
+ console.log(res.data)
+ <p>hello</p>
+ <div>welcome to our project</div>
+ <div>welcome to our project</div>
+ <div>welcome to our project</div>
+ <div>welcome to our project</div>;
 }`,
       likes:"10;",
      dislikes:"0",

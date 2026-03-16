@@ -6,7 +6,7 @@ import Comment from './Comment'
 
 const PostCard = ({post}) => {
   return (
-    <div className='bg-white rounded-3xl shadow-xl w-[900px] h-[500px] p-8'>
+    <div className='bg-white rounded-3xl shadow-xl w-[900px] h-fit p-8 border border-gray-300'>
     <HeaderPost post={post}/>
     <BodyPost post={post} />
     <Reaction post={post} />

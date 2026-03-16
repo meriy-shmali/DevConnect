@@ -12,7 +12,7 @@ setisfollowing(!isfollowing);
     <div className='flex justify-between items-center '>
       <div className='flex justify-center items-center space-x-9'>
     <div className='flex items-center justify-center space-x-5' onClick={()=>navigate(`/profile/${post.id}`)}>
-    <img src={post.user.avatar}
+    <img src={post.user?.avatar}
     className='w-15 h-15 rounded-full'/>
     <div>
       <div className='font-semibold text-xl'>{post.user.name}</div>
