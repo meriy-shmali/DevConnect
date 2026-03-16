@@ -100,9 +100,9 @@ console.log('hi')
  finalTags.forEach((tag)=>
    formData.append("tags[]", tag)
  );
-
+//اضافة عدة صور
  images.forEach((img)=>
-   formData.append("images",img)
+   formData.append("images[]",img)
  );
 
  createpostmutation.mutate(formData,{
@@ -137,7 +137,11 @@ const aiaction = AiAction({
 });
 
 return {
- 
+  improveMutation,
+ generateMutation,
+ summarizeMutation,
+ addtagMutation,
+ categoryMutation,
  text,
  setText,
  images,

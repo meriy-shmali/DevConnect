@@ -112,7 +112,9 @@ const Createpost = () => {
                            exit={{ opacity: 0, y: -20 }}
                            transition={{ duration: 0.2 }}>
               <AIAssistant improve={post.aiaction.improve} generate={post.aiaction.generate}
-              summarize={post.aiaction.summarize} addtags={()=>post.aiaction.addTags(post.text)} category={()=>post.aiaction.categorize(post.text)}/>
+              summarize={post.aiaction.summarize} addtags={()=>post.aiaction.addTags(post.text)} category={()=>post.aiaction.categorize(post.text)}
+              improveM={post.improveMutation} generateM={post.generateMutation} summarizeM={post.summarizeMutation}
+              addM={post.addtagMutation} categoryM={post.categoryMutation}/>
               </motion.div>
             )
             }</AnimatePresence>

@@ -9,14 +9,18 @@ export const AiAction=({
   setAiType,
   setShowModal,
   parsedcontent,
-})=>{
+})=>{ //دالة لتقليل تكرار الكود
+  const handleModalresult=(type,result)=>{
+    setAiResult(result);
+    setAiType(type);
+    setShowModal(true);
+  }
     return{
-           improve: () => {
+           improve: () => { //التاكد من وجود نص قبل الارسال وعدم ارسال null
+            if(!parsedcontent.text) return;
       improveMutation.mutate(parsedcontent.text, {
         onSuccess: (res) => {
-          setAiResult(res.data.text);
-          setAiType("improve");
-          setShowModal(true);
+        handleModalresult("improve",res.data.text)
         },
       });
     },
@@ -28,19 +32,18 @@ export const AiAction=({
     },
 
     summarize: () => {
+       if(!parsedcontent.code) return;
       summarizeMutation.mutate(parsedcontent.code, {
         onSuccess: (res) => {
-          setAiResult(res.data.text);
-          setAiType("summarize");
-          setShowModal(true);
+          handleModalresult("summarize",res.data.text)
         },
       });
     },
-
+// اضافة ؟ على التاغات لان الباك قد يرسل التاغ فارغ فهذا الشي لمنع حدوث خطأ
     addTags: (text) => {
       addtagMutation.mutate(text, {
         onSuccess: (res) => {
-          setText((prev) => prev + "\n\n" + res.data.tags.map(t => `#${t}`).join(" "));
+          setText((prev) => prev + "\n\n" + res.data.tags?.map(t => `#${t}`).join(" "));
         },
       });
     },

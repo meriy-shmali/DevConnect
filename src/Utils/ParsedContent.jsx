@@ -1,4 +1,14 @@
 import hljs from "highlight.js";
+/*const  iscodline=(line)=>{
+  return (
+    line.includes("{")||
+    line.includes("}")||
+    line.includes(";")||
+    line.includes("console.")||
+    line.includes("function")||
+    line.includes("=>")
+  )
+}*/
   export const parsecontent=(content)=>{
   const lines=content.split('\n');
   let textlines=[];
