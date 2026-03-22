@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import loginschema from '@/components/Schema/LoginSchema.jsx';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/context/AuthContext';
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
@@ -20,6 +21,7 @@ import Buttons from '../ui/ButtonGroup';
 import { uselogin } from '@/hook/UseMutaionLogin';
 
 const LoginForm=()=>{
+  const {setCurrentUser }=useAuth()
     const navigate=useNavigate();
 const form = useForm({
     resolver: zodResolver(loginschema),
@@ -39,7 +41,8 @@ const toastId = toast.loading("Logging in...");
       //لحفظ التوكين بعد القيام بتسجيل الدخول
       const token=res.data.token
       localStorage.setItem("token",token)
-
+     // تحديث currentUser بالـ context
+      setCurrentUser(res.data.user);
       toast.success("Login successful", {
         id: toastId,
         icon: "✅"

@@ -73,7 +73,7 @@ const Buttons = ({ type ,onClick,...props }) => {
   </Button>)}
   if(type=='send'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('send')}</Button>
+      <Button className='bg-blue-button text-text-button md:text-[20px] p-4 rounded-md'>{t('send')}</Button>
     )
   }
  if(type=='post'){

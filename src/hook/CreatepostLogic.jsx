@@ -7,13 +7,14 @@ import { useimprovepost,usesummarizecode,usegeneratepost,
 import { motion, AnimatePresence } from "framer-motion";
 import { usecreatepost } from "./UseMutationCreatepost";
 import{parsecontent} from '@/Utils/ParsedContent';
-
+import { useQueryClient } from "@tanstack/react-query";
 import { AiAction } from "@/hook/AiAction";
 import toast from "react-hot-toast";
+import { languages } from "prismjs";
 
 const CreatepostLogic = () => {
  const createpostmutation = usecreatepost();
-
+const queryClient = useQueryClient();
 // AI
 const improveMutation = useimprovepost();
 const generateMutation = usegeneratepost();
@@ -92,6 +93,7 @@ const toastId=toast.loading();
 console.log('hi')
  formData.append("text",parsedcontent.text);
  formData.append("code",parsedcontent.code);
+ formData.append("codeLanguages",parsedcontent.language)
  formData.append("category",category);
 
  const finalTags =
@@ -107,8 +109,10 @@ console.log('hi')
 
  createpostmutation.mutate(formData,{
    onSuccess: ()=>{
+    queryClient.invalidateQueries(["posts",category])
      setText("");
      toast(Messages.login_success,{id:toastId});
+    
      
 
      previewUrl.forEach((u)=>

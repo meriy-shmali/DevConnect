@@ -6,7 +6,9 @@ import { Navigate } from 'react-router-dom'
 import Choiches from './Choiches'
 import PostCard from './Postcard/PostCard'
 import { staticposts } from '@/Utils/data/staticpost'
+import { usechoich } from '@/hook/UseQuerychoich';
 const Feed = () => {
+ 
   return (
     <>
     <Header/>

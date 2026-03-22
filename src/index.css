@@ -39,7 +39,9 @@
     color: transparent;
   }
 }
-
+.hljs {
+  background: transparent !important;
+}
 html{
   font-family:'Roboto',sans-serif;
 }
