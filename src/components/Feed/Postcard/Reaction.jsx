@@ -6,25 +6,8 @@ import { VscLightbulbSparkle } from "react-icons/vsc";
 import { FaRegCommentDots } from "react-icons/fa";
 import { usereaction } from '@/hook/UseMutationreact';
 
-const Reaction = ({post,onOpenReaction}) => {
-const reactionData=[
-  {key:"likes",
-   count:post.likes,
-   icon:<AiOutlineLike/>
-  },{
-    key:"dislikes",
-   count:post.dislikes,
-   icon:< AiOutlineDislike/>
-  },
-  { key:"problem",
-   count:post.problem,
-   icon:<PiBugBeetle/>},
-   {
-    key:"ideas",
-   count:post.ideas,
-   icon:<VscLightbulbSparkle/>
-   }
-]//لما يكون عنا اكتر من زر مافينا نحط حالة وحدة للكل
+const Reaction = ({post,onOpenReaction,onClose,reactionData}) => {
+///لما يكون عنا اكتر من زر مافينا نحط حالة وحدة للكل
 const [active,setactive]=useState({})
 const [reaction,setreaction]=useState({
   likes: post.likes,
@@ -58,15 +41,17 @@ setactive(prev => ({
         <div className=''>
           <button
     key={items.key}
-    
-    className={` flex items-center space-x-1 px-2 py-1 rounded-2xl border border-gray-200 shadow text-lg w-fit`}
+    onClick={(e) => e.stopPropagation()
+    }
+    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl border border-gray-200 shadow text-lg w-fit `}
   >
- <div onClick={() => handlereaction(items.key)} className='text-xl text-gray-700'>{items.icon}</div>
+ <div onClick={()=>{onClose()
+  handlereaction(items.key)}} className='text-xl text-gray-700'>
+  {items.icon}</div>
   <div className='text-gradient font-semibold' onClick={(e)=>{ e.stopPropagation(); 
     onOpenReaction(items.key)}
   }>{reaction[items.key]}</div>
-
-  </button>
+</button>
   </div>
       ))}
       </div>
