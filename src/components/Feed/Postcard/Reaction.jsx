@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react'
+import React, {useEffect,  useState } from 'react'
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { PiBugBeetle } from "react-icons/pi";
@@ -6,14 +6,15 @@ import { VscLightbulbSparkle } from "react-icons/vsc";
 import { FaRegCommentDots } from "react-icons/fa";
 import { usereaction } from '@/hook/UseMutationreact';
 
-const Reaction = ({post,onOpenReaction,onClose,reactionData}) => {
+const Reaction = ({post,onOpenReaction,onClose,reactionData, incrementComment, commentCount,onOpenComments}) => {
 ///لما يكون عنا اكتر من زر مافينا نحط حالة وحدة للكل
 const [active,setactive]=useState({})
 const [reaction,setreaction]=useState({
   likes: post.likes,
   dislikes: post.dislikes,
   ideas: post.ideas,
-  problem: post.problem
+  problem: post.problem,
+  comment: commentCount
 })
 const reactionMutation=usereaction();
   //تابع لزيادة وانقاص عدد الايكات في البيانات الستاتيكية
@@ -27,13 +28,22 @@ setactive(prev => ({
     postId:post.id,
     type:type
   })
+   if(type === 'comment' && incrementComment){
+      incrementComment(); // يحدث count في PostCard
+    }
   }
+  useEffect(() => {
+  setreaction(prev => ({ ...prev, comment: commentCount }));
+}, [commentCount]);
   return (
     <div className='flex space-x-40 items-center '>
       <div>
      <button className='flex space-x-2 items-center rounded-2xl px-2 py-1 border border-gray-200 shadow-md '>
       <FaRegCommentDots className='text-xl text-gray-700'/>
-      <div className='text-lg font-semibold text-gradient'>{post.comment}</div>
+      <div className='text-lg font-semibold text-gradient'onClick={(e) => {
+    e.stopPropagation();
+    onOpenComments(); // 👈 بدل ما كان فاضي
+  }}>{reaction.comment}</div>
      </button>
      </div>
     <div className='flex space-x-3.5  '>

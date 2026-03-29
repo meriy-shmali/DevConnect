@@ -78,6 +78,8 @@ i18n.use(initReactI18next).init({
         show:"Show more results",
         View:"View thread",
         see_original:"See original",
+        comments:"Comments",
+        
 
 
 
@@ -159,6 +161,7 @@ i18n.use(initReactI18next).init({
         show:"عرض المزيد من النتائج",
         View:"عرض السلسلة",
         see_original:"الأصلي",
+        comments:"التعليقات",
 
       }
     }
