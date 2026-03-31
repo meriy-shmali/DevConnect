@@ -1,25 +1,33 @@
 import { useState, useEffect } from "react";
-import { usecommentreaction, useDeletecomment, usereplycomment, usetranslatecomment } from "@/hook/UseMutationComment";
+import { usecommentreaction, useDeletecomment, usereplycomment, usetranslatecomment,useEditcomment } from "@/hook/UseMutationComment";
 import { usegetreplies } from "@/hook/UseQueryComment";
 import { staticReplies } from "@/Utils/data/staticReplies";
-
+import { useAuth } from "@/context/AuthContext";
 export const useCommentLogic = (items = []) => {
   const [activeCommentId, setActiveCommentId] = useState(null);
   const [showmenu, setshowmenu] = useState(false);
-
+  const { currentUser } = useAuth();
+  const editComment=useEditcomment();
   const commentreactionMutation = usecommentreaction();
   const TranslatecommentMutaion = usetranslatecomment();
   const deletecomment = useDeletecomment();
   const addreplyMutation = usereplycomment();
 
   const { data: fetchedReplies } = usegetreplies(activeCommentId, !!activeCommentId);
-const [showTempReply, setShowTempReply] = useState({});
   const [translate, settranslate] = useState({});
   const [istranslate, setistranslate] = useState({});
   const [viewreply, setviewreply] = useState({});
   const [replyInput, setReplyInput] = useState({});
   const [replydata, setreplydata] = useState({});
   const [replyText, setreplyText] = useState({});
+  const [editing, setEditing] = useState({});
+  const [menu, setMenu] = useState({});
+  const toggleMenu = (id) => {
+  setMenu(prev => ({
+    ...prev,
+    [id]: !prev[id]
+  }));
+};
   const [counts, setCounts] = useState(() => {
     const map = {};
     [...items, ...Object.values(replydata).flat()].forEach(c => {
@@ -46,24 +54,29 @@ const [showTempReply, setShowTempReply] = useState({});
   }, [fetchedReplies, activeCommentId]);
 
   // Toggle reply input
-  const handleReplyClick = (comment) => {
+ const handleReplyClick = (comment) => {
   const id = comment.id;
 
-  const isOpen = replyInput[id]; // هل الحقل مفتوح حالياً؟
+  const isOpen = replyInput[id];
 
   if (isOpen) {
-    // إذا كان مفتوح → أغلق الحقل والردود
+    // سكّر الكل
     setReplyInput(prev => ({ ...prev, [id]: false }));
     setviewreply(prev => ({ ...prev, [id]: false }));
   } else {
-    // إذا كان مغلق → افتحه واظهر الردود
+    // افتح الكل
     setReplyInput(prev => ({ ...prev, [id]: true }));
     setviewreply(prev => ({ ...prev, [id]: true }));
 
-    // نص أولي إذا ما موجود
+    // حط mention إذا فاضي
     if (!replyText[id]) {
-      setreplyText(prev => ({ ...prev, [id]: `@${comment.user?.name || ""} ` }));
+      setreplyText(prev => ({
+        ...prev,
+        [id]: `@${comment.user?.name || ""} `
+      }));
     }
+
+    setActiveCommentId(id); // مهم لجيب الردود
   }
 };
   // Toggle view replies
@@ -74,10 +87,35 @@ const handleViewreply = (commentId) => {
   }));
 
   setActiveCommentId(commentId); // fetch
-};const handlesendreply = (parentId) => {
+};
+const handlesendreply = (parentId) => {
   const text = replyText[parentId];
   if (!text?.trim()) return;
 
+  // ✅ edit
+  if (editing[parentId]) {
+    setreplydata(prev => {
+      const updated = { ...prev };
+
+      Object.keys(updated).forEach(key => {
+        updated[key] = updated[key].map(c =>
+          c.id === parentId ? { ...c, text } : c
+        );
+      });
+
+      return updated;
+    });
+
+    setEditing(prev => ({ ...prev, [parentId]: false }));
+    setReplyInput(prev => ({ ...prev, [parentId]: false }));
+    setreplyText(prev => ({ ...prev, [parentId]: "" }));
+
+    editComment.mutate({ commentId: parentId, text }); // ✅ الصح
+
+    return;
+  }
+
+  // ✅ reply عادي
   const newReply = {
     id: Date.now(),
     text,
@@ -90,7 +128,6 @@ const handleViewreply = (commentId) => {
     [parentId]: [...(prev[parentId] || []), newReply]
   }));
 
-  // نفرغ النص فقط
   setreplyText(prev => ({ ...prev, [parentId]: "" }));
 
   addreplyMutation.mutate({ text, commentId: parentId });
@@ -124,25 +161,45 @@ const handleViewreply = (commentId) => {
       }
     });
   };
-
   const handleDeleteComment = (commentId) => {
-    setreplydata(prev => {
-      const newData = { ...prev };
-      Object.keys(newData).forEach(parentId => {
-        newData[parentId] = newData[parentId].filter(c => c.id !== commentId);
-      });
-      return newData;
+  setreplydata(prev => {
+    const newData = { ...prev };
+    Object.keys(newData).forEach(parentId => {
+      newData[parentId] = newData[parentId].filter(c => c.id !== commentId);
     });
-    setCounts(prev => { const newCounts = { ...prev }; delete newCounts[commentId]; return newCounts; });
-    deletecomment.mutate(commentId);
-  };
+    return newData;
+  });
+  setCounts(prev => { const newCounts = { ...prev }; delete newCounts[commentId]; return newCounts; });
+  deletecomment.mutate(commentId);
+};
+const handleEditClick = (comment) => {
+  const id = comment.id;
 
-  return {
-    showmenu, setshowmenu,
-    handleTranslate, istranslate, translate,
-    handleReaction, counts,
-    handleReplyClick, handleViewreply, handlesendreply,
-    viewreply, replydata, replyText, replyInput, setreplyText,
-    handleDeleteComment,showTempReply
-  };
+  // افتح input
+  setReplyInput(prev => ({
+    ...prev,
+    [id]: true
+  }));
+
+  // فعل وضع التعديل
+  setEditing(prev => ({
+    ...prev,
+    [id]: true
+  }));
+
+  // حط النص الحالي
+  setreplyText(prev => ({
+    ...prev,
+    [id]: comment.text
+  }));
+   setMenu(prev => ({ ...prev, [id]: false }));
+};
+ return {
+  showmenu, setshowmenu,
+  handleTranslate, istranslate, translate,
+  handleReaction, counts,
+  handleReplyClick, handleViewreply, handlesendreply, handleEditClick,
+  viewreply, replydata, replyText, replyInput, setreplyText,
+  handleDeleteComment, currentUser, editing, menu, toggleMenu,setreplydata
+};
 };

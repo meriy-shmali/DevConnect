@@ -5,48 +5,46 @@ import { HiOutlineAdjustments } from "react-icons/hi";
 import { useTranslation } from "react-i18next";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { useCommentLogic } from "@/hook/CommentLogic";
-import { useState } from "react";
-  // دالة عرض الردود (Recursive)
+import { BsThreeDotsVertical } from "react-icons/bs";
   const SidebarPanel = ({
-  title,
-  icon,
-  items,
-  showFilter,
-  onClose,
-  type,
-  sort,
-  setSort
-}) => {
+  title,icon,items,showFilter,onClose,type,sort,setSort}) => {
   const {
     showmenu, setshowmenu,
-    handleTranslate, istranslate, translate,
-    handleReaction, counts,
-    handleViewreply,
-    handlesendreply,
-    viewreply,
-    replydata,
-    replyText,
+    handleTranslate, istranslate, translate,currentUser,menu,toggleMenu,
+    handleReaction, counts,handleViewreply,handlesendreply,viewreply,replydata,replyText,
     setreplyText,
-    handleReplyClick,replyInput
+handleReplyClick,replyInput,editing,handleDeleteComment,handleEditClick
   } = useCommentLogic(items);
   const { t } = useTranslation();
   // 🟢 render nested replies
-const renderReplies = (parentId, level = 1) => {
-  return replydata[parentId]?.map(reply => (
+   const renderReplies = (parentId, level = 1) => { return replydata[parentId]?.map(reply => (
     <div key={reply.id} className={`ml-${level * 6} flex flex-col space-y-2`}>
       {/* header */}
       <div className="flex items-center space-x-2">
         <img src={reply.user?.avatar} className="w-6 h-6 rounded-full" />
         <span className="font-semibold text-sm">{reply.user?.name}</span>
         <span className="text-gray-400 text-xs">{reply.createdAt}</span>
-      </div>
-
+          {reply.user?.name === /*currentUser?.id*/ "You" && (
+    <div className="relative">
+      <button onClick={() => toggleMenu(reply.id)}>
+        <BsThreeDotsVertical />
+      </button>
+      {menu[reply.id] && (
+        <div className="absolute right-0 mt-2 bg-white border rounded shadow p-2 flex flex-col z-50">
+          <button onClick={() => handleEditClick(reply)}   className="px-3 py-1 hover:text-blue-500" >
+            edit
+          </button>
+          <button onClick={() => handleDeleteComment(reply.id)} className="px-3 py-1 hover:text-red-500">
+            delete
+          </button>
+        </div> )}</div>)}
+      </div>   
       {/* text */}
       <p className="text-sm">
         {istranslate[reply.id] ? translate[reply.id] : reply.text}
       </p>
-
       {/* reactions */}
+      {type=="comments"&&(
       <div className="flex items-center space-x-3">
         <div className="flex items-center space-x-1">
           <p>{counts[reply.id]?.likes || 0}</p>
@@ -54,30 +52,25 @@ const renderReplies = (parentId, level = 1) => {
             <AiOutlineLike />
           </button>
         </div>
-
         <div className="flex items-center space-x-1">
           <p>{counts[reply.id]?.dislikes || 0}</p>
           <button onClick={() => handleReaction(reply.id, 'dislike')}>
             <AiOutlineDislike />
           </button>
         </div>
-      </div>
-
+      </div>)}
       {/* actions */}
-      <div className="flex text-sm text-gray-500 space-x-4">
+    {type=="comments"&&(  <div className="flex text-sm text-gray-500 space-x-4">
         <button onClick={() => handleTranslate(reply)}>
           {istranslate[reply.id] ? t('see_original') : t('translate')}
         </button>
-
         <button onClick={() => handleReplyClick(reply)}>
           reply
         </button>
-
         <button onClick={() => handleViewreply(reply.id)}>
           {replydata[reply.id]?.length || 0} view replies
         </button>
-      </div>
-
+      </div>)}
       {/* input يظهر فقط عند reply */}
       {replyInput[reply.id] && (
         <div className="flex mt-2 space-x-2">
@@ -92,7 +85,6 @@ const renderReplies = (parentId, level = 1) => {
           <button onClick={() => handlesendreply(reply.id)}>ارسال</button>
         </div>
       )}
-
       {/* nested replies */}
       {viewreply[reply.id] && renderReplies(reply.id, level + 1)}
     </div>
@@ -101,7 +93,6 @@ const renderReplies = (parentId, level = 1) => {
   return (
     <>
       <div onClick={onClose} className="fixed inset-0 w-[800px] left-1/2" />
-
       <motion.div
         key={type}
         onClick={(e) => e.stopPropagation()}
@@ -111,7 +102,6 @@ const renderReplies = (parentId, level = 1) => {
         transition={{ duration: 0.3 }}
         className="sidebar fixed right-0 top-2 w-[450px] h-screen bg-white shadow-lg p-4 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto"
       >
-
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-2">
@@ -120,14 +110,12 @@ const renderReplies = (parentId, level = 1) => {
           </div>
           <IoIosClose onClick={onClose} className="text-4xl text-red-600" />
         </div>
-
         {/* Filter */}
         {type === 'comments' && showFilter && (
           <div className="flex justify-end mr-1">
             <button onClick={() => setshowmenu(prev => !prev)}>
               <HiOutlineAdjustments className="text-2xl" />
             </button>
-
             {showmenu && (
               <div className="absolute right-14 mt-2 bg-white shadow-md rounded-md p-2 flex flex-col z-50 border border-gray-300">
                 <button
@@ -139,7 +127,6 @@ const renderReplies = (parentId, level = 1) => {
                 >
                   {t('latest')}
                 </button>
-
                 <button
                   onClick={() => {
                     setSort("oldest");
@@ -153,7 +140,6 @@ const renderReplies = (parentId, level = 1) => {
             )}
           </div>
         )}
-
         {/* Items */}
         <div className="flex-col space-y-4">
           {items.length === 0 ? (
@@ -164,7 +150,6 @@ const renderReplies = (parentId, level = 1) => {
           ) : (
             items.map((item, idx) => (
               <div key={idx} className="flex flex-col space-y-1 pb-2">
-
                 {/* header */}
                 <div className="flex items-center space-x-3">
                   <img src={item.user?.avatar} className="w-10 h-10 rounded-full" />
@@ -175,24 +160,35 @@ const renderReplies = (parentId, level = 1) => {
                     {item.createdAt}
                   </div>
                 </div>
-
-                {/* content */}
+                 {item.user?.name ===/* currentUser?.id*/ "You"&& (
+    <div className="relative">
+      <button onClick={() => toggleMenu(item.id)}>
+        <BsThreeDotsVertical />
+      </button>
+      {menu[item.id] && (
+        <div className="absolute right-0 mt-2 bg-white border rounded shadow p-2 flex flex-col z-50">
+          <button onClick={() => handleEditClick(item)} className="px-3 py-1 hover:text-blue-500">
+            edit
+          </button>
+          <button
+            onClick={() => handleDeleteComment(item.id)}
+            className="px-3 py-1 hover:text-red-500"
+          >  delete</button>
+        </div>
+      )}
+    </div>
+  )}    {/* content */}
                 <div className="flex-col space-y-6">
-
                   <div className="flex justify-between">
                     <p className="ml-12 text-black">
                       {istranslate[item.id] ? translate[item.id] : item.text}
                     </p>
-
                     {/* reactions (بدون تعديل) */}
                     <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-1">
                         <p>{counts[item.id]?.likes || item.likes}</p>
                         <button onClick={() => handleReaction(item.id, 'like')}>
-                          <AiOutlineLike />
-                        </button>
-                      </div>
-
+                          <AiOutlineLike />  </button></div>
                       <div className="flex items-center space-x-1">
                         <p>{counts[item.id]?.dislikes || item.dislikes}</p>
                         <button onClick={() => handleReaction(item.id, 'dislike')}>
@@ -207,7 +203,6 @@ const renderReplies = (parentId, level = 1) => {
                     <button onClick={() => handleTranslate(item)}>
                       {istranslate[item.id] ? t('see_original') : t('translate')}
                     </button>
-
                     <button onClick={() => handleReplyClick(item)}>
                       reply
                     </button>
@@ -242,14 +237,7 @@ const renderReplies = (parentId, level = 1) => {
   <div className="ml-12 border-l pl-3 mt-2 space-y-3">
     {renderReplies(item.id)}
   </div>
-)}
-
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
+)}</div></div>   ))  )}</div>
       </motion.div>
     </>
   );

@@ -1,15 +1,21 @@
 import Buttons from '@/components/ui/ButtonGroup'
 import React, { useState } from 'react'
 import { IoSend } from "react-icons/io5";
-
-const Comment = ({post,onAddComment}) => {
+import { useEffect } from 'react';
+const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
   const [text,setText]=useState("")//to add comment
+  useEffect(() => {
+    if (editingComment) {
+      setText(editingComment.text);
+    }
+  }, [editingComment]);
   const handleSend=()=>{
     //منع التعليقات الفارغة
     if (!text.trim())return;
     //لتمرير التعليق للاب
-    onAddComment(text);
-    setText("")
+    onAddComment(text, editingComment?.id);
+    setText("");
+    setEditingComment(null);
   }
   return (
     <div className='flex space-x-4 items-center'>

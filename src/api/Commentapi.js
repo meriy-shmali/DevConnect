@@ -19,7 +19,7 @@ export const replycomment=(data)=>{
 }
 //like comment
 export const likecomment=(commentId)=>{
-    return api.post("")
+    return api.post(`/comments/${commentId}`)
 }
 //translate comment
 export const translateComment=(data)=>{
@@ -41,9 +41,9 @@ export const addreply=(data)=>{
 }
 //edit comment
 export const editcomment=({commentId,text})=>{
-    return api.put("")
+    return api.put(`/comments/${commentId}`, { text })
 }
 //delete comment
 export const deletecomment=(commentId)=>{
-    return api.delete("")
+    return api.delete(`/comments/${commentId}`)
 }

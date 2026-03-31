@@ -77,16 +77,8 @@ const handleAddComment = (text) => {
     {paneltype && (
   <SidebarPanel
     type={paneltype}
-    title={
-      paneltype === "comments"
-        ? t("comments")
-        : reactionMap[paneltype]?.label
-    }
-    icon={
-      paneltype === "comments"
-        ? <FaRegCommentDots />
-        : reactionMap[paneltype]?.icon
-    }
+   title={paneltype === "comments" ? t("comments") : reactionMap[paneltype]?.label}
+     icon={paneltype === "comments" ? <FaRegCommentDots /> : reactionMap[paneltype]?.icon}
   /*  items={
       paneltype === "comments"
         ? commentsData
