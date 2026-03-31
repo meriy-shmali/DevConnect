@@ -55,11 +55,14 @@ export const useCommentLogic = (items = []) => {
 
   // Toggle reply input
  const handleReplyClick = (comment) => {
-  const id = comment.id;
+   const id = comment.id;
 
-  const isOpen = replyInput[id];
+  const isInputOpen = replyInput[id];
+  const isRepliesOpen = viewreply[id];
 
-  if (isOpen) {
+  const isFullyOpen = isInputOpen && isRepliesOpen;
+
+  if (isFullyOpen) {
     // سكّر الكل
     setReplyInput(prev => ({ ...prev, [id]: false }));
     setviewreply(prev => ({ ...prev, [id]: false }));
@@ -68,7 +71,6 @@ export const useCommentLogic = (items = []) => {
     setReplyInput(prev => ({ ...prev, [id]: true }));
     setviewreply(prev => ({ ...prev, [id]: true }));
 
-    // حط mention إذا فاضي
     if (!replyText[id]) {
       setreplyText(prev => ({
         ...prev,
@@ -76,17 +78,35 @@ export const useCommentLogic = (items = []) => {
       }));
     }
 
-    setActiveCommentId(id); // مهم لجيب الردود
+    setActiveCommentId(id);
   }
 };
   // Toggle view replies
 const handleViewreply = (commentId) => {
-  setviewreply(prev => ({
-    ...prev,
-    [commentId]: !prev[commentId]
-  }));
+ const isInputOpen = replyInput[commentId];
 
-  setActiveCommentId(commentId); // fetch
+  if (isInputOpen) {
+    // 🔴 إذا reply مفتوحة
+    // سكّر input وخلي الردود
+    setReplyInput(prev => ({
+      ...prev,
+      [commentId]: false
+    }));
+
+    setviewreply(prev => ({
+      ...prev,
+      [commentId]: true
+    }));
+
+  } else {
+    // 🟢 toggle طبيعي
+    setviewreply(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId]
+    }));
+  }
+
+  setActiveCommentId(commentId);
 };
 const handlesendreply = (parentId) => {
   const text = replyText[parentId];

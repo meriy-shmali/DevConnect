@@ -4,34 +4,93 @@ export const staticReplies = {
       id: 101,
       text: "I agree with you",
       createdAt: "10m",
-      user: {
-        id: 2,
-        name: "Ahmad",
-        avatar: "/public/images/default avatar1.jpg"
-      }
+      user: { id: 2, name: "Ahmad", avatar: "/public/images/default avatar1.jpg" },
+      replies: [
+        {
+          id: 201,
+          text: "Thank you!",
+          createdAt: "5m",
+          user: { id: 5, name: "Lina", avatar: "/public/images/default avatar1.jpg" },
+          replies: [
+            {
+              id: 301,
+              text: "You're welcome!",
+              createdAt: "3m",
+              user: { id: 6, name: "Mona", avatar: "/public/images/default avatar1.jpg" },
+              replies: [
+                {
+                  id: 501,
+                  text: "Thanks Ahmad!",
+                  createdAt: "2m",
+                  user: { id: 2, name: "Ahmad", avatar: "/public/images/default avatar1.jpg" },
+                },
+                {
+                  id: 502,
+                  text: "Great reply!",
+                  createdAt: "1m",
+                  user: { id: 7, name: "Sara", avatar: "/public/images/default avatar1.jpg" },
+                },
+              ],
+            },
+            {
+              id: 302,
+              text: "Nice reply!",
+              createdAt: "2m",
+              user: { id: 8, name: "Aria", avatar: "/public/images/default avatar1.jpg" },
+              replies: [
+                {
+                  id: 503,
+                  text: "Thanks Aria!",
+                  createdAt: "1m",
+                  user: { id: 5, name: "Lina", avatar: "/public/images/default avatar1.jpg" },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 202,
+          text: "I totally agree",
+          createdAt: "4m",
+          user: { id: 9, name: "Khalid", avatar: "/public/images/default avatar1.jpg" },
+          replies: [
+            {
+              id: 304,
+              text: "Glad you agree!",
+              createdAt: "2m",
+              user: { id: 2, name: "Ahmad", avatar: "/public/images/default avatar1.jpg" },
+            },
+          ],
+        },
+      ],
     },
     {
       id: 102,
       text: "same problem here",
       createdAt: "5m",
-      user: {
-        id: 3,
-        name: "Sara",
-        avatar: "/public/images/default avatar1.jpg"
-      }
-    }
-  ],
-
-  2: [
+      user: { id: 3, name: "Sara", avatar: "/public/images/default avatar1.jpg" },
+      replies: [
+        {
+          id: 203,
+          text: "Me too!",
+          createdAt: "4m",
+          user: { id: 10, name: "Aria", avatar: "/public/images/default avatar1.jpg" },
+          replies: [
+            {
+              id: 305,
+              text: "Let's fix it",
+              createdAt: "2m",
+              user: { id: 3, name: "Sara", avatar: "/public/images/default avatar1.jpg" },
+            },
+          ],
+        },
+      ],
+    },
     {
-      id: 201,
-      text: "try useMemo",
-      createdAt: "2h",
-      user: {
-        id: 4,
-        name: "Karam",
-        avatar: "/public/images/default avatar1.jpg"
-      }
-    }
-  ]
+      id: 103,
+      text: "I agree",
+      createdAt: "10m",
+      user: { id: 4, name: "Mona", avatar: "/public/images/default avatar1.jpg" },
+    },
+  ],
 };
