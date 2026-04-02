@@ -1,4 +1,4 @@
-export const staticReplies = {
+export  const staticReplies = {
   1: [
     {
       id: 101,

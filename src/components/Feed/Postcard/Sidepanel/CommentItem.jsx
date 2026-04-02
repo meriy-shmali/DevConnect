@@ -45,7 +45,6 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
           type={type}
           level={level}
         />
-
         {item.user?.name === /*currentUser?.id*/"You" && (
           <MenuPanel
             id={item.id}
@@ -58,11 +57,9 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
       </div>
       <div className=" flex justify-between ml-12">
       {/* text */}
-      
       <p className="text-md">
         {istranslate[item.id] ? translate[item.id] : item.text}
       </p>
-
       {/* reactions */}
       {type === "comments" && (
         <ReactionPanel
@@ -126,14 +123,13 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
               setreplyText={setreplyText}
               handlesendreply={handlesendreply}
               viewreply={viewreply}
-              
               t={t}
             />
           ))}
            {hasMore && (
         <button
           className="text-blue-500 text-sm ml-4"
-          onClick={() => setVisibleReplies(prev => prev + 5)} // عرض 2 زيادة
+          onClick={() => setVisibleReplies(prev => prev + 5)} // عرض 5 زيادة
         >
           Show more ({replies.length - visibleReplies} more)
         </button>

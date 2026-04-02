@@ -76,9 +76,10 @@ i18n.use(initReactI18next).init({
         recent_serches:"Recent searches",
         results:"Results",
         show:"Show more results",
-        View:"View thread",
+        View:"View replies",
         see_original:"See original",
         comments:"Comments",
+        write:"Write a reply",
         
 
 
@@ -162,6 +163,7 @@ i18n.use(initReactI18next).init({
         View:"عرض السلسلة",
         see_original:"الأصلي",
         comments:"التعليقات",
+         write:"اكتب ردا",
 
       }
     }

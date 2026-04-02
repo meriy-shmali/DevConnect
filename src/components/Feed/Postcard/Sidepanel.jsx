@@ -5,16 +5,7 @@ import { LiaUserAltSlashSolid } from "react-icons/lia";
 import { useTranslation } from "react-i18next";
 import {useCommentLogic} from "@/hook/CommentLogic";
 import CommentItem from "./Sidepanel/CommentItem";
-const SidebarPanel = ({
-  title,
-  icon,
-  items,
-  showFilter,
-  onClose,
-  type,
-  sort,
-  setSort
-}) => {
+const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort}) => {
   const {
     showmenu,
     setshowmenu,
@@ -54,7 +45,7 @@ const SidebarPanel = ({
         animate={{ x: 0 }}
         exit={{ x: 400 }}
         transition={{ duration: 0.3 }}
-        className="sidebar fixed right-0 top-2 w-[450px] h-screen bg-white shadow-lg p-4 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll"
+        className="sidebar fixed right-0 top-2 w-[450px] h-screen bg-white shadow-lg p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll"
       >
         {/* header */}
         <div className="flex justify-between items-center mb-6">
@@ -101,8 +92,8 @@ const SidebarPanel = ({
         {/* items */}
         <div className="flex-col space-y-4">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-gray-500 space-y-2 mt-16 text-xl">
-              <LiaUserAltSlashSolid className="text-7xl" />
+            <div className=" flex flex-col items-center justify-center  h-full text-gray-500 space-y-2 relative -bottom-48 text-3xl">
+              <LiaUserAltSlashSolid className="text-8xl" />
               <p>No items</p>
             </div>
           ) : (

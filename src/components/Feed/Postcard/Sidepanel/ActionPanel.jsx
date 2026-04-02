@@ -9,14 +9,15 @@ const ActionPanel = ({
   replydata,
   t
 }) => {
+
   return (
     <div className="flex text-sm text-gray-500 space-x-4 ml-10 p-2">
       <button onClick={() => handleReplyClick(item)}>
-        reply
+       { t("reply")}
       </button>
 
       <button onClick={() => handleViewreply(item.id)}>
-        {replydata[item.id]?.length || 0} view replies
+        {replydata[item.id]?.length || 0} {t("View")}
       </button>
         <button onClick={() => handleTranslate(item)}>
         {istranslate[item.id] ? t("see_original") : t("translate")}

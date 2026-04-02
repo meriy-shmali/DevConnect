@@ -8,6 +8,7 @@ export const staticposts=[
     avatar:"/public/images/photo2.jpg",
     isfollowing:true
      },
+     trending:"best_following",
      date:"2 hours ago" ,
      category:"question",
      text:"How can I optimize React performance?"  ,
@@ -30,6 +31,7 @@ export const staticposts=[
      avatar:'/public/images/photo1.jpg',
      isfollowing:false 
      },
+      trending:"based on your intersted",
      date:"1 day",
      category:"project",
      text:"here is some of ui/ux",
@@ -51,6 +53,7 @@ export const staticposts=[
      avatar:'/public/images/photo3.jpg' ,
      isfollowing:false  
      },
+      trending:"trending",
      date:"7 hours ago",
      category:"problem",
      text:"my code gives error",

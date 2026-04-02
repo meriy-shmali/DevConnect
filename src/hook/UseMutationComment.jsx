@@ -39,14 +39,14 @@ export const useaddreply=()=>{
         mutationFn:addreply
     })
 } //edit comment
-export const useEditcomment = ({ commentId, text } = {}) => {
-    return useMutation({
-        mutationFn: () => editcomment({ commentId, text })
-    });
+export const useEditcomment = () => {
+  return useMutation({
+    mutationFn: editcomment
+  });
 };
 //delete comment
-export const useDeletecomment=(commentId)=>{
-    return useMutation({
-        mutationFn:()=> deletecomment(commentId)
-    })
-}
+export const useDeletecomment = () => {
+  return useMutation({
+    mutationFn: deletecomment
+  });
+};

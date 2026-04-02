@@ -4,28 +4,27 @@ import { usegetreplies } from "@/hook/UseQueryComment";
 import { staticReplies } from "@/Utils/data/staticReplies";
 import { useAuth } from "@/context/AuthContext";
 export const useCommentLogic = (items = []) => {
-  const [activeCommentId, setActiveCommentId] = useState(null);
+  const [activeCommentId, setActiveCommentId] = useState(null);//لمعرفة الردود تابعة لاي تعليق
   const [showmenu, setshowmenu] = useState(false);
+  const [menu, setMenu] = useState({});//عندي مجموعة تعليقات وكل تعليق له حالة
+  const [translate, settranslate] = useState({});//الترجمة
+  const [istranslate, setistranslate] = useState({});//هل عم نعرض النص المترجم ام الاصلي
+  const [viewreply, setviewreply] = useState({});
+  const [replyInput, setReplyInput] = useState({});//لفتح حقل الادخال
+  const [replydata, setreplydata] = useState({});//لتخزين الردود
+  const [replyText, setreplyText] = useState({});//لادخال النص 
+  const [editing, setEditing] = useState({});//من اجل تعديل التعليق
   const { currentUser } = useAuth();
   const editComment=useEditcomment();
   const commentreactionMutation = usecommentreaction();
   const TranslatecommentMutaion = usetranslatecomment();
   const deletecomment = useDeletecomment();
   const addreplyMutation = usereplycomment();
-
   const { data: fetchedReplies } = usegetreplies(activeCommentId, !!activeCommentId);
-  const [translate, settranslate] = useState({});
-  const [istranslate, setistranslate] = useState({});
-  const [viewreply, setviewreply] = useState({});
-  const [replyInput, setReplyInput] = useState({});
-  const [replydata, setreplydata] = useState({});
-  const [replyText, setreplyText] = useState({});
-  const [editing, setEditing] = useState({});
-  const [menu, setMenu] = useState({});
   const toggleMenu = (id) => {
   setMenu(prev => ({
     ...prev,
-    [id]: !prev[id]
+    [id]: !prev[id] //بحافظ على القيم القديمة وبعكس القيمة الجديدة 
   }));
 };
   const [counts, setCounts] = useState(() => {
@@ -34,12 +33,12 @@ export const useCommentLogic = (items = []) => {
       map[c.id] = { likes: c.likes || 0, dislikes: c.dislikes || 0 };
     });
     return map;
-  });
+  });//يتم تنفيذها مرة واحدة من اجل الكومينت والريبلاي 
   const [active, setActive] = useState(() => {
     const map = {};
     items.forEach(c => map[c.id] = c.userReaction || null);
     return map;
-  });
+  });//user reaction بكون حسب الباك 
 
   // Fetch replies when activeCommentId changes
   useEffect(() => {
@@ -49,19 +48,16 @@ export const useCommentLogic = (items = []) => {
       : staticReplies[activeCommentId] || [];
     setreplydata(prev => ({
       ...prev,
-      [activeCommentId]: replies
+      [activeCommentId]: replies//الردود الخاصة بتعليق معين 
     }));
   }, [fetchedReplies, activeCommentId]);
 
   // Toggle reply input
  const handleReplyClick = (comment) => {
-   const id = comment.id;
-
+  const id = comment.id;
   const isInputOpen = replyInput[id];
   const isRepliesOpen = viewreply[id];
-
   const isFullyOpen = isInputOpen && isRepliesOpen;
-
   if (isFullyOpen) {
     // سكّر الكل
     setReplyInput(prev => ({ ...prev, [id]: false }));
@@ -70,14 +66,12 @@ export const useCommentLogic = (items = []) => {
     // افتح الكل
     setReplyInput(prev => ({ ...prev, [id]: true }));
     setviewreply(prev => ({ ...prev, [id]: true }));
-
     if (!replyText[id]) {
       setreplyText(prev => ({
         ...prev,
         [id]: `@${comment.user?.name || ""} `
       }));
     }
-
     setActiveCommentId(id);
   }
 };
@@ -86,8 +80,6 @@ const handleViewreply = (commentId) => {
  const isInputOpen = replyInput[commentId];
 
   if (isInputOpen) {
-    // 🔴 إذا reply مفتوحة
-    // سكّر input وخلي الردود
     setReplyInput(prev => ({
       ...prev,
       [commentId]: false
@@ -98,8 +90,7 @@ const handleViewreply = (commentId) => {
       [commentId]: true
     }));
 
-  } else {
-    // 🟢 toggle طبيعي
+  } else { 
     setviewreply(prev => ({
       ...prev,
       [commentId]: !prev[commentId]
@@ -111,8 +102,7 @@ const handleViewreply = (commentId) => {
 const handlesendreply = (parentId) => {
   const text = replyText[parentId];
   if (!text?.trim()) return;
-
-  // ✅ edit
+  //edit
   if (editing[parentId]) {
     setreplydata(prev => {
       const updated = { ...prev };
@@ -130,12 +120,12 @@ const handlesendreply = (parentId) => {
     setReplyInput(prev => ({ ...prev, [parentId]: false }));
     setreplyText(prev => ({ ...prev, [parentId]: "" }));
 
-    editComment.mutate({ commentId: parentId, text }); // ✅ الصح
+   editComment.mutate({ commentId: parentId, text }); //  الصح
 
     return;
   }
 
-  // ✅ reply عادي
+  //  reply عادي
   const newReply = {
     id: Date.now(),
     text,
@@ -150,7 +140,18 @@ const handlesendreply = (parentId) => {
 
   setreplyText(prev => ({ ...prev, [parentId]: "" }));
 
-  addreplyMutation.mutate({ text, commentId: parentId });
+addreplyMutation.mutate(
+  { text, commentId: parentId },
+  {
+    onSuccess: (res) => {
+      // استبدال البيانات من الباك
+      setreplydata(prev => ({
+        ...prev,
+        [parentId]: res.data || prev[parentId]
+      }));
+    }
+  }
+);
 };
   const handleReaction = (commentId, type) => {
     const current = active[commentId];
@@ -194,19 +195,16 @@ const handlesendreply = (parentId) => {
 };
 const handleEditClick = (comment) => {
   const id = comment.id;
-
   // افتح input
   setReplyInput(prev => ({
     ...prev,
     [id]: true
   }));
-
   // فعل وضع التعديل
   setEditing(prev => ({
     ...prev,
     [id]: true
   }));
-
   // حط النص الحالي
   setreplyText(prev => ({
     ...prev,

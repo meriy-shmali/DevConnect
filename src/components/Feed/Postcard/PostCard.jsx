@@ -16,6 +16,7 @@ import { useaddcomment } from '@/hook/UseMutationComment'
 import { staticComment } from '@/Utils/data/staticcomment'
 import { usecomment } from '@/hook/UseQueryComment'
 import { FaRegCommentDots } from 'react-icons/fa6'
+import Trending from './Trending'
 const PostCard = ({post}) => {
   const{t}=useTranslation()
   const [sort,setsort]=useState('latest');//المستخدم يغير الفلترة
@@ -67,6 +68,7 @@ const handleAddComment = (text) => {
 };
   return (
     <div className='bg-white rounded-3xl shadow-xl w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10'>
+    <Trending post={post}/>
     <HeaderPost post={post}/>
     <BodyPost post={post} />
     <Reaction post={post}  onOpenReaction={handleOpenReaction} onClose={handleClose} reactionData={reactionData}
