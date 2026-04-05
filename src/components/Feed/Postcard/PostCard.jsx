@@ -11,18 +11,23 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { PiBugBeetle } from "react-icons/pi";
 import { MdLightbulbOutline } from "react-icons/md";
-import { usequeryreaction } from '@/hook/UseQueryreact'
-import { useaddcomment } from '@/hook/UseMutationComment'
-import { staticComment } from '@/Utils/data/staticcomment'
-import { usecomment } from '@/hook/UseQueryComment'
-import { FaRegCommentDots } from 'react-icons/fa6'
-import Trending from './Trending'
+import { usequeryreaction } from '@/hook/UseQueryreact';
+import { useaddcomment } from '@/hook/UseMutationComment';
+import { staticComment } from '@/Utils/data/staticcomment';
+import { usecomment } from '@/hook/UseQueryComment';
+import { useEffect } from 'react'
+import { FaRegCommentDots } from 'react-icons/fa6';
+import { useQueryClient } from "@tanstack/react-query";
+import Trending from './Trending';
 const PostCard = ({post}) => {
   const{t}=useTranslation()
   const [sort,setsort]=useState('latest');//المستخدم يغير الفلترة
   const[paneltype,setpaneltype]=useState(null)
   const [commentCount, setCommentCount] = useState(post.comment)
   const [comments, setComments] = useState(staticComment[post.id] || []); 
+  useEffect(() => {
+  setCommentCount(post.comment);
+}, [post.comment]);
 // نخزن التعليقات في الحالة لتحديث العدد فورًا
   const handleOpenReaction = (type) => {
   setpaneltype(type)
@@ -33,12 +38,13 @@ const handleopencomment=()=>{
 const handleClose = () => {
  setpaneltype(null)
 };
-const { data: commentsData = [] } = usecomment(post.id, sort);
+const commentsData = usecomment(post.id, sort);
 const { data } = usequeryreaction(
   post.id,
   paneltype !== "comments" ? paneltype : null
 );
-const users = data?.length ? data : staticuser[paneltype] || [];
+  const queryClient = useQueryClient();
+const users = data ?? staticuser[paneltype] ?? [];
 const reactionData = [
   { key: "likes", label: "useful", count: post.likes, icon: <AiOutlineLike /> },
   { key: "dislikes", label: "not useful", count: post.dislikes, icon: <AiOutlineDislike /> },
@@ -59,9 +65,12 @@ const handleAddComment = (text) => {
 
   setComments(prev => [newComment, ...prev]); // إضافة التعليق جديد بالواجهة فورًا
   setCommentCount(prev => prev + 1);
+
   addcommntMutation.mutate({ postId: post.id, text },{
-    onSuccess(data){//حسب الباك
-      setCommentCount(data.newCommentCount)
+    onSuccess(){//حسب الباك
+     queryClient.invalidateQueries({
+  queryKey: ['comment', post.id]
+});
     }
   }
   ); // إرسال للباك

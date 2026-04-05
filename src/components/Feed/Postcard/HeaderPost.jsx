@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
+import { useFollow } from '@/hook/UseFollow'
 const HeaderPost = ({post}) => {
   const navigate=useNavigate()
+  const {followMutation}=useFollow
   //في حال الباك ما رجع isfollowing
   const[isfollowing,setisfollowing]=useState(post.user?.isfollowing||false);
     const { currentUser } = useAuth();
   const handleFollow=(e)=>{
 e.stopPropagation(); // يمنع الانتقال للصفحة
-
+followMutation.mutate(post.user.id)
 setisfollowing(!isfollowing);
   }
   return (
