@@ -5,7 +5,7 @@ import { LiaUserAltSlashSolid } from "react-icons/lia";
 import { useTranslation } from "react-i18next";
 import {useCommentLogic} from "@/hook/CommentLogic";
 import CommentItem from "./Sidepanel/CommentItem";
-const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort}) => {
+const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,postId}) => {
   const {
     showmenu,
     setshowmenu,
@@ -28,7 +28,7 @@ const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort}) =
     editing,
     handleDeleteComment,
     handleEditClick
-  } = useCommentLogic(items);
+  } = useCommentLogic(items,postId);
 
   const { t } = useTranslation();
 
@@ -45,7 +45,7 @@ const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort}) =
         animate={{ x: 0 }}
         exit={{ x: 400 }}
         transition={{ duration: 0.3 }}
-        className="sidebar fixed right-0 top-2 w-[450px] h-screen bg-white shadow-lg p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll"
+        className="sidebar fixed right-0 top-2 w-[470px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll"
       >
         {/* header */}
         <div className="flex justify-between items-center mb-6">

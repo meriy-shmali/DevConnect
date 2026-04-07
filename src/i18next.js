@@ -80,6 +80,7 @@ i18n.use(initReactI18next).init({
         see_original:"See original",
         comments:"Comments",
         write:"Write a reply",
+        intersted:"people with same intersted like you",
         
 
 
@@ -164,6 +165,7 @@ i18n.use(initReactI18next).init({
         see_original:"الأصلي",
         comments:"التعليقات",
          write:"اكتب ردا",
+         intersted:"اشخاص لديهم نفس الاهتمامات ",
 
       }
     }

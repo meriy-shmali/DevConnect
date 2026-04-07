@@ -45,7 +45,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
           type={type}
           level={level}
         />
-        {item.user?.name === /*currentUser?.id*/"You" && (
+        {item.user?.username === /*currentUser?.id*/"You" && (
           <MenuPanel
             id={item.id}
             menu={menu}

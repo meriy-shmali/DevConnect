@@ -13,11 +13,11 @@ import CreatepostMobile from "./CreatepostMobile";
 import { MdPostAdd } from "react-icons/md";
 import AiModal from './AiModal';
 const Createpost = () => {
-  const navigate=useNavigate();
+ 
   const post=CreatepostLogic();
   const { t } = useTranslation();
   return (
-    <div className=" sticky">
+    <div>
     <div className="hidden md:block"  onClick={()=>post.setshow(!post.show)}>
       <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45 ">
         <div className="flex-col justify-center items-center mt-8 p-8 space-y-14 pb-36">
@@ -122,11 +122,7 @@ const Createpost = () => {
         </div>
       </div>
     </div>
-    <div className="md:hidden flex justify-center">
-    <div onClick={()=>navigate("/post-mobile")} className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500 flex align-middle">{t('create')}</div>
     
- 
-    </div>
     <AiModal open={post.showModel}
      result={post.aiResult}
      onuse={post.handleUseAi}

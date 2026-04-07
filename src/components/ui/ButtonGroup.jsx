@@ -40,7 +40,7 @@ const Buttons = ({ type ,onClick,...props }) => {
   if(type=='follow'){
     return(
       <Button variant='secondary'
-      className='bg-follow-button text-text-button text-[24px] hover:bg-hover-purple'
+      className='bg-follow-button text-text-button text-[22px] md:text-[24px] hover:bg-hover-purple'
       size='sm'>{t("follow")}</Button>
     )
   }

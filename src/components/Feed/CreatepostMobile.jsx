@@ -15,7 +15,7 @@ const CreatepostMobile = () => {
     const post=CreatepostLogic();
     const {t}=useTranslation();
   return (
-    <div className='flex-col mt-14  space-y-16'>
+    <div className='flex-col mt-14   space-y-16'>
     <div> <p className='text-5xl flex justify-center items-center font-semibold'>{t('create')}</p></div>
     <div className='flex justify-center'>
      <Textarea

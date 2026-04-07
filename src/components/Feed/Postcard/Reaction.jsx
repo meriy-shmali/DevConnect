@@ -5,15 +5,16 @@ import { PiBugBeetle } from "react-icons/pi";
 import { VscLightbulbSparkle } from "react-icons/vsc";
 import { FaRegCommentDots } from "react-icons/fa";
 import { usereaction } from '@/hook/UseMutationreact';
-
+import { QueryClient, useQueryClient} from '@tanstack/react-query';
 const Reaction = ({post,onOpenReaction,onClose,reactionData, incrementComment, commentCount,onOpenComments}) => {
 ///لما يكون عنا اكتر من زر مافينا نحط حالة وحدة للكل
 const [active,setactive]=useState({})
+const queryClient=useQueryClient()
 const [reaction,setreaction]=useState({
-  likes: post.likes,
-  dislikes: post.dislikes,
-  ideas: post.ideas,
-  problem: post.problem,
+  useful: post.reaction_counts?.useful || 0,
+  not_useful: post.reaction_counts?.not_useful || 0,
+  creative_solution: post.reaction_counts?.creative_solution || 0,
+  same_problem: post.reaction_counts?.same_problem || 0,
   comment: commentCount
 })
 const reactionMutation=usereaction();
@@ -24,10 +25,22 @@ setactive(prev => ({
     ...prev,
     [type]: !prev[type]
   }));
-  reactionMutation.mutate({
-    postId:post.id,
-    type:type
-  })
+ reactionMutation.mutate(
+  { postId: post.id, type: type },
+  {
+    onSuccess: (res) => {
+      // تحديث state بالقيم الجديدة من الباك بدل increment/decrement محلي
+      setreaction(prev => ({ ...prev, [type]: res.data[type] }));
+      queryClient.invalidateQueries({ queryKey: ["posts"] }); // لضمان تحديث الـ feed
+      queryClient.invalidateQueries({ queryKey: ["reaction", post.id, type] }); // لو عندك sidepanel
+    },
+    onError: () => {
+      // rollback لو صار خطأ
+      setreaction(prev => ({ ...prev, [type]: prev[type] }));
+      setactive(prev => ({ ...prev, [type]: !prev[type] }));
+    }
+  }
+);
    if(type === 'comment' && incrementComment){
       incrementComment(); // يحدث count في PostCard
     }
@@ -39,8 +52,8 @@ setactive(prev => ({
     <div className='flex space-x-40 items-center '>
       <div>
      <button className='flex space-x-2 items-center rounded-2xl px-2 py-1 border border-gray-200 shadow-md '>
-      <FaRegCommentDots className='text-xl text-gray-700'/>
-      <div className='text-lg font-semibold text-gradient'onClick={(e) => {
+      <FaRegCommentDots className='md:text-xl text-lg text-gray-700'/>
+      <div className='md:text-lg text-md font-semibold text-gradient'onClick={(e) => {
     e.stopPropagation();
     onOpenComments(); // 👈 بدل ما كان فاضي
   }}>{reaction.comment}</div>
@@ -48,17 +61,18 @@ setactive(prev => ({
      </div>
     <div className='flex space-x-3.5  '>
       {reactionData.map((items)=>(
-        <div className=''>
+        <div  key={items.key}>
           <button
-    key={items.key}
     onClick={(e) => e.stopPropagation()
     }
     className={`flex items-center space-x-3 px-2 py-1 rounded-2xl border border-gray-200 shadow text-lg w-fit `}
   >
- <div onClick={()=>{onClose()
-  handlereaction(items.key)}} className='text-xl text-gray-700'>
+ <div onClick={(e)=>{
+  e.stopPropagation()
+  onClose()
+  handlereaction(items.key)}} className='md:text-xl text-lg text-gray-700'>
   {items.icon}</div>
-  <div className='text-gradient font-semibold' onClick={(e)=>{ e.stopPropagation(); 
+  <div className='text-gradient font-semibold md:text-lg text-md' onClick={(e)=>{ e.stopPropagation(); 
     onOpenReaction(items.key)}
   }>{reaction[items.key]}</div>
 </button>

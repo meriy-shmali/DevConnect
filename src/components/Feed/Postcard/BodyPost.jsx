@@ -16,9 +16,9 @@ const BodyPost = ({post}) => {
     setTimeout(()=>setcopy(false),2000);
   } //للتحكم بالنص  مثل الخط مثلا
   const isText =
-  post.text &&
+  post.content &&
   !post.code &&
-  (!post.images || post.images.length === 0)&&(!post.tags||post.tags.length===0);//اذا ما حطينا الطول يساوي صفر رح يعتبر انو في صورة حتى لو فاضية
+  (!post.media || post.media.length === 0)&&(!post.tags||post.tags.length===0);//اذا ما حطينا الطول يساوي صفر رح يعتبر انو في صورة حتى لو فاضية
   //يشير لعنصر بالكود 
   const codeRef = useRef(null);
   //منستنى حتى يجهز الكود بعدين منلونه
@@ -29,19 +29,19 @@ const BodyPost = ({post}) => {
 }, [post.code]);
 //من اجل اعادة تعيين اول صورة  في كل مرة يتغير البوست لمنع الاخطاء في حال كان بوست يحوي 4 صور والتاني صورتين
 useEffect(() => {
-  if(post.images?.length>0){
+  if(post.media?.length>0){
     setCurrentImage(0);
   }
-}, [post.images]);
+}, [post.media]);
 //لتنفيذ التشغيل التلقائي للصور 
 useEffect(() => {
-  if (!post.images || post.images.length === 0) return;
+  if (!post.media || post.media.length === 0) return;
 
   const interval = setInterval(() => {
-    setCurrentImage((prev) => (prev + 1) % post.images.length);
+    setCurrentImage((prev) => (prev + 1) % post.media.length);
   }, 6000);// كل 6 ثواني
     return () => clearInterval(interval); // تنظيف عند unmount
-}, [post.images]); 
+}, [post.media]); 
 const {t}= useTranslation();
 
 const translate=useTranslate();
@@ -59,7 +59,7 @@ if(Translate)
 }
 translate.mutate({
   postId:post.id,
- text:post.text,
+ text:post.content,
 },{
   onSuccess:(res)=>{
     setTranslate(res.data.translate);
@@ -73,15 +73,15 @@ translate.mutate({
   return (
     <div className='mt-7 w-[800px] h-fit rounded-md p-3 flex-col space-y-6 items-start '>
     {/*text */}
-    {isTranslate?translate:post.text &&(
-      <p className={`${isText? "text-3xl font-semibold":"text-2xl"}`}>{post.text}</p>
+    {isTranslate?translate:post.content &&(
+      <p className={`${isText? "md:text-3xl text-2xl font-semibold":"md:text-2xl text-xl"}`}>{post.content}</p>
     )}
 
 {post.code && (
 
-<div className="bg-gray-900 text-white rounded-lg overflow-hidden ">
+<div className="bg-gray-900 text-white rounded-lg overflow-hidden md:w-full w-[500px]">
 <div className="sticky top-0 z-10 bg-gray-900 border-b border-gray-700 flex justify-between items-center px-3 py-1">
-   <div className='text-xl'>
+   <div className='md:text-xl text-lg'>
     {post.codeLanguage || "plaintext"}
 
   </div>
@@ -89,7 +89,7 @@ translate.mutate({
 onClick={handlecopy}
 className="text-xs  bg-gray-700 p-2 rounded-md"
 >
-{copy?<TbCopyCheck className='text-[20px]' />:<FaRegCopy className='text-[20px]' />}
+{copy?<TbCopyCheck className='md:text-[20px] text-[16px]' />:<FaRegCopy className='md:text-[20px] text-[16px]' />}
 </button>
 </div>
 <pre className="p-4 overflow-auto max-h-60 code-scroll">
@@ -103,25 +103,25 @@ className="text-xs  bg-gray-700 p-2 rounded-md"
 )}
 {/* IMAGES */}
 {/* حطينا اشارة الاستفهام لان بدونها رح يكون الشرط عطول صح */}
-{post.images?.length > 0 && (
+{post.media?.length > 0 && (
 
 <div className="w-fit h-fit">
 
 <img
-src={post.images[currentImage]}
-className="rounded-xl w-full"
+src={post.media[currentImage]} loading='lazy'
+className="rounded-xl md:w-full w-[500px]"
 />
 
 {/* dots */}
 
 <div className="flex justify-center gap-2 mt-2">
 
-{post.images.map((img,index)=>(
+{post.media.map((img,index)=>(
 
 <div
 key={img}
 onClick={()=>setCurrentImage(index)}
-className={`w-3 h-3 rounded-full cursor-pointer ${
+className={`md:w-3 md:h-3 w-2 h-2 rounded-full cursor-pointer ${
 index===currentImage ? "bg-black":"bg-gray-500"
 }`}
 />
@@ -131,7 +131,7 @@ index===currentImage ? "bg-black":"bg-gray-500"
   {post.tags?.map((tag,index) => (
     <div
       key={index}
-      className="text-xl text-gray-700 flex-wrap"
+      className="md:text-xl text-lg text-gray-700 flex-wrap"
     >
       {tag}
     </div>

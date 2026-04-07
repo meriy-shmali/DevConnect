@@ -109,7 +109,9 @@ console.log('hi')
 
  createpostmutation.mutate(formData,{
    onSuccess: ()=>{
-    queryClient.invalidateQueries(["posts",category])
+    queryClient.invalidateQueries({
+      queryKey:["posts",category]
+    })
      setText("");
      toast(Messages.login_success,{id:toastId});
     

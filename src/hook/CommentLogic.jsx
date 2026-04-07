@@ -3,7 +3,8 @@ import { usecommentreaction, useDeletecomment, usereplycomment, usetranslatecomm
 import { usegetreplies } from "@/hook/UseQueryComment";
 import { staticReplies } from "@/Utils/data/staticReplies";
 import { useAuth } from "@/context/AuthContext";
-export const useCommentLogic = (items = []) => {
+import {useQueryClient } from "@tanstack/react-query";
+export const useCommentLogic = (items = [],postId) => {
   const [activeCommentId, setActiveCommentId] = useState(null);//لمعرفة الردود تابعة لاي تعليق
   const [showmenu, setshowmenu] = useState(false);
   const [menu, setMenu] = useState({});//عندي مجموعة تعليقات وكل تعليق له حالة
@@ -20,6 +21,7 @@ export const useCommentLogic = (items = []) => {
   const TranslatecommentMutaion = usetranslatecomment();
   const deletecomment = useDeletecomment();
   const addreplyMutation = usereplycomment();
+  const  queryClient=useQueryClient()
   const { data: fetchedReplies } = usegetreplies(activeCommentId, !!activeCommentId);
   const toggleMenu = (id) => {
   setMenu(prev => ({
@@ -120,7 +122,12 @@ const handlesendreply = (parentId) => {
     setReplyInput(prev => ({ ...prev, [parentId]: false }));
     setreplyText(prev => ({ ...prev, [parentId]: "" }));
 
-   editComment.mutate({ commentId: parentId, text }); //  الصح
+  editComment.mutate({ commentId: parentId, text }, {
+  onSuccess: () => {
+    queryClient.invalidateQueries({queryKey:["comment", postId]}
+      );
+  }
+}); //  الصح
 
     return;
   }
@@ -149,6 +156,7 @@ addreplyMutation.mutate(
         ...prev,
         [parentId]: res.data || prev[parentId]
       }));
+       queryClient.invalidateQueries({queryKey:["comment", postId]});
     }
   }
 );
@@ -167,7 +175,14 @@ addreplyMutation.mutate(
       return { ...prev, [commentId]: { likes: newLikes, dislikes: newDislikes } };
     });
     setActive(prev => ({ ...prev, [commentId]: current === type ? null : type }));
-    commentreactionMutation.mutate({ commentId, type });
+   commentreactionMutation.mutate({ commentId, type }, {
+  onSuccess: () => {
+    queryClient.invalidateQueries({
+      queryKey:["comment", postId]
+    }
+      );
+  }
+});
   };
 
   const handleTranslate = (comment) => {
@@ -191,7 +206,12 @@ addreplyMutation.mutate(
     return newData;
   });
   setCounts(prev => { const newCounts = { ...prev }; delete newCounts[commentId]; return newCounts; });
-  deletecomment.mutate(commentId);
+ deletecomment.mutate(commentId, {
+  onSuccess: () => {
+    queryClient.invalidateQueries({
+      queryKey:["comment", postId]});
+  }
+});
 };
 const handleEditClick = (comment) => {
   const id = comment.id;

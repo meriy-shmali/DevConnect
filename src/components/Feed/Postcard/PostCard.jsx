@@ -23,18 +23,36 @@ const PostCard = ({post}) => {
   const{t}=useTranslation()
   const [sort,setsort]=useState('latest');//المستخدم يغير الفلترة
   const[paneltype,setpaneltype]=useState(null)
-  const [commentCount, setCommentCount] = useState(post.comment)
+  const [commentCount, setCommentCount] = useState(post.total_comments)
   const [comments, setComments] = useState(staticComment[post.id] || []); 
   useEffect(() => {
-  setCommentCount(post.comment);
-}, [post.comment]);
+  setCommentCount(post.total_comments);
+}, [post.total_comments]);
 // نخزن التعليقات في الحالة لتحديث العدد فورًا
-  const handleOpenReaction = (type) => {
+  /*const handleOpenReaction = (type) => {
   setpaneltype(type)
+};*/
+const handleTogglePanel = (type) => {
+  if (paneltype === type) {
+    // إذا نفس النوع مضغوط مرتين → سكّر
+    setpaneltype(null);
+  } else {
+    // إذا نوع جديد → افتح
+    setpaneltype(type);
+  }
 };
-const handleopencomment=()=>{
+/*const handleopencomment=()=>{
   setpaneltype('comments')
-}
+}*/
+const handleToggleComments = () => {
+  if (paneltype === 'comments') {
+    // إذا نفس النوع مضغوط مرتين → سكّر
+    setpaneltype(null);
+  } else {
+    // افتح التعليقات
+    setpaneltype('comments');
+  }
+};
 const handleClose = () => {
  setpaneltype(null)
 };
@@ -44,12 +62,16 @@ const { data } = usequeryreaction(
   paneltype !== "comments" ? paneltype : null
 );
   const queryClient = useQueryClient();
-const users = data ?? staticuser[paneltype] ?? [];
+const users = Array.isArray(data)
+  ? data
+  : Array.isArray(staticuser[paneltype])
+  ? staticuser[paneltype]
+  : [];
 const reactionData = [
-  { key: "likes", label: "useful", count: post.likes, icon: <AiOutlineLike /> },
-  { key: "dislikes", label: "not useful", count: post.dislikes, icon: <AiOutlineDislike /> },
-  { key: "problem", label: "same problem", count: post.problem, icon: <PiBugBeetle /> },
-  { key: "ideas", label: "creative solution", count: post.ideas, icon: <MdLightbulbOutline /> }
+  { key: "useful", label: "useful", count: post.reaction_counts?.useful , icon: <AiOutlineLike /> },
+  { key: "not_useful", label: "not useful", count: post.reaction_counts?.not_useful, icon: <AiOutlineDislike /> },
+  { key: "same_problem", label: "same problem", count: post.reaction_counts?.same_problem , icon: <PiBugBeetle /> },
+  { key: "creative_solution", label: "creative solution", count:  post.reaction_counts?.creative_solution, icon: <MdLightbulbOutline /> }
 ];
 const reactionMap = Object.fromEntries(
   reactionData.map(item => [item.key, item])
@@ -76,14 +98,14 @@ const handleAddComment = (text) => {
   ); // إرسال للباك
 };
   return (
-    <div className='bg-white rounded-3xl shadow-xl w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10'>
+    <div className='bg-white rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center'>
     <Trending post={post}/>
     <HeaderPost post={post}/>
     <BodyPost post={post} />
-    <Reaction post={post}  onOpenReaction={handleOpenReaction} onClose={handleClose} reactionData={reactionData}
+    <Reaction post={post}  onOpenReaction={handleTogglePanel} onClose={handleClose} reactionData={reactionData}
      incrementComment={() => setCommentCount(prev => prev + 1)}
      commentCount={commentCount}
-     onOpenComments={handleopencomment}/>
+     onOpenComments={ handleToggleComments}/>
       <AnimatePresence>
     {paneltype && (
   <SidebarPanel
@@ -95,11 +117,16 @@ const handleAddComment = (text) => {
         ? commentsData
         : users
     }*/
-   items={paneltype === "comments" ? staticComment[post.id] || [] : users}
+  items={
+  paneltype === "comments"
+    ? (staticComment[post.id] || [])
+    : users
+}
     showFilter={paneltype === "comments"}
     sort={sort}
     setSort={setsort}
     onClose={handleClose}
+    postId={post.id}
   />
 )}
     </AnimatePresence>

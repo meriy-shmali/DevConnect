@@ -181,7 +181,7 @@ const toastId = toast.loading("Creating account...");
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="number"
+                type="password"
                 placeholder="•••••••"
                 className="placeholder:text-[22px] mt-3"
               />

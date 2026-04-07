@@ -49,21 +49,14 @@ const toastId = toast.loading("Logging in...");
       });
       form.reset();
       navigate("/feed");
-
     },
-
     onError: () => {
-
       toast.error("Invalid email or password", {
         id: toastId,
         icon: "❌"
       });
-
     }
-
   });
-   
-
     
   };
   const { t } = useTranslation();
@@ -118,18 +111,13 @@ const toastId = toast.loading("Logging in...");
         </FormItem>
       )}
     />
-   
-            
-           <div> <Button variant='link' className=' underline text-[24px] text-gray-700'>{t('forgot_password')}</Button></div>
+   <div> <Button variant='link' className=' underline text-[24px] text-gray-700'>{t('forgot_password')}</Button></div>
            <div className='flex justify-center p-4'><Buttons type="login" /></div> 
             
             <div className='flex-col  justify-center justify-items-center space-y-8 mt-8 '>
             <div className='flex-col space-y-2'><p className='text-[24px]'>{t('dont_have_account')}</p>
             <div><Button onClick={()=>navigate('/register') } variant='link' className=' underline text-[24px] text-gray-700'>{t('createaccount')}</Button></div></div>
             </div>
-
-
-
   </form>
 </Form>
 
