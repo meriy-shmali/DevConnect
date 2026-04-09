@@ -1,0 +1,96 @@
+export const staticReplies = {
+  1: [
+    {
+      id: 101,
+      text: "I agree with you",
+      created_at: "2026-04-06T12:00:00Z",
+      user: { id: 2, username: "Ahmad", personal_photo_url: "/images/default avatar1.jpg" },
+      replies: [
+        {
+          id: 201,
+          text: "Thank you!",
+          created_at: "2026-04-06T12:05:00Z",
+          user: { id: 5, username: "Lina", personal_photo_url: "/images/default avatar1.jpg" },
+          replies: [
+            {
+              id: 301,
+              text: "You're welcome!",
+              created_at: "2026-04-06T12:07:00Z",
+              user: { id: 6, username: "Mona", personal_photo_url: "/images/default avatar1.jpg" },
+              replies: [
+                {
+                  id: 501,
+                  text: "Thanks Ahmad!",
+                  created_at: "2026-04-06T12:08:00Z",
+                  user: { id: 2, username: "Ahmad", personal_photo_url: "/images/default avatar1.jpg" },
+                },
+                {
+                  id: 502,
+                  text: "Great reply!",
+                  created_at: "2026-04-06T12:09:00Z",
+                  user: { id: 7, username: "Sara", personal_photo_url: "/images/default avatar1.jpg" },
+                },
+              ],
+            },
+            {
+              id: 302,
+              text: "Nice reply!",
+              created_at: "2026-04-06T12:07:00Z",
+              user: { id: 8, username: "Aria", personal_photo_url: "/images/default avatar1.jpg" },
+              replies: [
+                {
+                  id: 503,
+                  text: "Thanks Aria!",
+                  created_at: "2026-04-06T12:08:00Z",
+                  user: { id: 5, username: "Lina", personal_photo_url: "/images/default avatar1.jpg" },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 202,
+          text: "I totally agree",
+          created_at: "2026-04-06T12:04:00Z",
+          user: { id: 9, username: "Khalid", personal_photo_url: "/images/default avatar1.jpg" },
+          replies: [
+            {
+              id: 304,
+              text: "Glad you agree!",
+              created_at: "2026-04-06T12:06:00Z",
+              user: { id: 2, username: "Ahmad", personal_photo_url: "/images/default avatar1.jpg" },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 102,
+      text: "Same problem here",
+      created_at: "2026-04-06T12:05:00Z",
+      user: { id: 3, username: "Sara", personal_photo_url: "/images/default avatar1.jpg" },
+      replies: [
+        {
+          id: 203,
+          text: "Me too!",
+          created_at: "2026-04-06T12:06:00Z",
+          user: { id: 10, username: "Aria", personal_photo_url: "/images/default avatar1.jpg" },
+          replies: [
+            {
+              id: 305,
+              text: "Let's fix it",
+              created_at: "2026-04-06T12:08:00Z",
+              user: { id: 3, username: "Sara", personal_photo_url: "/images/default avatar1.jpg" },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 103,
+      text: "I agree",
+      created_at: "2026-04-06T12:10:00Z",
+      user: { id: 4, username: "Mona", personal_photo_url: "/images/default avatar1.jpg" },
+    },
+  ],
+};

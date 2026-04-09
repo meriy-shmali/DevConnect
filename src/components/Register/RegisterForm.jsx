@@ -95,7 +95,7 @@ const RegisterForm = () => {
         </FormItem>
       )}
     />
-    <FormField
+     <FormField
       control={form.control}
       name="username"
       render={({ field }) => (
@@ -107,7 +107,7 @@ const RegisterForm = () => {
               <InputGroupInput
                 {...field}
                 type="username"
-                placeholder="username"
+                placeholder=""
                 className="placeholder:text-[22px] mt-2"
               />
               <InputGroupAddon>

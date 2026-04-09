@@ -85,9 +85,9 @@ const Buttons = ({ type }) => {
       <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('use')}</Button>
     )
   }
-   if(type=='save'){
+   if(type=='save' || type==='submit'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('save')}</Button>
+      <Button className='bg-blue-button text-text-button md:text-[25px] ' variant='default'>{t('save')}</Button>
     )
   }
   if(type=='ai'){

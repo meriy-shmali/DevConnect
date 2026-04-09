@@ -11,6 +11,8 @@ i18n.use(initReactI18next).init({
         login:"Login",
         email:"Email:",
         password:"Password:",
+        current_password:" Current Password",
+        new_password:"New Password",
         forgot_password:"Forgot Your Password?",
         createaccount:"Create an account",
         dont_have_account:"Dont have an account?",
@@ -55,12 +57,13 @@ i18n.use(initReactI18next).init({
         delete:"Delete",
         follow:"Follow",
         followers:"Followers",
-        personal_info:"Personal info",
+        following:"Following",
+        personal_info:"Personal information",
         specialization:"Specialization",
         bio:"Bio",
         links:"Links",
         save:"Save",
-        edit_personal_info:"Edit personal info",
+        edit_personal_info:"Edit personal information",
         edit_post:"Edit post",
         account_setting:"Account Settings",
         language:"Language",
@@ -70,8 +73,8 @@ i18n.use(initReactI18next).init({
         arabic:"Arabic",
         current_pass:"Current Password",
         new_pass:"New Password",
-
-
+        no_followers_yet:"No Followers Yet.",
+        no_following_yet:"No Following Yet."
 
       }
     },
@@ -82,8 +85,10 @@ i18n.use(initReactI18next).init({
         start:"ابدأ الان",
         translate:"الترجمة",
         login:"تسجيل الدخول",
-         email:"الايميل:",
+        email:"الايميل:",
         password:"كلمة المرور:",
+        current_password:"كلمة المرور الحالية",
+        new_password:"كلمة المرور الجديدة",
         forgot_password:"هل نسيت كلمة المرور؟",
         createaccount:"انشاء حساب",
         dont_have_account:"ليس لديك حساب؟",
@@ -128,6 +133,7 @@ i18n.use(initReactI18next).init({
         delete:"حذف",
         follow:"متابعة",
         followers:"المتابعين",
+        following:"المتابعين",
         personal_info:"المعلومات الشخصية",
         specialization:"التخصص",
         bio:"السيرة الذاتية",
@@ -143,7 +149,8 @@ i18n.use(initReactI18next).init({
         arabic:"عربي",
         current_pass:"كلمة المرور الحالية",
         new_pass:"كلمة المرور الجديدة",
-
+        no_followers_yet:"لا يوجد متابعين بعد",
+        no_following_yet:""
       }
     }
   },
