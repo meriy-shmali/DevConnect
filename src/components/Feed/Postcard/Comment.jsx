@@ -24,7 +24,13 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
       <input placeholder='Add Comment'
       value={text}
       onChange={(e)=>setText(e.target.value)}
-      className=" md:text-lg text-sm w-[400px] border border-gray-300 rounded-md  p-2 "/>
+      onKeyDown={(e) => {
+    if (e.key === "Enter" && !e.shiftKey) { // Enter بدون Shift
+      e.preventDefault(); // يمنع السطر الجديد
+      handleSend();
+    }
+  }}
+      className=" md:text-lg text-sm w-[400px] border border-gray-300 rounded-md  p-2  dark:bg-gray-100"/>
       < IoSend  onClick={handleSend}className='md:text-[30px] text-[25px] text-blue-700 '/>
     </div>
   )

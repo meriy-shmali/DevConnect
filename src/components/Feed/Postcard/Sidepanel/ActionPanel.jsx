@@ -11,7 +11,7 @@ const ActionPanel = ({
 }) => {
 
   return (
-    <div className="flex text-sm text-gray-500 space-x-4 ml-10 p-2">
+    <div className="flex text-sm text-gray-500 dark:text-gray-300 space-x-4 ml-10 p-2">
       <button onClick={() => handleReplyClick(item)}>
        { t("reply")}
       </button>

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { useFollow } from '@/hook/UseFollow'
+import MenuPanel from './Sidepanel/MenuPanel'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ar';
@@ -9,6 +10,13 @@ import { useTranslation } from 'react-i18next';
 dayjs.extend(relativeTime);
 const HeaderPost = ({post}) => {
   const navigate=useNavigate()
+  const [menu, setMenu] = useState({});
+  const toggleMenu = (id) => {
+  setMenu(prev => ({
+    ...prev,
+    [id]: !prev[id]
+  }));
+};
   const { i18n } = useTranslation();
   const {followMutation}=useFollow()
   //في حال الباك ما رجع isfollowing
@@ -33,8 +41,8 @@ setisfollowing(!isfollowing);
     <img src= {post.user?.personal_photo_url||"/public/images/default avatar1.jpg"}
     className='md:w-15 md:h-15 w-14 h-14 rounded-full'/>
     <div>
-      <div className='font-semibold text-lg md:text-xl'>{post.user?.username}</div>
-      <div className='text-gray-600 text-sm'>{formattedDate}</div>
+      <div className='font-semibold text-lg md:text-xl dark:text-white'>{post.user?.username}</div>
+      <div className='text-gray-600 dark:text-gray-400 text-sm'>{formattedDate}</div>
     </div>
     </div>
     <div> 
@@ -53,10 +61,20 @@ ${isfollowing
 </button>)}
     </div>
     </div>
-    <div className=' rounded-3xl border border-black w-[100px] md:w-[120px] text-center'>
-     <p className=' text-lg md:text-xl p-1 '>{post.post_type||"general"}</p> 
+    <div className='flex justify-center items-center space-x-4'>
+    <div className=' rounded-3xl border border-black dark:border-white w-[100px] md:w-[120px] text-center'>
+     <p className=' text-lg md:text-xl p-1 dark:text-white '>{post.post_type||"general"}</p> 
       </div>
-
+{post.user.id !== currentUser?.id && (
+      <MenuPanel
+        id={post.id}
+        menu={menu}
+        toggleMenu={toggleMenu}
+        size={28}
+       // onEdit={handleEditPost}
+       // onDelete={handleDeletePost}
+      />
+    )}</div>
     </div>
   )
 }

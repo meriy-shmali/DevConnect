@@ -4,6 +4,7 @@ import Welcomepage from './components/Welcomepage'
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+
 function App() {
   const { i18n } = useTranslation();
 
@@ -38,6 +39,9 @@ function App() {
       <Welcomepage/>
         </div>
         </Toaster>
+        <div className="fixed top-5 right-5 z-50 flex gap-2">
+ 
+</div>
     </>
     
   )

@@ -16,7 +16,7 @@ export const staticposts = [
     content: "How can I optimize React performance?",
     media: [],
     code: "",
-    code_language: "",
+  codeLanguage: "",
     tags: ["#React #javascript"],
     reaction_counts: {
       useful: 320,
@@ -41,7 +41,7 @@ export const staticposts = [
     content: "Here is some of UI/UX",
     media: ["/images/ui1.png","/images/ui2.png"],
     code: "",
-    code_language: "",
+    codeLanguage: "",
     tags: ["#ui/ux #webDesign #landpage"],
     reaction_counts: {
       useful: 100,
@@ -73,7 +73,7 @@ export const staticposts = [
  <div>welcome to our project</div>
  <div>welcome to our project</div>;
 }`,
-    code_language: "javascript",
+   codeLanguage: "javascript",
     tags: ["#Error #help #React"],
     reaction_counts: {
       useful: 10,

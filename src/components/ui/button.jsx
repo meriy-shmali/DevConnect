@@ -11,8 +11,9 @@ const buttonVariants = cva(
       variant: {
         default:
          "text-primary-foreground ",
+         ai_sidepanel:"flex  space-x-1 text-[30px] hover:bg-white hover:text-black rounded-[10px] mr-30 w-[400px] justify-start" ,         
          ai:
-         "flex items-center justify-start space-x-1 text-[24px] hover:bg-white hover:text-black rounded-[10px] w-[250px] mr-3",
+         "flex items-center justify-start space-x-1 text-[22px] hover:bg-white hover:text-black rounded-[10px] w-[220px] mr-3",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:

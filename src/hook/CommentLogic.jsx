@@ -71,7 +71,7 @@ export const useCommentLogic = (items = [],postId) => {
     if (!replyText[id]) {
       setreplyText(prev => ({
         ...prev,
-        [id]: `@${comment.user?.name || ""} `
+        [id]: `@${comment.user?.username || ""} `
       }));
     }
     setActiveCommentId(id);
@@ -136,7 +136,7 @@ const handlesendreply = (parentId) => {
   const newReply = {
     id: Date.now(),
     text,
-    user: { name: "You", avatar: "/images/default-avatar.jpg" },
+    user: { username: "You", personal_photo_url: "/images/default-avatar.jpg" },
     createdAt: "now"
   };
 
@@ -232,12 +232,20 @@ const handleEditClick = (comment) => {
   }));
    setMenu(prev => ({ ...prev, [id]: false }));
 };
+const resetCommentState = () => {
+  setReplyInput({});
+  setreplyText({});
+  setviewreply({});
+  setEditing({});
+  setMenu({});
+  setActiveCommentId(null);
+};
  return {
   showmenu, setshowmenu,
   handleTranslate, istranslate, translate,
   handleReaction, counts,
   handleReplyClick, handleViewreply, handlesendreply, handleEditClick,
   viewreply, replydata, replyText, replyInput, setreplyText,
-  handleDeleteComment, currentUser, editing, menu, toggleMenu,setreplydata
+  handleDeleteComment, currentUser, editing, menu, toggleMenu,setreplydata,resetCommentState
 };
 };

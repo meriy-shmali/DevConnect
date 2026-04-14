@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AIAssistant from "./AIAssistant";
 import { RiImageAddFill } from "react-icons/ri";
 import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
-
+import AiModal from './AiModal';
 
 const CreatepostMobile = () => {
     const post=CreatepostLogic();
@@ -65,22 +65,28 @@ const CreatepostMobile = () => {
       <div className=' flex-col space-y-9'>
      <div className='text-xl'>{t('help')} </div>
      <div className='flex justify-center items-center'> <Button className="text-[22px] border-2 rounded-[50px]  pt-1 pb-1 text-black border-black  " onClick={()=>post.setshow(!post.show)}>{t('ai')}<BsStars className='size-[22px] text-amber-300'/></Button></div>
-      <AnimatePresence>
+     <AnimatePresence> 
             {
            post. show&&(
              <motion.div    initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                            exit={{ opacity: 0, y: -20 }}
                            transition={{ duration: 0.2 }}
-                           >
-            <AIAssistant improve={post.aiaction.improve} generate={post.aiaction.generate}
-              summarize={post.aiaction.summarize} addtags={()=>post.aiaction.addTags(post.text)} category={()=>post.aiaction.categorize(post.text)}/>
+                           className=' relative right-12'>
+              <AIAssistant
+              type='mobile' improve={post.aiaction.improve} generate={post.aiaction.generate}
+              summarize={post.aiaction.summarize} addtags={()=>post.aiaction.addTags(post.text)} category={()=>post.aiaction.categorize(post.text)}
+              improveM={post.improveMutation} generateM={post.generateMutation} summarizeM={post.summarizeMutation}
+              addM={post.addtagMutation} categoryM={post.categoryMutation}/>
               </motion.div>
             )
             }</AnimatePresence>
     </div>
      </div>
-     
+     <AiModal open={post.showModel}
+     result={post.aiResult}
+     onuse={post.handleUseAi}
+     onclose={()=>post.setshowModel(false)} />
     </div>
   )
 }

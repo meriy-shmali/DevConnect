@@ -6,6 +6,7 @@ import "highlight.js/styles/github-dark.css"; // أو أي theme
 import { useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next';
 import { useTranslate } from '@/hook/UseMutationTrans';
+import { motion } from 'framer-motion';
 const BodyPost = ({post}) => {
   const[copy,setcopy]=useState(false)
   const [currentImage,setCurrentImage] = useState(0)
@@ -71,16 +72,16 @@ translate.mutate({
   
 }
   return (
-    <div className='mt-7 w-[800px] h-fit rounded-md p-3 flex-col space-y-6 items-start '>
+    <div className='mt-7 w-full h-fit rounded-md p-3 flex-col space-y-6 items-start '>
     {/*text */}
     {isTranslate?translate:post.content &&(
-      <p className={`${isText? "md:text-3xl text-2xl font-semibold":"md:text-2xl text-xl"}`}>{post.content}</p>
+      <p className={`${isText? "md:text-3xl text-2xl font-semibold":"md:text-2xl text-xl dark:text-gray-100"}`}>{post.content}</p>
     )}
 
 {post.code && (
 
-<div className="bg-gray-900 text-white rounded-lg overflow-hidden md:w-full w-[500px]">
-<div className="sticky top-0 z-10 bg-gray-900 border-b border-gray-700 flex justify-between items-center px-3 py-1">
+<div className="bg-gray-900 dark:bg-gray-950 text-white rounded-lg overflow-hidden md:w-full w-[500px]">
+<div className="sticky top-0 z-10 bg-gray-900 dark:bg-gray-950 border-b border-gray-700 flex justify-between items-center px-3 py-1">
    <div className='md:text-xl text-lg'>
     {post.codeLanguage || "plaintext"}
 
@@ -107,9 +108,24 @@ className="text-xs  bg-gray-700 p-2 rounded-md"
 
 <div className="w-fit h-fit">
 
-<img
-src={post.media[currentImage]} loading='lazy'
-className="rounded-xl md:w-full w-[500px]"
+<motion.img
+  key={currentImage}
+  src={post.media[currentImage]}
+  loading='lazy'
+  drag="x"
+  dragConstraints={{ left: 0, right: 0 }}
+  onDragEnd={(e, info) => {
+    if (info.offset.x < -50 && currentImage < post.media.length - 1) {
+      setCurrentImage(prev => prev + 1);
+    } else if (info.offset.x > 50 && currentImage > 0) {
+      setCurrentImage(prev => prev - 1);
+    }
+  }}
+  initial={{ opacity: 0, x: 50 }}
+  animate={{ opacity: 1, x: 0 }}
+  exit={{ opacity: 0, x: -50 }}
+  transition={{ duration: 0.3 }}
+  className="rounded-xl md:w-full w-[500px]"
 />
 
 {/* dots */}
@@ -131,13 +147,13 @@ index===currentImage ? "bg-black":"bg-gray-500"
   {post.tags?.map((tag,index) => (
     <div
       key={index}
-      className="md:text-xl text-lg text-gray-700 flex-wrap"
+      className="md:text-xl text-lg text-gray-700 dark:text-gray-300 flex-wrap"
     >
       {tag}
     </div>
   ))}
 </div>
-<button className='text-sm text-gray-600'onClick={handletranslate}>{isTranslate?t('see_original'):t('translate')}</button>
+<button className='text-sm text-gray-600 dark:text-gray-400'onClick={handletranslate}>{isTranslate?t('see_original'):t('translate')}</button>
 
 
 

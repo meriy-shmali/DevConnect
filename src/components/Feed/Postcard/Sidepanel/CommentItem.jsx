@@ -57,7 +57,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
       </div>
       <div className=" flex justify-between ml-12">
       {/* text */}
-      <p className="text-md">
+      <p className="text-md dark:text-gray-100">
         {istranslate[item.id] ? translate[item.id] : item.text}
       </p>
       {/* reactions */}

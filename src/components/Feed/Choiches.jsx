@@ -11,7 +11,7 @@ const Choiches = ({ setCategory }) => {
     <div className=' flex  items-start space-x-3'> 
       <div className='pt-2.5'>
       <button onClick={()=>setshow(!show)}>
-        <TbAdjustmentsHorizontal className='text-4xl md:text-5xl' />
+        <TbAdjustmentsHorizontal className='text-4xl md:text-5xl dark:text-white' />
       </button></div>  <AnimatePresence>
 
         {show && (
@@ -23,7 +23,7 @@ exit={{ opacity:0, scale:0.3 }}
 
 transition={{ duration:0.25 }}
 
-        className= 'origin-left bg-white shadow-lg text-lg p-3 w-fit flex space-x-5 md:p-4 rounded-2xl md:text-xl  '
+        className= 'origin-left bg-white shadow-lg text-lg p-3 w-fit flex space-x-5 md:p-4 rounded-2xl md:text-xl dark:text-black '
         >
 
         <button className='hover:text-gray-400 duration-200'onClick={()=>{ setCategory("question")

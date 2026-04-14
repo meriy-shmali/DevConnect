@@ -98,7 +98,7 @@ const handleAddComment = (text) => {
   ); // إرسال للباك
 };
   return (
-    <div className='bg-white rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center'>
+    <div className='bg-white dark:bg-dark-post-background rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center'>
     <Trending post={post}/>
     <HeaderPost post={post}/>
     <BodyPost post={post} />
@@ -109,6 +109,7 @@ const handleAddComment = (text) => {
       <AnimatePresence>
     {paneltype && (
   <SidebarPanel
+  key={paneltype}
     type={paneltype}
    title={paneltype === "comments" ? t("comments") : reactionMap[paneltype]?.label}
      icon={paneltype === "comments" ? <FaRegCommentDots /> : reactionMap[paneltype]?.icon}

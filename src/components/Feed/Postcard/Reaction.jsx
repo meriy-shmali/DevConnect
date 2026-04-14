@@ -51,11 +51,11 @@ setactive(prev => ({
   return (
     <div className='flex space-x-40 items-center '>
       <div>
-     <button className='flex space-x-2 items-center rounded-2xl px-2 py-1 border border-gray-200 shadow-md '>
+     <button className='flex space-x-2 items-center rounded-2xl px-2 py-1 border border-gray-200 shadow-md dark:bg-gray-100 '>
       <FaRegCommentDots className='md:text-xl text-lg text-gray-700'/>
       <div className='md:text-lg text-md font-semibold text-gradient'onClick={(e) => {
     e.stopPropagation();
-    onOpenComments(); // 👈 بدل ما كان فاضي
+    onOpenComments();  
   }}>{reaction.comment}</div>
      </button>
      </div>
@@ -65,12 +65,12 @@ setactive(prev => ({
           <button
     onClick={(e) => e.stopPropagation()
     }
-    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl border border-gray-200 shadow text-lg w-fit `}
+    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl border border-gray-200 shadow text-lg w-fit dark:bg-gray-100 `}
   >
  <div onClick={(e)=>{
   e.stopPropagation()
   onClose()
-  handlereaction(items.key)}} className='md:text-xl text-lg text-gray-700'>
+  handlereaction(items.key)}} className='md:text-xl text-lg text-gray-700 '>
   {items.icon}</div>
   <div className='text-gradient font-semibold md:text-lg text-md' onClick={(e)=>{ e.stopPropagation(); 
     onOpenReaction(items.key)}

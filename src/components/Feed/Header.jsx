@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { IoSearchOutline, IoSearchSharp ,IoPersonAddSharp, IoSettingsSharp } from 'react-icons/io5';
+import { IoSearchOutline, IoSearchSharp ,IoPersonAddSharp } from 'react-icons/io5';
+import { MdSettings } from "react-icons/md";
+import { IoNotifications } from "react-icons/io5";
 
 // صورة افتراضية للمستخدم (Placeholder)
 const NO_AVATAR = 'NO_AVATAR'; 
@@ -17,7 +19,7 @@ const renderAvatar=(avatarUrl,sizeClass)=>{
   if (avatarUrl===NO_AVATAR){return(<IoPersonAddSharp className={`${sizeClass} text-gray-400`}/>);
   }
 return(<img className={`${sizeClass} rounded-full object-cover`} src={avatarUrl}/>)}
-const Header = ({ onNotificationClick }) => {
+const Header = ({ onNotificationClick,setTheme }) => {
   // 1. حالة لإدارة قيمة حقل البحث
   const [searchTerm, setSearchTerm] = useState('');
   // 2. حالة لإدارة ظهور القائمة المنسدلة للبحث
@@ -55,16 +57,16 @@ const Header = ({ onNotificationClick }) => {
 
 
   return (
-    <header className="bg-black shadow-lg shadow-2xl border-b border-gray-200 sticky top-0 z-30 ">
+    <header className="bg-black dark:bg-gray-50 shadow-lg border-b border-gray-200 fixed top-0 z-30 w-full ">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" style={{ direction: 'ltr' }}>
         
         {/* 1. شعار التطبيق - DevConnect */}
         <div className="flex items-center ">
-         <p className='text-[48px] font-bold text-gradient'>DevConnect</p>
+         <p className='md:text-[48px] text-[40px] font-bold text-gradient'>DevConnect</p>
         </div>
         
         {/* 2. حاوية البحث والقائمة المنسدلة */}
-        <div ref={searchRef} className="flex-grow flex justify-center mx-4 md:max-4 relative">
+        <div ref={searchRef} className="flex-grow flex justify-center mx-4 md:max-4 relative ml-12 md:ml-0">
           <div className=" w-full md:max-w-sm  ">
             <div className="relative">
               {/* حقل البحث */}
@@ -74,10 +76,10 @@ const Header = ({ onNotificationClick }) => {
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onFocus={() => searchTerm.length > 0 && setIsDropdownOpen(true)} // لإظهارها عند التركيز إذا كان هناك نص
-                className="w-full py-2 pl-14 pr-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100  text-lg font-semibld text-left placeholder-gray-700 "
+                className="md:w-full w-[250px] py-1 md:py-2 pl-10 md:pl-12 pr-4  border border-gray-300  rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 dark:border-gray-800 dark:bg-gray-50 text-lg  md:text-xl font-semibld text-left placeholder-gray-700 dark:placeholder-gray-800 "
                 style={{ direction: 'ltr' }} // تأكد من أن البحث يبدأ من اليسار (Ltr)
               />
-              <IoSearchSharp className="absolute left-3 top-1/2 transform -translate-y-1/2 h-7 w-7 text-gray-700"   />
+              <IoSearchSharp className="absolute left-3 top-1/2 transform -translate-y-1/2 md:h-7 md:w-7 w-5 h-5 text-gray-700 "   />
             </div>
 
             {/* القائمة المنسدلة للبحث */}
@@ -113,10 +115,10 @@ const Header = ({ onNotificationClick }) => {
           
           {/* أيقونة الإشعارات */}
           <button 
-            className="p-2 rounded-full hover:bg-gray-800 text-gray-300 relative transition duration-150"
+            className="p-2 rounded-full  text-gray-300 dark:text-gray-700 relative transition duration-150"
             onClick={onNotificationClick}
           >
-            <svg
+            {/*<svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
               viewBox="0 0 24 24"
@@ -129,16 +131,37 @@ const Header = ({ onNotificationClick }) => {
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 border-2 border-black"></span>
+            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 border-2 border-black"></span>*/}
+            <IoNotifications className='md:w-8 md:h-8 w-7 h-7 '/>
           </button>
           
           {/* أيقونة الملف الشخصي - تستخدم الصورة الافتراضية */}
-          <button className="flex items-center p-0.5 rounded-full hover:bg-gray-800">
+          <button className="flex items-center p-0.5 rounded-full">
             {renderAvatar(userAvatar,'h-8 w-8')}
           </button>
-          <button className='p-2 rounded-full hover:bg-gray-800 text-gray-300 transition duration-150'>
-            <IoSettingsSharp className='h-6 w-6'/>
+          <button className='p-2 rounded-full  text-gray-300 dark:text-gray-700 transition duration-150'>
+            <MdSettings className='md:h-9 md:w-9 w-7 h-7'/>
           </button>
+           <button
+    onClick={() => setTheme("light")}
+    className="px-3 py-1 bg-gray-200 rounded"
+  >
+    ☀️
+  </button>
+
+  <button
+    onClick={() => setTheme("dark")}
+    className="px-3 py-1 bg-gray-800 text-white rounded"
+  >
+    🌙
+  </button>
+
+  <button
+    onClick={() => setTheme("system")}
+    className="px-3 py-1 bg-blue-500 text-white rounded"
+  >
+    💻
+  </button>
         </div>
       </div>
     </header>

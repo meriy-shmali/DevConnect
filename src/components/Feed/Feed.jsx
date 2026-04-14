@@ -11,30 +11,32 @@ import Suggestion from './Postcard/Suggestion'
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { UseTheme } from '@/hook/UseTheme'
 const Feed = () => {
    const navigate=useNavigate();
+   const { theme, setTheme } = UseTheme();
      const { t } = useTranslation();
  const[category,setcategory]=useState('all');
 const {data}=usechoich(category)
  //const posts = data?.data || staticposts||[];
  //const posts = data || staticposts || []; اذا رجع مصفوفة
   return (
-    <div className='bg-main-background'>
-  <Header />
+    <div className=' dark:bg-dark-main-background '>
+  <Header theme={theme} setTheme={setTheme} />
 
-  <div className='bg-main-background relative h-screen'>
+  <div className='bg-main-background dark:bg-dark-main-background relative h-screen mt-16'>
     
     {/* زر إنشاء على الموبايل */}
     <div className="md:hidden flex items-center justify-center">
       <div
         onClick={()=>navigate("/post-mobile")}
-        className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500 flex align-middle"
+        className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500 flex align-middle dark:text-gray-300 dark:border-gray-300"
       >
         {t('create')}
       </div>
     </div>
 
-    <div className='flex items-center justify-between ml-10 mt-5 '>
+    <div className='flex items-center justify-between ml-14 mt-5 '>
       
       <div className='flex-col  space-y-12 md:ml-0 md:w-[60%]'>
         <Choiches setCategory={setcategory} />
@@ -48,7 +50,7 @@ const {data}=usechoich(category)
 
       {/* هنا نضيف Createpost ثابت */}
       <div className="hidden md:block">
-        <div className="fixed top-28 right-10 w-[400px]">
+        <div className="fixed top-24 right-10 w-[400px]">
           <Createpost />
         </div>
       </div>

@@ -5,7 +5,14 @@ import { LiaUserAltSlashSolid } from "react-icons/lia";
 import { useTranslation } from "react-i18next";
 import {useCommentLogic} from "@/hook/CommentLogic";
 import CommentItem from "./Sidepanel/CommentItem";
+import { useEffect } from "react";
 const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,postId}) => {
+  const isComments = type === "comments";
+
+const logic = useCommentLogic(
+  isComments ? items : [],
+  isComments ? postId : null
+);
   const {
     showmenu,
     setshowmenu,
@@ -27,11 +34,15 @@ const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,pos
     replyInput,
     editing,
     handleDeleteComment,
-    handleEditClick
-  } = useCommentLogic(items,postId);
+    handleEditClick,resetCommentState
+  } = logic;
 
   const { t } = useTranslation();
-
+useEffect(() => {
+  if (type !== "comments") {
+     logic.resetCommentState();;
+  }
+}, [type]);
   return (
     <>
       {/* overlay */}
@@ -44,14 +55,14 @@ const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,pos
         initial={{ x: 400 }}
         animate={{ x: 0 }}
         exit={{ x: 400 }}
-        transition={{ duration: 0.3 }}
-        className="sidebar fixed right-0 top-2 w-[470px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll"
+        transition={{ type: "tween", duration: 0.2 }}
+        className="sidebar fixed right-0 top-0 w-[470px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll dark:bg-dark-post-background border border-white"
       >
         {/* header */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-2">
-            <h2 className="text-2xl font-bold">{title}</h2>
-            <p className="text-[25px]">{icon}</p>
+            <h2 className="text-2xl font-bold dark:text-gray-50">{title}</h2>
+            <p className="text-[25px] dark:text-gray-50">{icon}</p>
           </div>
           <IoIosClose onClick={onClose} className="text-4xl text-red-600" />
         </div>
@@ -60,7 +71,7 @@ const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,pos
         {type === "comments" && showFilter && (
           <div className="flex justify-end mr-1">
             <button onClick={() => setshowmenu(prev => !prev)}>
-              <HiOutlineAdjustments className="text-2xl" />
+              <HiOutlineAdjustments className="text-2xl dark:text-gray-50" />
             </button>
 
             {showmenu && (
@@ -92,7 +103,7 @@ const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,pos
         {/* items */}
         <div className="flex-col space-y-4">
           {items.length === 0 ? (
-            <div className=" flex flex-col items-center justify-center  h-full text-gray-500 space-y-2 relative -bottom-48 text-3xl">
+            <div className=" flex flex-col items-center justify-center  h-full text-gray-500 dark:text-gray-50 space-y-2 relative -bottom-48 text-3xl">
               <LiaUserAltSlashSolid className="text-8xl" />
               <p>No items</p>
             </div>
