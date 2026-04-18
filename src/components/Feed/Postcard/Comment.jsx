@@ -13,7 +13,11 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
     //منع التعليقات الفارغة
     if (!text.trim())return;
     //لتمرير التعليق للاب
-    onAddComment(text, editingComment?.id);
+    onAddComment({
+      postId: post.id,   // ✅ أهم تعديل
+      text: text,
+      // للتعديل لاحقًا
+    });
     setText("");
     setEditingComment(null);
   }

@@ -12,12 +12,20 @@ import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { UseTheme } from '@/hook/UseTheme'
+import { useEffect } from 'react'
 const Feed = () => {
    const navigate=useNavigate();
+
+  /*useEffect(() => {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);*/
    const { theme, setTheme } = UseTheme();
      const { t } = useTranslation();
  const[category,setcategory]=useState('all');
-const {data}=usechoich(category)
+const {data: posts = []}=usechoich(category)
  //const posts = data?.data || staticposts||[];
  //const posts = data || staticposts || []; اذا رجع مصفوفة
   return (
@@ -40,6 +48,7 @@ const {data}=usechoich(category)
       
       <div className='flex-col  space-y-12 md:ml-0 md:w-[60%]'>
         <Choiches setCategory={setcategory} />
+        {/*posts */}
         {staticposts.map((post,index)=>(
           <div key={post.id}>
             <PostCard key={post.id} post={post}/>

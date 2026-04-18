@@ -16,21 +16,26 @@ function App() {
     <>
     <Toaster position='top-center' toastOptions={{
       duration:3000,
+      className: "shadow-lg",
       style:{
         fontSize:"16px",
+        borderRadius: "10px",
+        padding: "12px 16px",
       },
          success: {
-      style: {
-        background: "#d1fae5",
-        color: "#065f46",
-      },
+        style: {
+    background: "#ecfdf5",
+    color: "#065f46",
+    border: "1px solid #10b981",
+  },
       icon: "✅",
     }
       ,error: {
-      style: {
-        background: "#fee2e2",
-        color: "#7f1d1d",
-      },
+       style: {
+    background: "#fef2f2",
+    color: "#7f1d1d",
+    border: "1px solid #ef4444",
+  },
       icon: "❌",
     },
   

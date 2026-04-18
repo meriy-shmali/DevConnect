@@ -3,7 +3,7 @@ const HeaderPanel = ({ user, createdAt, type,level }) => {
     <div className="flex items-center space-x-3 relative">
      
 
-      <img src={user?. personal_photo_url} className="w-10 h-10 rounded-full" />
+      <img src={user?.personal_photo_url} className="w-10 h-10 rounded-full" />
       <div className="text-md font-semibold capitalize dark:text-gray-50">
         {user?.username}
       </div>

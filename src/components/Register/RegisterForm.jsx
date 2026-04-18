@@ -24,18 +24,19 @@ import { fi } from 'zod/v4/locales';
 import { useregister } from '@/hook/UseMutationRegister';
 
 const RegisterForm = () => {
+    const { t } = useTranslation();
     const form = useForm({
     resolver: zodResolver(registerschema),
     defaultValues: {
-     firstname:"",
-     lastname:"",
-      email: "",
-      password: "",
-      confirmpassword:"",
-      phone:"",
-      age:"",
-      gender:"",
-      username:"",
+   first_name: "",
+  last_name: "",
+  email: "",
+  password: "",
+  confirm_password: "",
+  phone_number: "",
+  age: "",
+  gender: "",
+  username: "",
     },
     
   });
@@ -48,20 +49,18 @@ const toastId = toast.loading("Creating account...");
 
     onSuccess: () => {
 
-      toast.success("Account created successfully", {
+      toast.success(t('Register_success'), {
         id: toastId,
-        icon: "✅"
       });
      form.reset();
-      navigate("/feed");
+      navigate("/login");
 
     },
 
     onError: () => {
-
-      toast.error("Registration failed", {
+      toast.error(t('Register_error'), {
         id: toastId,
-        icon: "❌"
+       
       });
 
     }
@@ -69,14 +68,14 @@ const toastId = toast.loading("Creating account...");
   });
    
   };
-  const { t } = useTranslation();
+
   return (
     <Form {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
     
     <FormField
       control={form.control}
-      name="firstname"
+      name="first_name"
       render={({ field }) => (
         <FormItem>
           <FormLabel className="text-[30px] md:text-[48px]">{t('firstname')}</FormLabel>
@@ -100,7 +99,7 @@ const toastId = toast.loading("Creating account...");
     />
     <FormField
       control={form.control}
-      name="lastname"
+      name="last_name"
       render={({ field }) => (
         <FormItem>
           <FormLabel className="text-[30px] md:text-[48px]">{t('lastname')}</FormLabel>
@@ -196,7 +195,7 @@ const toastId = toast.loading("Creating account...");
     />
     <FormField
       control={form.control}
-      name="confirmpassword"
+      name="confirm_password"
       render={({ field }) => (
         <FormItem>
           <FormLabel className=" text-[30px] md:text-[48px]">{t('confirm_password')}</FormLabel>
@@ -204,7 +203,7 @@ const toastId = toast.loading("Creating account...");
             <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
               <InputGroupInput
                 {...field}
-                type="number"
+                type="password"
                 placeholder="•••••••"
                 className="placeholder:text-[22px] mt-3"
               />
@@ -268,7 +267,7 @@ const toastId = toast.loading("Creating account...");
             
   <FormField
       control={form.control}
-      name="phone"
+      name="phone_number"
       render={({ field }) => (
         <FormItem>
           <FormLabel className=" text-[30px] md:text-[48px]">{t('phone_number')}</FormLabel>

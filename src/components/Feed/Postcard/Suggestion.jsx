@@ -6,16 +6,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useFollow } from '@/hook/UseFollow';
 import { useTranslation } from 'react-i18next';
 import { staticsuggestion } from '@/Utils/data/staticsuggestion';
-
-const Suggestion = ({ data }) => {
+import { UseSugesstion } from '@/hook/UseQuerySuggestion';
+const Suggestion = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const [users, setusers] = useState(data || staticsuggestion);
-
+const { data, isLoading } = UseSugesstion();
+  const [users, setusers] = useState(data || staticsuggestion);//منحذفو عند الربط مع الباك 
+/*const [users, setusers] = useState([]);
   useEffect(() => {
-    setusers(data || staticsuggestion);
-  }, [data]);
+    setusers(data);
+  }, [data]);*/
 
   const { followMutation } = useFollow();
 
@@ -81,17 +81,17 @@ const Suggestion = ({ data }) => {
 
                   <div className='flex items-center space-x-1 text-sm text-black dark:text-gray-100'>
                     <GoPeople />
-                    <p>{user.followers}</p>
+                    <p>{user.followers_count}</p>
                   </div>
                 </div>
               </div>
 
               <div className="flex-col justify-center items-center space-y-5">
                 <div className="text-gray-500 dark:text-gray-200 text-center text-md">
-                  {user.speicality?.length > 0 && (
+                  {user.specialization?.length > 0 && (
                     <div className='flex justify-center capitalize'>
-                      <div>{user.speicality[0]}</div> 
-                      <div>{user.speicality.length > 1 && " ..."}</div>
+                      <div>{user.specialization[0]}</div> 
+                      <div>{user.specialization.length > 1 && " ..."}</div>
                     </div>
                   )}
                 </div>
@@ -140,10 +140,10 @@ const Suggestion = ({ data }) => {
                 >
 
                   <div className='border border-gray-300 p-5 rounded-2xl shadow-xl mb-6 w-[250px]  h-fit flex-col space-y-5 dark:bg-dark-post-background'
-                       onClick={() => navigate(`/src/components/Feed/ProfilePeople/ProfilePeople.jsx`)}>
+                       onClick={() => navigate(`/profile/${user.id}`)}>
 
                     <div className='flex justify-center items-center space-x-3'>
-                      <img src={user.personal_photo_url} className='md:w-20 md:h-20 w-14 h-14 rounded-full'/>
+                      <img src={user.personal_photo_url||'/public/images/default avatar1.jpg'} className='md:w-20 md:h-20 w-14 h-14 rounded-full'/>
 
                       <div className="w-[120px] "> 
                         <p className="font-semibold md:text-lg text-md capitalize truncate dark:text-gray-50">
@@ -152,17 +152,17 @@ const Suggestion = ({ data }) => {
 
                         <div className='flex items-center space-x-1 text-lg dark:text-gray-50 '>
                           <GoPeople />
-                          <p>{user.followers}</p>
+                          <p>{user.followers_count}</p>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex-col justify-center items-center space-y-5">
                       <div className="text-gray-500 text-center text-lg dark:text-gray-200">
-                        {user.speicality?.length > 0 && (
+                        {user.specialization?.length > 0 && (
                           <div className='flex justify-center capitalize'>
-                            <div>{user.speicality[0]}</div> 
-                            <div>{user.speicality.length > 1 && " ..."}</div>
+                            <div>{user.specialization[0]}</div> 
+                            <div>{user.specialization.length > 1 && " ..."}</div>
                           </div>
                         )}
                       </div>

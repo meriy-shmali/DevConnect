@@ -1,4 +1,4 @@
 import api from "./Api"
 export const getsuggestion=()=>{
-    return api.get("")
+    return api.get("/suggested-users/")
 }

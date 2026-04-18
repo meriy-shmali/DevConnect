@@ -1,16 +1,15 @@
 import React from 'react'
 import Buttons from './ui/ButtonGroup'
 import { useTranslation } from "react-i18next";
-//import { useNavigate } from 'react-router-dom';
-//import { useAuth } from '@/context/AuthContext';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 function Welcomepage() {
-  //const { currentUser } = useAuth();
- // const Navigte=useNavigate();
+  const { currentUser } = useAuth();
+ const Navigte=useNavigate();
    const { t } = useTranslation();
-   /* if (currentUser) {
-    return <Navigate to="/feed" />;
-  }*/
+    if (currentUser) {
+    return <Navigte to="/feed" />;
+  }
   return (
 
     <>

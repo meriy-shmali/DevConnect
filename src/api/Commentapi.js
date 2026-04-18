@@ -1,17 +1,18 @@
 import api from "./Api";
 //get comment from back
 export const getcomment=(postId,sort)=>{
-    return api.get("",{
+    return api.get(`/posts/${postId}/comments/`,{
         params:{
-            postId,
-            sort
+            ordering: sort === "latest" ? "desc" : "asc"
         }
     }
     )
 }
 // add comment 
-export const addcomment=(data)=>{
-    return api.post("",data)
+export const addcomment=({ postId, content })=>{
+    return api.post(`/posts/${postId}/comments/create/`, {
+    content
+  })
 }
 // reply comment
 export const replycomment=(data)=>{
@@ -22,28 +23,33 @@ export const likecomment=(commentId)=>{
     return api.post(`/comments/${commentId}`)
 }
 //translate comment
-export const translateComment=(data)=>{
-    return api.post("",data);
+export const translateComment=({ commentId })=>{
+    return api.post("/translate-comment/",{ commentId });
 }
 //comment reaction
-export const commentreaction=(data)=>{
-    return api.post("",data)
+export const commentreaction=({ commentId, reaction_type })=>{
+    return api.post(`/comments/${commentId}/react/`, {
+    reaction_type
+  })
 }
 //comment get replies
 export const commentgetreplies=(commentId)=>{
-return api.get("",{
+return api.get(`/comments/${commentId}/replies/`,{
     params:{commentId }
 })
 }
 //add reply
-export const addreply=(data)=>{
-    return api.post("",data)
+export const addreply=({ postId, content, parent })=>{
+    return api.post(`/posts/${postId}/comments/create/`, {
+    content,
+    parent
+  })
 }
 //edit comment
-export const editcomment=({commentId,text})=>{
-    return api.put(`/comments/${commentId}`, { text })
+export const editcomment=({commentId,content})=>{
+    return api.put(`/comments/${commentId}/`, { content })
 }
 //delete comment
 export const deletecomment=(commentId)=>{
-    return api.delete(`/comments/${commentId}`)
+    return api.delete(`/comments/${commentId}/`)
 }

@@ -50,40 +50,46 @@ const[Translate,setTranslate]=useState(null);
 const[isTranslate,setisTransalte]=useState(false);
 const handletranslate=()=>{
   //اذا كان مترجم يرجع للاصلي
-  if(isTranslate)
-{setisTransalte(false)
-  return;
-}//اذا مترجم قبل ما بعيد الطلب
-if(Translate)
-{setisTransalte(true)
-  return;
-}
-translate.mutate({
-  postId:post.id,
- text:post.content,
-},{
-  onSuccess:(res)=>{
-    setTranslate(res.data.translate);
-    setisTransalte(true)
+  if (isTranslate) {
+    setisTransalte(false);
+    return;
   }
-})
 
+  if (Translate) {
+    setisTransalte(true);
+    return;
+  }
 
+  translate.mutate(
+    {
+      postId: post.id,
+      text: post.content,
+    },
+    {
+      onSuccess: (res) => {
+        setTranslate(res.data.content);
+        setisTransalte(true);
+      },
+    }
+  );
   
 }
   return (
     <div className='mt-7 w-full h-fit rounded-md p-3 flex-col space-y-6 items-start '>
     {/*text */}
-    {isTranslate?translate:post.content &&(
-      <p className={`${isText? "md:text-3xl text-2xl font-semibold":"md:text-2xl text-xl dark:text-gray-100"}`}>{post.content}</p>
-    )}
+    <p className={`${isText
+  ? "md:text-3xl text-2xl font-semibold"
+  : "md:text-2xl text-xl dark:text-gray-100"
+} whitespace-pre-wrap`}>
+  {isTranslate ? Translate : post.content}
+</p>
 
 {post.code && (
 
 <div className="bg-gray-900 dark:bg-gray-950 text-white rounded-lg overflow-hidden md:w-full w-[500px]">
 <div className="sticky top-0 z-10 bg-gray-900 dark:bg-gray-950 border-b border-gray-700 flex justify-between items-center px-3 py-1">
    <div className='md:text-xl text-lg'>
-    {post.codeLanguage || "plaintext"}
+    {post.code_language || "plaintext"}
 
   </div>
 <button
@@ -94,7 +100,7 @@ className="text-xs  bg-gray-700 p-2 rounded-md"
 </button>
 </div>
 <pre className="p-4 overflow-auto max-h-60 code-scroll">
-<code ref={codeRef} className={post.codeLanguage}>
+<code ref={codeRef} className={post.code_language}>
 {post.code}
 </code>
 </pre>

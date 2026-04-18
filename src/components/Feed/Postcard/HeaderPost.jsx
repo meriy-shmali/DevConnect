@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { useFollow } from '@/hook/UseFollow'
 import MenuPanel from './Sidepanel/MenuPanel'
+import { useEffect } from 'react'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
 dayjs.extend(relativeTime);
 const HeaderPost = ({post}) => {
+  const { followMutation, unfollowMutation } = useFollow();
   const navigate=useNavigate()
   const [menu, setMenu] = useState({});
   const toggleMenu = (id) => {
@@ -18,14 +20,22 @@ const HeaderPost = ({post}) => {
   }));
 };
   const { i18n } = useTranslation();
-  const {followMutation}=useFollow()
+ 
   //في حال الباك ما رجع isfollowing
- const [isfollowing, setisfollowing] = useState(post.user?.is_following || false);
+ const [isfollowing, setisfollowing] = useState(false);
+
+useEffect(() => {
+  setisfollowing(post.is_following);
+}, [post.is_following]);
     const { currentUser } = useAuth();
   const handleFollow=(e)=>{
 e.stopPropagation(); // يمنع الانتقال للصفحة
-followMutation.mutate(post.user.id)
-setisfollowing(!isfollowing);
+  const mutation = isfollowing ? unfollowMutation : followMutation;
+mutation.mutate(post.user.id, {
+  onSuccess: () => {
+    setisfollowing(prev => !prev);
+  }
+});
   }
    const locale = i18n.language === 'ar' ? 'ar' : 'en';
   dayjs.locale(locale);

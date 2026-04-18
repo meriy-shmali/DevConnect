@@ -5,6 +5,7 @@ import loginschema from '@/components/Schema/LoginSchema.jsx';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext';
+import jwtDecode from 'jwt-decode';
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
@@ -21,6 +22,7 @@ import Buttons from '../ui/ButtonGroup';
 import { uselogin } from '@/hook/UseMutaionLogin';
 
 const LoginForm=()=>{
+  const{t}=useTranslation()
   const {setCurrentUser }=useAuth()
     const navigate=useNavigate();
 const form = useForm({
@@ -39,27 +41,26 @@ const toastId = toast.loading("Logging in...");
 
     onSuccess: (res) => {
       //لحفظ التوكين بعد القيام بتسجيل الدخول
-      const token=res.data.token
-      localStorage.setItem("token",token)
-     // تحديث currentUser بالـ context
-      setCurrentUser(res.data.user);
-      toast.success("Login successful", {
+       const access = res.data.access;
+  const refresh = res.data.refresh;
+   localStorage.setItem("access", access);
+  localStorage.setItem("refresh", refresh);
+const decodedData = jwtDecode(access);
+  setCurrentUser(decodedData);
+      toast.success(t('Login_sucess'), {
         id: toastId,
-        icon: "✅"
       });
       form.reset();
       navigate("/feed");
     },
     onError: () => {
-      toast.error("Invalid email or password", {
+      toast.error(t('Login_error'), {
         id: toastId,
-        icon: "❌"
       });
     }
   });
     
   };
-  const { t } = useTranslation();
  return (
    <Form {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -112,7 +113,7 @@ const toastId = toast.loading("Logging in...");
       )}
     />
    <div> <Button variant='link' className=' underline text-[24px] text-gray-700'>{t('forgot_password')}</Button></div>
-           <div className='flex justify-center p-4'><Buttons type="login" /></div> 
+           <div className='flex justify-center p-4'><Buttons type="login" disabled={loginMutaion.isPending} /></div> 
             
             <div className='flex-col  justify-center justify-items-center space-y-8 mt-8 '>
             <div className='flex-col space-y-2'><p className='text-[24px]'>{t('dont_have_account')}</p>

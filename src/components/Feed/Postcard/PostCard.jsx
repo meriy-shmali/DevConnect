@@ -24,7 +24,7 @@ const PostCard = ({post}) => {
   const [sort,setsort]=useState('latest');//المستخدم يغير الفلترة
   const[paneltype,setpaneltype]=useState(null)
   const [commentCount, setCommentCount] = useState(post.total_comments)
-  const [comments, setComments] = useState(staticComment[post.id] || []); 
+ // const [comments, setComments] = useState(staticComment[post.id] || []); 
   useEffect(() => {
   setCommentCount(post.total_comments);
 }, [post.total_comments]);
@@ -57,16 +57,16 @@ const handleClose = () => {
  setpaneltype(null)
 };
 const commentsData = usecomment(post.id, sort);
-const { data } = usequeryreaction(
+const data = usequeryreaction(
   post.id,
   paneltype !== "comments" ? paneltype : null
 );
   const queryClient = useQueryClient();
-const users = Array.isArray(data)
+/*const users = Array.isArray(data)
   ? data
   : Array.isArray(staticuser[paneltype])
   ? staticuser[paneltype]
-  : [];
+  : [];*/
 const reactionData = [
   { key: "useful", label: "useful", count: post.reaction_counts?.useful , icon: <AiOutlineLike /> },
   { key: "not_useful", label: "not useful", count: post.reaction_counts?.not_useful, icon: <AiOutlineDislike /> },
@@ -77,18 +77,27 @@ const reactionMap = Object.fromEntries(
   reactionData.map(item => [item.key, item])
 );
 const addcommntMutation=useaddcomment()
-const handleAddComment = (text) => {
-  const newComment = {
-    id: Date.now(), // id مؤقت للواجهة
-    text,
-    user: { name: "You", avatar: "" },
-    likes: 0,
-  };
+const handleAddComment = ({ postId, text }) => {
+  if (!text.trim()) return;
+ /* const newComment = {
+  id: Date.now(),
+  text,
+  user: {
+    username: "You",
+    personal_photo_url: ""
+  },
+  useful_count: 0,
+  not_useful_count: 0,
+  replies_count: 0,
+  is_reply: false
+};*/
+  
 
-  setComments(prev => [newComment, ...prev]); // إضافة التعليق جديد بالواجهة فورًا
-  setCommentCount(prev => prev + 1);
+//  setComments(prev => [newComment, ...prev]); // إضافة التعليق جديد بالواجهة فورًا
+  //setCommentCount(prev => prev + 1);
 
-  addcommntMutation.mutate({ postId: post.id, text },{
+  addcommntMutation.mutate({   postId,
+      content: text, },{
     onSuccess(){//حسب الباك
      queryClient.invalidateQueries({
   queryKey: ['comment', post.id]
@@ -121,7 +130,7 @@ const handleAddComment = (text) => {
   items={
   paneltype === "comments"
     ? (staticComment[post.id] || [])
-    : users
+    : data
 }
     showFilter={paneltype === "comments"}
     sort={sort}

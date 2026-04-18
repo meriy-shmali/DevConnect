@@ -81,9 +81,32 @@ i18n.use(initReactI18next).init({
         comments:"Comments",
         write:"Write a reply",
         intersted:"people with same intersted like you",
-        
-
-
+        /*success message */
+        Login_sucess:"user login sucessfully",
+        Register_sucess:"user registered sucessfully",
+        //loading image
+        improve_loading:"text being improved",
+          summarize_loading:"text being summarized",
+          generate_loading:"text being generated",
+          tags_loading:"tags are being extracted",
+          classify_loading:"text being classify",
+          create_post_loading:"publishing in progress",
+          //
+          improve_success:"text improved sucessfully",
+          summarize_success:"code summarized sucessfully",
+          generate_success:"text generated sucessfully",
+          tags_success:"tags extracted sucessfully",
+          classify_success:"text classify sucessfully",
+          create_post_success:"post sucessfully",
+ /*error message */
+         Login_error:"user login unsucessfully",
+         Register_error:"user registered unsucessfully",
+        improve_error:"text improve failed",
+          summarize_error:"code summarize failed",
+          generate_error:"text generate failed",
+          tags_error:"tags extract failed",
+          classify_error:"text classify failed",
+          create_post_error:"post failed",
 
       }
     },
@@ -166,7 +189,32 @@ i18n.use(initReactI18next).init({
         comments:"التعليقات",
          write:"اكتب ردا",
          intersted:"اشخاص لديهم نفس الاهتمامات ",
-
+         /*sucess message */
+          Login_sucess:"تم تسجيل الدخول بنجاح",
+          Register_sucess:"تم تسجيل المستخدم بنجاح",
+          //loading
+          improve_loading:"جاري تحسين النص ...",
+          summarize_loading:"جاري تلخيص الكود ...",
+          generate_loading:"جاري توليد النص ...",
+          tags_loading:"جاري استخراج الوسوم...",
+          classify_loading:"جاري تصنيف النص...",
+          create_post_loading:"جاري النشر ...",
+          //
+               improve_success:"تم تحسين النص بنجاح",
+          summarize_success:"تم تلخيص الكود بنجاخ",
+          generate_success:"تم توليد نص بنجاح",
+          tags_success:"تم استخراج الوسوم بنجاح",
+          classify_success:"تم تصنيف النص بنجاح",
+          create_post_success:"تم النشر بنجاح",
+          /*error message */
+         Login_error:"لم يتم تسجيل الدخول بنجاح",
+         Register_error:"لم يتم تسجيل المستخدم بنجاح",
+         improve_error:"فشل تحسين النص",
+          summarize_error:"فشل تلخيص الكود",
+          generate_error:"فشل توليد نص",
+          tags_error:"فشل استخراج وسوم",
+          classify_error:"فشل تصنيف النص",
+        create_post_error:"فشل النشر ",
       }
     }
   },

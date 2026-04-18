@@ -5,30 +5,18 @@ export const useFollow=()=>{
      const followMutation= useMutation({
         mutationFn:follow,
         onSuccess:()=>{
-queryClient.invalidateQueries({
-  queryKey:["suggestion"]
-});
-queryClient.invalidateQueries({
-  queryKey:["post"]
-});
-queryClient.invalidateQueries({
-  queryKey:["profile"]
+["suggestion", "post", "profile"].forEach((key) => {
+  queryClient.invalidateQueries({ queryKey: [key] });
 });
         }
      })
     const unfollowMutation = useMutation({
     mutationFn: unfollow,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-  queryKey:["suggestion"]
-});
-queryClient.invalidateQueries({
-  queryKey:["post"]
-});
-queryClient.invalidateQueries({
-  queryKey:["profile"]
+    ["suggestion", "post", "profile"].forEach((key) => {
+  queryClient.invalidateQueries({ queryKey: [key] });
 });
     },
   });
-  return{unfollowMutation,followMutation}
+  return { followMutation, unfollowMutation };
 }

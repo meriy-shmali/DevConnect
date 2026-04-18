@@ -22,7 +22,8 @@ export const useCommentLogic = (items = [],postId) => {
   const deletecomment = useDeletecomment();
   const addreplyMutation = usereplycomment();
   const  queryClient=useQueryClient()
-  const { data: fetchedReplies } = usegetreplies(activeCommentId, !!activeCommentId);
+  const { data } = usegetreplies(activeCommentId, !!activeCommentId);
+  const fetchedReplies = data?.data || [];
   const toggleMenu = (id) => {
   setMenu(prev => ({
     ...prev,
@@ -48,6 +49,7 @@ export const useCommentLogic = (items = [],postId) => {
     const replies = fetchedReplies?.length > 0
       ? fetchedReplies
       : staticReplies[activeCommentId] || [];
+      //const replies = fetchedReplies || [];
     setreplydata(prev => ({
       ...prev,
       [activeCommentId]: replies//الردود الخاصة بتعليق معين 
@@ -122,7 +124,8 @@ const handlesendreply = (parentId) => {
     setReplyInput(prev => ({ ...prev, [parentId]: false }));
     setreplyText(prev => ({ ...prev, [parentId]: "" }));
 
-  editComment.mutate({ commentId: parentId, text }, {
+  editComment.mutate({ commentId: parentId,
+    content: text }, {
   onSuccess: () => {
     queryClient.invalidateQueries({queryKey:["comment", postId]}
       );
@@ -136,7 +139,10 @@ const handlesendreply = (parentId) => {
   const newReply = {
     id: Date.now(),
     text,
-    user: { username: "You", personal_photo_url: "/images/default-avatar.jpg" },
+    user: {
+    username: currentUser?.username,
+    personal_photo_url: currentUser?.personal_photo_url
+  },
     createdAt: "now"
   };
 
@@ -148,13 +154,17 @@ const handlesendreply = (parentId) => {
   setreplyText(prev => ({ ...prev, [parentId]: "" }));
 
 addreplyMutation.mutate(
-  { text, commentId: parentId },
+  {
+    postId,
+    content: text,
+    parent: parentId
+  },
   {
     onSuccess: (res) => {
       // استبدال البيانات من الباك
       setreplydata(prev => ({
         ...prev,
-        [parentId]: res.data || prev[parentId]
+        [parentId]: res.data?.data|| prev[parentId]
       }));
        queryClient.invalidateQueries({queryKey:["comment", postId]});
     }
@@ -162,40 +172,88 @@ addreplyMutation.mutate(
 );
 };
   const handleReaction = (commentId, type) => {
-    const current = active[commentId];
-    setCounts(prev => {
-      const { likes = 0, dislikes = 0 } = prev[commentId] || {};
-      let newLikes = likes, newDislikes = dislikes;
-      if (current === type) {
-        type === 'like' ? newLikes-- : newDislikes--;
-      } else {
-        type === 'like' ? newLikes++ : newDislikes++;
-        current === 'like' ? newLikes-- : current === 'dislike' ? newDislikes-- : null;
-      }
-      return { ...prev, [commentId]: { likes: newLikes, dislikes: newDislikes } };
-    });
-    setActive(prev => ({ ...prev, [commentId]: current === type ? null : type }));
-   commentreactionMutation.mutate({ commentId, type }, {
-  onSuccess: () => {
-    queryClient.invalidateQueries({
-      queryKey:["comment", postId]
-    }
-      );
+   const current = active[commentId]; // like | dislike | null
+
+  let reaction_type = type;
+
+  // إذا ضغط نفس الزر → إلغاء التفاعل
+  if (current === type) {
+    reaction_type = null;
   }
-});
-  };
 
-  const handleTranslate = (comment) => {
-    const id = comment.id;
-    if (istranslate[id]) return setistranslate(prev => ({ ...prev, [id]: false }));
-    if (translate[id]) return setistranslate(prev => ({ ...prev, [id]: true }));
+  // تحديث UI فوراً
+  setActive(prev => ({
+    ...prev,
+    [commentId]: reaction_type
+  }));
 
-    TranslatecommentMutaion.mutate({ commentId: id, text: comment.text }, {
-      onSuccess: (res) => {
-        settranslate(prev => ({ ...prev, [id]: res.data.translate }));
-        setistranslate(prev => ({ ...prev, [id]: true }));
+  setCounts(prev => {
+    const prevCounts = prev[commentId] || { useful: 0, not_useful: 0 };
+
+    let useful = prevCounts.useful;
+    let not_useful = prevCounts.not_useful;
+
+    // إزالة التفاعل السابق
+    if (current === "useful") useful--;
+    if (current === "not_useful") not_useful--;
+
+    // إضافة التفاعل الجديد
+    if (reaction_type === "useful") useful++;
+    if (reaction_type === "not_useful") not_useful++;
+
+    return {
+      ...prev,
+      [commentId]: {
+        useful,
+        not_useful
       }
-    });
+    };
+  });
+  commentreactionMutation.mutate(
+    {
+      commentId,
+      reaction_type
+    },
+    {
+      onSuccess: (res) => {
+        queryClient.invalidateQueries({
+          queryKey: ["comment", postId]
+        });
+      }
+    }
+  );
+  };
+  const handleTranslate = (comment) => {
+  const id = comment.id;
+
+  if (istranslate[id]) {
+    return setistranslate(prev => ({
+      ...prev,
+      [id]: false
+    }));
+  }
+  // إذا موجود ترجمة مسبقاً بس رجّعها
+  if (translate[id]) {
+    return setistranslate(prev => ({
+      ...prev,
+      [id]: true
+    }));
+  }
+  TranslatecommentMutaion.mutate(
+    { commentId: id },
+    {
+      onSuccess: (res) => {
+        settranslate(prev => ({
+          ...prev,
+          [id]: res.data.comment // 👈 هذا المهم
+        }));
+        setistranslate(prev => ({
+          ...prev,
+          [id]: true
+        }));
+      }
+    }
+  );
   };
   const handleDeleteComment = (commentId) => {
   setreplydata(prev => {
@@ -205,13 +263,32 @@ addreplyMutation.mutate(
     });
     return newData;
   });
-  setCounts(prev => { const newCounts = { ...prev }; delete newCounts[commentId]; return newCounts; });
- deletecomment.mutate(commentId, {
-  onSuccess: () => {
+
+deletecomment.mutate(commentId, {
+  onSuccess: (res) => {
+    setreplydata(prev => {
+      const newData = { ...prev };
+
+      Object.keys(newData).forEach(parentId => {
+        newData[parentId] = newData[parentId].filter(
+          c => c.id !== commentId
+        );
+      });
+
+      return newData;
+    });
+
+    setCounts(prev => {
+      const newCounts = { ...prev };
+      delete newCounts[commentId];
+      return newCounts;
+    });
+
     queryClient.invalidateQueries({
-      queryKey:["comment", postId]});
+      queryKey: ["comment", postId]
+    });
   }
-});
+})
 };
 const handleEditClick = (comment) => {
   const id = comment.id;

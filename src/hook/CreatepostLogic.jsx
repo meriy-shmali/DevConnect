@@ -8,11 +8,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usecreatepost } from "./UseMutationCreatepost";
 import{parsecontent} from '@/Utils/ParsedContent';
 import { useQueryClient } from "@tanstack/react-query";
-import { AiAction } from "@/hook/AiAction";
+import { useAiAction } from "./useAiAction";
 import toast from "react-hot-toast";
 import { languages } from "prismjs";
+import { useTranslation } from "react-i18next";
 
 const CreatepostLogic = () => {
+  const{t}=useTranslation();
  const createpostmutation = usecreatepost();
 const queryClient = useQueryClient();
 // AI
@@ -71,9 +73,9 @@ const removeImage = (index) => {
  setPreviewUrl((prev)=>prev.filter((_,i)=>i!==index));
 };
 
-const parsedcontent = useMemo(() =>
- parsecontent(text)
-,[text]);
+const parsedcontent = useMemo(() => {
+  return parsecontent(text);
+}, [text]);
 
 const handleUseAi = () => {
 
@@ -82,19 +84,18 @@ const handleUseAi = () => {
  }
 
  else if(aiType==="summarize"){
-   setText(parsedcontent.text + aiResult);
+   setText((prev) => prev + "\n\n" + aiResult);
  }
 
 };
 
 const handlePost = () => {
-const toastId=toast.loading();
  const formData = new FormData();
 console.log('hi')
- formData.append("text",parsedcontent.text);
+ formData.append("content",parsedcontent.text);
  formData.append("code",parsedcontent.code);
- formData.append("codeLanguages",parsedcontent.language)
- formData.append("category",category);
+ formData.append("code_language",parsedcontent.language)
+ formData.append("post_type",category);
 
  const finalTags =
    tags.length > 0 ? tags : extractTagsFromText(text);
@@ -106,17 +107,13 @@ console.log('hi')
  images.forEach((img)=>
    formData.append("images[]",img)
  );
-
+  const toastId=toast.loading(t('create_post_loading'))
  createpostmutation.mutate(formData,{
    onSuccess: ()=>{
     queryClient.invalidateQueries({
       queryKey:["posts",category]
     })
-     setText("");
-     toast(Messages.login_success,{id:toastId});
-    
-     
-
+ toast.success(t('create_post_success'), { id: toastId })
      previewUrl.forEach((u)=>
        u && URL.revokeObjectURL(u)
      );
@@ -124,12 +121,15 @@ console.log('hi')
      setPreviewUrl([]);
      setimages([]);
      setshow(false);
-   }
+   },
+  onError:() => {
+      toast.error(t('create_post_error'), { id: toastId });
+      }
  });
 
 };
 
-const aiaction = AiAction({
+const aiaction = useAiAction({
  improveMutation,
  generateMutation,
  summarizeMutation,
