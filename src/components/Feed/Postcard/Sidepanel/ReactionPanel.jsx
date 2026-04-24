@@ -5,14 +5,14 @@ const ReactionPanel = ({ id, counts, handleReaction }) => {
     <div className="flex items-center space-x-3">
       <div className="flex items-center space-x-1 dark:text-gray-200">
         <p>{counts[id]?.useful || 0}</p>
-        <button onClick={() => handleReaction(id, "like")}>
+        <button onClick={() => handleReaction(id, "useful")}>
           <AiOutlineLike />
         </button>
       </div>
 
       <div className="flex items-center space-x-1 dark:text-gray-200">
         <p>{counts[id]?.not_useful || 0}</p>
-        <button onClick={() => handleReaction(id, "dislike")}>
+        <button onClick={() => handleReaction(id, "not_useful")}>
           <AiOutlineDislike />
         </button>
       </div>

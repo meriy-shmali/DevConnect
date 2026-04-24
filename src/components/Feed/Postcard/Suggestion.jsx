@@ -8,21 +8,24 @@ import { useTranslation } from 'react-i18next';
 import { staticsuggestion } from '@/Utils/data/staticsuggestion';
 import { UseSugesstion } from '@/hook/UseQuerySuggestion';
 const Suggestion = () => {
+  
   const { t } = useTranslation();
   const navigate = useNavigate();
 const { data, isLoading } = UseSugesstion();
-  const [users, setusers] = useState(data || staticsuggestion);//منحذفو عند الربط مع الباك 
-/*const [users, setusers] = useState([]);
+  //const [users, setusers] = useState(data || staticsuggestion);//منحذفو عند الربط مع الباك 
+const [users, setusers] = useState([]);
   useEffect(() => {
     setusers(data);
-  }, [data]);*/
+  }, [data]);
 
   const { followMutation } = useFollow();
 
   const [startIndex, setStartIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(4);
 
-  const visibleUsers = users.slice(startIndex, startIndex + itemsPerPage);
+  const visibleUsers = Array.isArray(users) 
+  ? users.slice(startIndex, startIndex + itemsPerPage) 
+  : [];
 
   const handleFollow = (id, e) => {
     const previousUsers = users;
@@ -52,11 +55,11 @@ const { data, isLoading } = UseSugesstion();
 
   // 🛠 fix index bug
   useEffect(() => {
-    if (startIndex >= users.length) {
-      setStartIndex(0);
-    }
-  }, [itemsPerPage, users.length]);
-
+  if (users && users.length > 0 && startIndex >= users.length) {
+    setStartIndex(0);
+  }
+}, [itemsPerPage, users?.length]);
+if (!users || users.length === 0) return null;
   return (
     <div>
       <div className='md:text-3xl text-2xl mt-10 font-semibold capitalize dark:text-dark-text'>
@@ -88,12 +91,9 @@ const { data, isLoading } = UseSugesstion();
 
               <div className="flex-col justify-center items-center space-y-5">
                 <div className="text-gray-500 dark:text-gray-200 text-center text-md">
-                  {user.specialization?.length > 0 && (
-                    <div className='flex justify-center capitalize'>
-                      <div>{user.specialization[0]}</div> 
-                      <div>{user.specialization.length > 1 && " ..."}</div>
-                    </div>
-                  )}
+                <p className="truncate w-full px-2 capitalize" title={user.specialization}>
+                          {user.specialization || t('no_specialization')}
+                        </p>
                 </div>
 
                 <button
@@ -159,12 +159,9 @@ const { data, isLoading } = UseSugesstion();
 
                     <div className="flex-col justify-center items-center space-y-5">
                       <div className="text-gray-500 text-center text-lg dark:text-gray-200">
-                        {user.specialization?.length > 0 && (
-                          <div className='flex justify-center capitalize'>
-                            <div>{user.specialization[0]}</div> 
-                            <div>{user.specialization.length > 1 && " ..."}</div>
-                          </div>
-                        )}
+                        <p className="truncate w-full px-2 capitalize" title={user.specialization}>
+                          {user.specialization || t('no_specialization')}
+                        </p>
                       </div>
 
                       <button

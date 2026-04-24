@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { usecommentreaction, useDeletecomment, usereplycomment, usetranslatecomment,useEditcomment } from "@/hook/UseMutationComment";
+import { usecommentreaction, useDeletecomment, usetranslatecomment,useEditcomment, useaddreply } from "@/hook/UseMutationComment";
 import { usegetreplies } from "@/hook/UseQueryComment";
 import { staticReplies } from "@/Utils/data/staticReplies";
 import { useAuth } from "@/context/AuthContext";
 import {useQueryClient } from "@tanstack/react-query";
+import { UseMe } from "./UseQueryMe";
 export const useCommentLogic = (items = [],postId) => {
   const [activeCommentId, setActiveCommentId] = useState(null);//لمعرفة الردود تابعة لاي تعليق
   const [showmenu, setshowmenu] = useState(false);
+  const[countreply,setcountreply]=useState({})
   const [menu, setMenu] = useState({});//عندي مجموعة تعليقات وكل تعليق له حالة
   const [translate, settranslate] = useState({});//الترجمة
   const [istranslate, setistranslate] = useState({});//هل عم نعرض النص المترجم ام الاصلي
@@ -15,47 +17,58 @@ export const useCommentLogic = (items = [],postId) => {
   const [replydata, setreplydata] = useState({});//لتخزين الردود
   const [replyText, setreplyText] = useState({});//لادخال النص 
   const [editing, setEditing] = useState({});//من اجل تعديل التعليق
-  const { currentUser } = useAuth();
+  const { data: currentUser } = UseMe();
   const editComment=useEditcomment();
   const commentreactionMutation = usecommentreaction();
   const TranslatecommentMutaion = usetranslatecomment();
   const deletecomment = useDeletecomment();
-  const addreplyMutation = usereplycomment();
+  const addreplyMutation = useaddreply()
   const  queryClient=useQueryClient()
-  const { data } = usegetreplies(activeCommentId, !!activeCommentId);
-  const fetchedReplies = data?.data || [];
+const { data: fetchedReplies = [] } = usegetreplies(activeCommentId, !!activeCommentId);
+useEffect(() => {
+  if (items && items.length > 0) {
+    const initialCounts = {};
+    items.forEach(c => {
+      initialCounts[c.id] = c.replies_count || 0;
+    });
+    setcountreply(prev => ({ ...initialCounts, ...prev }));
+  }
+}, [items]);
   const toggleMenu = (id) => {
   setMenu(prev => ({
     ...prev,
     [id]: !prev[id] //بحافظ على القيم القديمة وبعكس القيمة الجديدة 
   }));
 };
-  const [counts, setCounts] = useState(() => {
-    const map = {};
-    [...items, ...Object.values(replydata).flat()].forEach(c => {
-      map[c.id] = { likes: c.likes || 0, dislikes: c.dislikes || 0 };
+const [counts, setCounts] = useState({});
+const [active, setActive] = useState({});
+useEffect(() => {
+  if (items && items.length > 0) {
+    const newCounts = {};
+    const newActive = {};
+    
+    items.forEach(c => {
+      // نستخدم useful و not_useful لتطابق الـ ReactionPanel
+      newCounts[c.id] = { 
+        useful: c.likes || 0, 
+        not_useful: c.dislikes || 0 
+      };
+      newActive[c.id] = c.userReaction || null;
     });
-    return map;
-  });//يتم تنفيذها مرة واحدة من اجل الكومينت والريبلاي 
-  const [active, setActive] = useState(() => {
-    const map = {};
-    items.forEach(c => map[c.id] = c.userReaction || null);
-    return map;
-  });//user reaction بكون حسب الباك 
 
+    setCounts(prev => ({ ...newCounts, ...prev }));
+    setActive(prev => ({ ...newActive, ...prev }));
+  }
+}, [items]);
   // Fetch replies when activeCommentId changes
-  useEffect(() => {
-    if (!activeCommentId) return;
-    const replies = fetchedReplies?.length > 0
-      ? fetchedReplies
-      : staticReplies[activeCommentId] || [];
-      //const replies = fetchedReplies || [];
+useEffect(() => {
+  if (activeCommentId && fetchedReplies) {
     setreplydata(prev => ({
       ...prev,
-      [activeCommentId]: replies//الردود الخاصة بتعليق معين 
+      [activeCommentId]: fetchedReplies
     }));
-  }, [fetchedReplies, activeCommentId]);
-
+  }
+}, [fetchedReplies, activeCommentId]);
   // Toggle reply input
  const handleReplyClick = (comment) => {
   const id = comment.id;
@@ -73,7 +86,7 @@ export const useCommentLogic = (items = [],postId) => {
     if (!replyText[id]) {
       setreplyText(prev => ({
         ...prev,
-        [id]: `@${comment.user?.username || ""} `
+        [id]: `@${comment.user_username|| ""} `
       }));
     }
     setActiveCommentId(id);
@@ -102,6 +115,7 @@ const handleViewreply = (commentId) => {
   }
 
   setActiveCommentId(commentId);
+  queryClient.invalidateQueries({ queryKey:["replies", commentId]})
 };
 const handlesendreply = (parentId) => {
   const text = replyText[parentId];
@@ -113,7 +127,7 @@ const handlesendreply = (parentId) => {
 
       Object.keys(updated).forEach(key => {
         updated[key] = updated[key].map(c =>
-          c.id === parentId ? { ...c, text } : c
+          c.id === parentId ? { ...c, content: text} : c
         );
       });
 
@@ -136,21 +150,9 @@ const handlesendreply = (parentId) => {
   }
 
   //  reply عادي
-  const newReply = {
-    id: Date.now(),
-    text,
-    user: {
-    username: currentUser?.username,
-    personal_photo_url: currentUser?.personal_photo_url
-  },
-    createdAt: "now"
-  };
 
-  setreplydata(prev => ({
-    ...prev,
-    [parentId]: [...(prev[parentId] || []), newReply]
-  }));
 
+ 
   setreplyText(prev => ({ ...prev, [parentId]: "" }));
 
 addreplyMutation.mutate(
@@ -161,12 +163,21 @@ addreplyMutation.mutate(
   },
   {
     onSuccess: (res) => {
-      // استبدال البيانات من الباك
+      const serverReply = res.data;
+
       setreplydata(prev => ({
         ...prev,
-        [parentId]: res.data?.data|| prev[parentId]
+        [parentId]: [
+          ...(prev[parentId] || []),
+          serverReply   // ✔️ هيك الصح
+        ]
       }));
-       queryClient.invalidateQueries({queryKey:["comment", postId]});
+ setcountreply(prev => ({
+    ...prev,
+    [parentId]: (Number(prev[parentId]) || 0) + 1 
+  }));
+      setReplyInput(prev => ({ ...prev, [parentId]: false }));
+      setreplyText(prev => ({ ...prev, [parentId]: "" }));
     }
   }
 );
@@ -305,7 +316,7 @@ const handleEditClick = (comment) => {
   // حط النص الحالي
   setreplyText(prev => ({
     ...prev,
-    [id]: comment.text
+    [id]: comment.content
   }));
    setMenu(prev => ({ ...prev, [id]: false }));
 };
@@ -323,6 +334,6 @@ const resetCommentState = () => {
   handleReaction, counts,
   handleReplyClick, handleViewreply, handlesendreply, handleEditClick,
   viewreply, replydata, replyText, replyInput, setreplyText,
-  handleDeleteComment, currentUser, editing, menu, toggleMenu,setreplydata,resetCommentState
+  handleDeleteComment, currentUser, editing, menu, toggleMenu,setreplydata,resetCommentState,setcountreply,countreply
 };
 };

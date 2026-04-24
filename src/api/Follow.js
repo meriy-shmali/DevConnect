@@ -5,5 +5,5 @@ export const follow=(userId)=>{
 }
 // for unfollow
 export const unfollow=(userId)=>{
-    return api.delete(`/follow/${userId}/`)
+    return api.delete(`/unfollow/${userId}/`)
 }

@@ -55,8 +55,8 @@ const Createpost = () => {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
     <div className="bg-white p-6 rounded-xl w-[500px]">
       <Textarea value={post.aiResult} />
-    <Button className='bg-blue-button text-text-button md:text-[25px]' onClick={post.handleUseAi}>{post.t('use')}</Button>
-    <Button className='bg-cancel-button text-text-button text-[24px]'onClick={()=>post.setshowModel(false)}>{t('cancel')}</Button>
+    <Button className='bg-blue-button text-text-button md:text-[25px]' onClick={post.handleUseAi}>use</Button>
+    <Button className='bg-cancel-button text-text-button text-[24px]'onClick={()=>post.setshowModel(false)}>cancel</Button>
     </div>
   </div>
           )

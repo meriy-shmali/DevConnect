@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+
 export const useAiAction=({
     improveMutation,
   generateMutation,
@@ -7,29 +8,36 @@ export const useAiAction=({
   addtagMutation,
   categoryMutation,
   setText,
-  setAiResult,
-  setAiType,
-  setShowModel,
+  setaiResult, // تعديل الاسم ليطابق
+  setaiType,   // تعديل الاسم ليطابق
+  setshowModel,
   parsedcontent,
 })=>{
-  const {t}=useTranslation();
+  const {t,i18n}=useTranslation();
    //دالة لتقليل تكرار الكود
   const handleModalresult=(type,result)=>{
-    setAiResult(result);
-    setAiType(type);
-    setShowModel(true);
+    setaiResult(result);
+   setaiType(type);
+    setshowModel (true);
   }
     return{
            improve: () => { //التاكد من وجود نص قبل الارسال وعدم ارسال null
             if(!parsedcontent.text) return;
             const toastId=toast.loading(t('improve_loading'))
+           
       improveMutation.mutate(parsedcontent.text, {
         onSuccess: (res) => {
-          toast.success(t('improve_success'), { id: toastId })
-        handleModalresult("improve",res.data.text)
+     const result = res.data.improved_text
+      if (result) {
+        handleModalresult("improve", result);
+      } else {
+        console.log("الباك إند أرجع بيانات فارغة أو مسمى حقل مختلف:", res.data);
+      }
+    
         },
-         onError: () => {
+         onError: (res) => {
       toast.error(t('improve_error'), { id: toastId });
+      console.log("الباك إند أرجع بيانات فارغة أو مسمى حقل مختلف:", res.data);
     },
       });
     },
@@ -39,8 +47,9 @@ export const useAiAction=({
        const toastId=toast.loading(t('generate_loading'))
       generateMutation.mutate(parsedcontent.text, {
         onSuccess: (res) =>{
+          const generatedText =  res.data.enhanced_post;
           toast.success(t('generate_success'), { id: toastId })
-           setText(res.data.text)},
+     setText(generatedText + (parsedcontent.code ? "\n\n" + parsedcontent.code : ""));},
            onError: () => {
       toast.error(t('generate_error'), { id: toastId });
       }});
@@ -49,16 +58,19 @@ export const useAiAction=({
     summarize: () => {
        if(!parsedcontent.code) return;
         const toastId=toast.loading(t('summarize_loading'))
+        const currentAppLang = i18n.language === 'ar' ? 'ar' : 'en';
       summarizeMutation.mutate({
-  code: parsedcontent.code,
-  code_Language: parsedcontent.language
+  code: parsedcontent.code, 
+  appLanguage: currentAppLang
+    
 }, {
         onSuccess: (res) => {
           toast.success(t('summarize_success'), { id: toastId })
-          handleModalresult("summarize",res.data.text)
+          handleModalresult("summarize",res.data.explanation)
         },
-        onError: () => {
+        onError: (err) => {
       toast.error(t('summarize_error'), { id: toastId });
+      console.log("تفاصيل خطأ 400:", err.response?.data);
       }
       });
     },
@@ -68,7 +80,7 @@ export const useAiAction=({
       addtagMutation.mutate(text, {
         onSuccess: (res) => {
           toast.success(t('tags_success'), { id: toastId })
-          setText((prev) => prev + "\n\n" + res.data.tags?.map(t => `#${t}`).join(" ")||"");
+          setText((prev) => prev + "\n\n " + res.data.tags?.map(t => `#${t}`).join(" ")||"");
         }, onError: () => {
       toast.error(t('tags_error'), { id: toastId });
       }
@@ -77,10 +89,10 @@ export const useAiAction=({
 
     categorize: (text) => {
       const toastId=toast.loading(t('classify_loading'))
-      categoryMutation.mutate(text, {
+      categoryMutation.mutate({content: text}, {
         onSuccess: (res) => {
           toast.success(t('classify_success'), { id: toastId })
-          setText((prev) => prev + `\n\ncategory: ${res.data.category}`||"");
+          setText((prev) => prev + `\n\ncategory: ${res.data.post_type}`||"");
         },
         onError: () => {
       toast.error(t('classify_error'), { id: toastId });

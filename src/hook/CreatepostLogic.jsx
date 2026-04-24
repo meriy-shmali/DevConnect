@@ -80,13 +80,15 @@ const parsedcontent = useMemo(() => {
 const handleUseAi = () => {
 
  if(aiType==="improve"){
-   setText(aiResult);
+  const newContent = aiResult + (parsedcontent.code ? "\n\n" + parsedcontent.code : "");
+    setText(newContent);
  }
 
  else if(aiType==="summarize"){
-   setText((prev) => prev + "\n\n" + aiResult);
+const newContent = parsedcontent.text + "\n\n" + aiResult + (parsedcontent.code ? "\n\n" + parsedcontent.code : "");
+    setText(newContent);
  }
-
+setshowModel(false);
 };
 
 const handlePost = () => {
@@ -96,16 +98,11 @@ console.log('hi')
  formData.append("code",parsedcontent.code);
  formData.append("code_language",parsedcontent.language)
  formData.append("post_type",category);
-
- const finalTags =
-   tags.length > 0 ? tags : extractTagsFromText(text);
-
- finalTags.forEach((tag)=>
-   formData.append("tags[]", tag)
- );
+const finalTags = tags.length > 0 ? tags : extractTagsFromText(text);
+  formData.append("tags", JSON.stringify(finalTags));
 //اضافة عدة صور
  images.forEach((img)=>
-   formData.append("images[]",img)
+   formData.append("images",img)
  );
   const toastId=toast.loading(t('create_post_loading'))
  createpostmutation.mutate(formData,{

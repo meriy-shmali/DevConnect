@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState,useEffect } from "react";
-import jwtDecode from 'jwt-decode';
+//import jwtDecode from 'jwt-decode';
 // 1. إنشاء الـ Context
 const AuthContext = createContext();
 
@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null); // رح يحتوي بيانات المستخدم بعد تسجيل الدخول
   //مشان ما يختفي المستخدم لما اعمل refresh
-  useEffect(() => {
+ /* useEffect(() => {
     const token = localStorage.getItem("access");
     if (token) {
       try {
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.clear();
       }
     }
-  }, []);
+  }, []);*/
   
 
   return (

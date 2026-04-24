@@ -7,7 +7,7 @@ export const usequeryreaction=(postId,reaction_type)=>{
         queryKey:["reaction",postId,reaction_type],
         queryFn:()=>showreact(postId,reaction_type),
         //لمنع الطلب في حال لم يكن هناك نوع يعني ما ضغطنا
-        enabled:!!postId&&!!reaction_type
+       enabled: !!postId && !!reaction_type && reaction_type !== "comments",
     });
     return data?.data || [];
 

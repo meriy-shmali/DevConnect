@@ -13,7 +13,7 @@ import { MailIcon ,LockIcon, User, PhoneCall, Phone } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import {
   InputGroup,
   InputGroupAddon,
@@ -53,21 +53,40 @@ const toastId = toast.loading("Creating account...");
         id: toastId,
       });
      form.reset();
-      navigate("/login");
+     setTimeout(() => {
+          navigate("/login");
+        }, 800);
 
     },
+    onError: (error) => {
+      //اغلاق التحميل فور حدوث الخطأ
+      toast.dismiss(toastId);
 
-    onError: () => {
-      toast.error(t('Register_error'), {
-        id: toastId,
-       
-      });
+      // إذا كان الخطأ بسبب بيانات مكررة (Email, Phone, Username)
+      const serverErrors = error.response?.data;
 
+      if (serverErrors && typeof serverErrors === 'object') {
+        // نمر على كل حقل أرسله السيرفر كخطأ ونعرضه تحت الإدخال المناسب
+        Object.keys(serverErrors).forEach((field) => {
+          form.setError(field, {
+            type: "server",
+            message: serverErrors[field][0], // مثلاً: "email already exists"
+          });
+        });
+        
+        // إظهار توست عام ينبه المستخدم لوجود أخطاء في الحقول
+        toast.error("Please check the highlighted fields");
+      } else {
+        // خطأ عام في حال انقطاع السيرفر أو مشكلة غير متوقعة
+        toast.error(t('Register_error'));
+      }
     }
-
-  });
+  
+  },
+  )}
+    
    
-  };
+  ;
 
   return (
     <Form {...form}>

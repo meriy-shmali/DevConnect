@@ -9,24 +9,40 @@ import hljs from "highlight.js";
     line.includes("=>")
   )
 }*/
-  export const parsecontent=(content)=>{
-  const lines=content.split('\n');
-  let textlines=[];
-  let codelines=[];
-  lines.forEach((line)=>{
-    const result=hljs.highlightAuto(line);
-    if(result.language&&result.relevance>2){
-      codelines.push(line);
+ export const parsecontent = (content) => {
+  const lines = content.split('\n');
+  let textlines = [];
+  let codelines = [];
+  let isCodeStarted = false; // مؤشر لبدء كتلة الكود
+
+  lines.forEach((line) => {
+    const trimmedLine = line.trim();
+    
+    // فحص السطر: هل يحتوي على كلمات مفتاحية برمجية قوية؟
+    const isStrongCodeIndicator = /^(def\s|class\s|import\s|from\s|if\s|return\s|print\(|#)/.test(trimmedLine);
+    
+    // استخدام highlightAuto لفحص السطر
+    const result = hljs.highlightAuto(line);
+
+    // المنطق: إذا وجدنا مؤشر كود قوي، نعتبر أن كل ما يليه هو كود
+    if (isStrongCodeIndicator || (result.relevance > 2 && result.language)) {
+      isCodeStarted = true;
     }
-    else{
+
+    if (isCodeStarted) {
+      codelines.push(line);
+    } else {
+      // طالما لم يبدأ الكود بعد، كل شيء يعتبر نصاً
       textlines.push(line);
     }
-  })
-   const detected = hljs.highlightAuto(codelines.join("\n"));
+  });
+
+  // تحديد اللغة للكتلة البرمجية كاملة لضمان التلوين الصحيح
+  const detected = hljs.highlightAuto(codelines.join("\n"));
 
   return {
     text: textlines.join("\n").trim(),
     code: codelines.join("\n").trim(),
     language: detected.language || "plaintext",
   };
- }
+};

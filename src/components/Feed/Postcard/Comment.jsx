@@ -23,7 +23,7 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
   }
   return (
     <div className='flex space-x-4 items-center'>
-      <img src={post.user?. personal_photo_url}
+      <img src={post.user?. personal_photo_url||"/images/default avatar1.jpg"}
     className='w-10 h-10 rounded-full'/>
       <input placeholder='Add Comment'
       value={text}

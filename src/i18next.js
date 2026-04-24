@@ -99,7 +99,7 @@ i18n.use(initReactI18next).init({
           classify_success:"text classify sucessfully",
           create_post_success:"post sucessfully",
  /*error message */
-         Login_error:"user login unsucessfully",
+         Login_error:"invalid email or password",
          Register_error:"user registered unsucessfully",
         improve_error:"text improve failed",
           summarize_error:"code summarize failed",
@@ -207,7 +207,7 @@ i18n.use(initReactI18next).init({
           classify_success:"تم تصنيف النص بنجاح",
           create_post_success:"تم النشر بنجاح",
           /*error message */
-         Login_error:"لم يتم تسجيل الدخول بنجاح",
+         Login_error:"خطأ في الايميل او الباسوورد",
          Register_error:"لم يتم تسجيل المستخدم بنجاح",
          improve_error:"فشل تحسين النص",
           summarize_error:"فشل تلخيص الكود",

@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { addcomment, addreply, deletecomment, editcomment } from "@/api/Commentapi";
-import { replycomment } from "@/api/Commentapi";
 import { likecomment } from "@/api/Commentapi";
 import { translateComment } from "@/api/Commentapi";
 import { commentreaction } from "@/api/Commentapi";
@@ -10,12 +9,7 @@ export const useaddcomment=()=>{
         mutationFn:addcomment
     });
 }
-// reply comment
-export const usereplycomment=()=>{
-    return useMutation({
-        mutationFn:replycomment
-    });
-}
+
 //like comment
 export const uselikecomment=()=>{
     return useMutation({

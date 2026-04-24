@@ -5,7 +5,7 @@ const Trending = ({post}) => {
      
   return (
  <>
- {post.trending!=="best_following"&&(
+ {post.suggestion_reason!=="Following"&&(
    <motion.div
   animate={{ scale: [1, 1.05, 1] }}
   transition={{ repeat: Infinity, duration: 1.5 }}
@@ -15,7 +15,7 @@ const Trending = ({post}) => {
     background:
       "linear-gradient(140deg, #5a7ca0 0%, #7a6bb0 20%, #9b3a98 45%, #c45a6d 70%, #b8a89a 100%)"
   }}>   
-  <span>{post.trending}</span>
+  <span>{post.suggestion_reason}</span>
 </motion.div>)}</>
   )
 }

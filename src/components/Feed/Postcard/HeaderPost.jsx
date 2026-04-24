@@ -8,8 +8,10 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
+import { UseMe } from '@/hook/UseQueryMe'
 dayjs.extend(relativeTime);
 const HeaderPost = ({post}) => {
+  const {data}=UseMe()
   const { followMutation, unfollowMutation } = useFollow();
   const navigate=useNavigate()
   const [menu, setMenu] = useState({});
@@ -22,12 +24,11 @@ const HeaderPost = ({post}) => {
   const { i18n } = useTranslation();
  
   //في حال الباك ما رجع isfollowing
- const [isfollowing, setisfollowing] = useState(false);
-
+ const [isfollowing, setisfollowing] = useState(post.is_following);
+const [isInitiallyFollowing] = useState(post.is_following);
 useEffect(() => {
   setisfollowing(post.is_following);
 }, [post.is_following]);
-    const { currentUser } = useAuth();
   const handleFollow=(e)=>{
 e.stopPropagation(); // يمنع الانتقال للصفحة
   const mutation = isfollowing ? unfollowMutation : followMutation;
@@ -43,20 +44,22 @@ mutation.mutate(post.user.id, {
   const formattedDate = post.created_at
     ? dayjs(post.created_at).fromNow()
     : '';
-
+const shouldShowFollowLogic = 
+      Number(post.user?.id) !== Number(data?.id) && isInitiallyFollowing === false;
   return (
     <div className='flex justify-between items-center '>
       <div className='flex justify-center items-center space-x-9'>
     <div className='flex items-center justify-center space-x-5' onClick={()=>navigate(`/profile/${post.user?.id}`)}>
-    <img src= {post.user?.personal_photo_url||"/public/images/default avatar1.jpg"}
-    className='md:w-15 md:h-15 w-14 h-14 rounded-full'/>
+    <img src= {post.user?.personal_photo_url||"/images/default avatar1.jpg"}
+    className='md:w-15 md:h-15 w-14 h-14 rounded-full'
+    onError={(e) => { e.target.src = "/images/default avatar1.jpg" }}/>
     <div>
       <div className='font-semibold text-lg md:text-xl dark:text-white'>{post.user?.username}</div>
       <div className='text-gray-600 dark:text-gray-400 text-sm'>{formattedDate}</div>
     </div>
     </div>
     <div> 
-      {post.user.id!==currentUser?.id&&(
+      {shouldShowFollowLogic&&(
       <button
 onClick={handleFollow}
 className={`px-3 py-2  text-sm md:text-[16px] rounded-md  font-semibold transition
@@ -75,7 +78,7 @@ ${isfollowing
     <div className=' rounded-3xl border border-black dark:border-white w-[100px] md:w-[120px] text-center'>
      <p className=' text-lg md:text-xl p-1 dark:text-white '>{post.post_type||"general"}</p> 
       </div>
-{post.user.id !== currentUser?.id && (
+{Number(post.user.id) === Number(data?.id) && (
       <MenuPanel
         id={post.id}
         menu={menu}

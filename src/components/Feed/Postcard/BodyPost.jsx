@@ -62,13 +62,17 @@ const handletranslate=()=>{
 
   translate.mutate(
     {
-      postId: post.id,
+      post_id: post.id,
       text: post.content,
     },
     {
       onSuccess: (res) => {
-        setTranslate(res.data.content);
-        setisTransalte(true);
+        // الوصول للبيانات بناءً على الصورة المرفقة
+        const translatedContent = res.data.content; 
+        if (translatedContent) {
+          setTranslate(translatedContent);
+          setisTransalte(true);
+        }
       },
     }
   );
@@ -116,7 +120,7 @@ className="text-xs  bg-gray-700 p-2 rounded-md"
 
 <motion.img
   key={currentImage}
-  src={post.media[currentImage]}
+  src={post.media[currentImage].image_url}
   loading='lazy'
   drag="x"
   dragConstraints={{ left: 0, right: 0 }}
@@ -150,13 +154,13 @@ index===currentImage ? "bg-black":"bg-gray-500"
 ))}</div></div>)}
 {/*Tags */}
 <div className="flex items-center gap-6">
-  {post.tags?.map((tag,index) => (
-    <div
+  {Array.isArray(post.tags) && post.tags.length > 0 && post.tags.map((tag,index) => (
+   tag && tag !== "[]" &&( <div
       key={index}
       className="md:text-xl text-lg text-gray-700 dark:text-gray-300 flex-wrap"
     >
-      {tag}
-    </div>
+     # {tag}
+    </div>)
   ))}
 </div>
 <button className='text-sm text-gray-600 dark:text-gray-400'onClick={handletranslate}>{isTranslate?t('see_original'):t('translate')}</button>

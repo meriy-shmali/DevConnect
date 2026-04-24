@@ -8,61 +8,68 @@ import { usereaction } from '@/hook/UseMutationreact';
 import { useQueryClient} from '@tanstack/react-query';
 const Reaction = ({post,onOpenReaction,onClose,reactionData, incrementComment, commentCount,onOpenComments}) => {
 ///لما يكون عنا اكتر من زر مافينا نحط حالة وحدة للكل
-const [active,setactive]=useState({
-  useful: post.user_reaction === "useful",
-  not_useful: post.user_reaction === "not_useful",
-  same_problem: post.user_reaction === "same_problem",
-  creative_solution: post.user_reaction === "creative_solution",})
+const [active, setactive] = useState({
+        useful: post.user_reaction === "useful",
+        not_useful: post.user_reaction === "not_useful",
+        same_problem: post.user_reaction === "same_problem",
+        creative_solution: post.user_reaction === "creative_solution",
+    });
+    const [localCounts, setLocalCounts] = useState(post.reaction_counts || {});
+    useEffect(() => {
+        setactive({
+            useful: post.user_reaction === "useful",
+            not_useful: post.user_reaction === "not_useful",
+            same_problem: post.user_reaction === "same_problem",
+            creative_solution: post.user_reaction === "creative_solution",
+        });setLocalCounts(post.reaction_counts || {});
+    }, [post.user_reaction, post.reaction_counts]);
 const queryClient=useQueryClient()
-const [reaction,setreaction]=useState({
-  useful: post.reaction_counts?.useful || 0,
-  not_useful: post.reaction_counts?.not_useful || 0,
-  creative_solution: post.reaction_counts?.creative_solution || 0,
-  same_problem: post.reaction_counts?.same_problem || 0,
-  comment: commentCount
-})
 const reactionMutation=usereaction();
   //تابع لزيادة وانقاص عدد الايكات في البيانات الستاتيكية
-  const handlereaction=(type)=>{
-  //setreaction(prev=>({...prev,[type]:active[type]?prev[type]-1:prev[type]+1}))
-setactive(
-  prev => ({
-  useful: type === "useful" ? !prev.useful : false,
-  not_useful: type === "not_useful" ? !prev.not_useful : false,
-  same_problem: type === "same_problem" ? !prev.same_problem : false,
-  creative_solution: type === "creative_solution" ? !prev.creative_solution : false,
-})
-  );
+const handlereaction = async (type) => {
+  const previousActive = { ...active };
+    const previousCounts = { ...localCounts };
+    await queryClient.cancelQueries({ queryKey: ["posts"] });
+        // تحديث بصري سريع (Optimistic Update)
+        setactive(prev => {
+      const newState = { useful: false, not_useful: false, same_problem: false, creative_solution: false };
+      // إذا ضغط على نفس التفاعل -> اجعل الكل false (حذف)
+      // إذا ضغط على تفاعل جديد -> اجعل النوع الجديد فقط true
+      if (prev[type]) return newState; 
+      return { ...newState, [type]: true };
+    });
+    setLocalCounts(prev => {
+      const newCounts = { ...prev };
+      
+      // 1. إذا كان هناك تفاعل سابق، انقصه
+      Object.keys(active).forEach(key => {
+        if (active[key] && newCounts[key] > 0) {
+          newCounts[key] -= 1;
+        }
+      });
 
-  reactionMutation.mutate(
-  {
-    postId: post.id,
-    reaction_type: type,
-  },
-  {
-    onSuccess: (res) => {
-      //setreaction(res.data.reaction_counts);
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      queryClient.invalidateQueries({ queryKey: ["reaction", post.id, type] });
-    },
-    onError: () => {
-       setactive({
-    useful: post.user_reaction === "useful",
-    not_useful: post.user_reaction === "not_useful",
-    same_problem: post.user_reaction === "same_problem",
-    creative_solution: post.user_reaction === "creative_solution",
-  });
-    }
-  }
-);
+      // 2. إذا لم يكن المستخدم قد ضغط على نفس التفاعل (أي يريد إضافة تفاعل جديد أو تبديل)
+      if (!active[type]) {
+        newCounts[type] = (newCounts[type] || 0) + 1;
+      }
 
-   /*if(type === 'comment' && incrementComment){
-      incrementComment(); // يحدث count في PostCard
-    }
-  }*/
-  useEffect(() => {
-  setreaction(prev => ({ ...prev, comment: commentCount }));
-}, [commentCount]);
+      return newCounts;
+    });
+        reactionMutation.mutate(
+            { postId: post.id, reaction_type: type },
+            {
+                onSuccess: () => {
+                    // إعادة جلب البيانات لتحديث العدادات الحقيقية
+                    queryClient.invalidateQueries({ queryKey: ["posts"] });
+                },
+                onError: () => {
+                    // العودة للحالة الأصلية في حال فشل الطلب
+                    setactive(previousActive);
+          setLocalCounts(previousCounts);
+                }
+            }
+        );
+    };
   return (
     <div className='flex space-x-40 items-center '>
       <div>
@@ -71,7 +78,7 @@ setactive(
       <div className='md:text-lg text-md font-semibold text-gradient'onClick={(e) => {
     e.stopPropagation();
     onOpenComments();  
-  }}>{reaction.comment}</div>
+  }}>{post.total_comments || 0}</div>
      </button>
      </div>
     <div className='flex space-x-3.5  '>
@@ -89,7 +96,7 @@ setactive(
   {items.icon}</div>
   <div className='text-gradient font-semibold md:text-lg text-md' onClick={(e)=>{ e.stopPropagation(); 
     onOpenReaction(items.key)}
-  }>{reaction[items.key]}</div>
+  }>{localCounts[items.key] || 0}</div>
 </button>
   </div>
       ))}
@@ -97,6 +104,6 @@ setactive(
     
     </div>
   )
-}}
+}
 
 export default Reaction

@@ -19,8 +19,10 @@ import { useEffect } from 'react'
 import { FaRegCommentDots } from 'react-icons/fa6';
 import { useQueryClient } from "@tanstack/react-query";
 import Trending from './Trending';
+import { UseMe } from '@/hook/UseQueryMe'
 const PostCard = ({post}) => {
   const{t}=useTranslation()
+  const { data: currentUser } = UseMe();
   const [sort,setsort]=useState('latest');//المستخدم يغير الفلترة
   const[paneltype,setpaneltype]=useState(null)
   const [commentCount, setCommentCount] = useState(post.total_comments)
@@ -79,32 +81,35 @@ const reactionMap = Object.fromEntries(
 const addcommntMutation=useaddcomment()
 const handleAddComment = ({ postId, text }) => {
   if (!text.trim()) return;
- /* const newComment = {
-  id: Date.now(),
-  text,
-  user: {
-    username: "You",
-    personal_photo_url: ""
-  },
-  useful_count: 0,
-  not_useful_count: 0,
-  replies_count: 0,
-  is_reply: false
-};*/
-  
 
-//  setComments(prev => [newComment, ...prev]); // إضافة التعليق جديد بالواجهة فورًا
-  //setCommentCount(prev => prev + 1);
+  addcommntMutation.mutate(
+    { 
+      postId, 
+      content: text // تأكدي أنها content
+    }, 
+    {
+      onSuccess: (response) => { 
+        setCommentCount(prev => prev + 1);
 
-  addcommntMutation.mutate({   postId,
-      content: text, },{
-    onSuccess(){//حسب الباك
-     queryClient.invalidateQueries({
-  queryKey: ['comment', post.id]
-});
+        // تحديث الكاش بالأسماء التي يحبها السيرفر وتفهمها الواجهة
+        queryClient.setQueryData(['comment', postId], (oldData) => {
+          const newComment = {
+            id: response.data?.id || Date.now(), 
+            content: text, // استخدام المحتوى النصي
+            user_username: currentUser?.username, // المسمى الصحيح للاسم
+            user_photo_url: currentUser?.personal_photo_url, // المسمى الصحيح للصورة
+            created_at: new Date().toISOString(), // التاريخ بصيغة ISO
+            likes: 0,
+            dislikes: 0,
+            replies_count: 0
+          };
+          return oldData ? [newComment, ...oldData] : [newComment];
+        });
+
+        queryClient.invalidateQueries({ queryKey: ['comment', postId] });
+      }
     }
-  }
-  ); // إرسال للباك
+  );
 };
   return (
     <div className='bg-white dark:bg-dark-post-background rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center'>
@@ -122,16 +127,12 @@ const handleAddComment = ({ postId, text }) => {
     type={paneltype}
    title={paneltype === "comments" ? t("comments") : reactionMap[paneltype]?.label}
      icon={paneltype === "comments" ? <FaRegCommentDots /> : reactionMap[paneltype]?.icon}
-  /*  items={
+   items={
       paneltype === "comments"
-        ? commentsData
-        : users
-    }*/
-  items={
-  paneltype === "comments"
-    ? (staticComment[post.id] || [])
-    : data
-}
+        ? (commentsData||[])
+        : (data||[])
+   }
+ currentUser={currentUser}
     showFilter={paneltype === "comments"}
     sort={sort}
     setSort={setsort}

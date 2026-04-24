@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import loginschema from '@/components/Schema/LoginSchema.jsx';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
-import jwtDecode from 'jwt-decode';
+//import jwtDecode from 'jwt-decode';
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
@@ -23,7 +23,7 @@ import { uselogin } from '@/hook/UseMutaionLogin';
 
 const LoginForm=()=>{
   const{t}=useTranslation()
-  const {setCurrentUser }=useAuth()
+//  const {setCurrentUser }=useAuth()
     const navigate=useNavigate();
 const form = useForm({
     resolver: zodResolver(loginschema),
@@ -45,13 +45,16 @@ const toastId = toast.loading("Logging in...");
   const refresh = res.data.refresh;
    localStorage.setItem("access", access);
   localStorage.setItem("refresh", refresh);
-const decodedData = jwtDecode(access);
-  setCurrentUser(decodedData);
+//const decodedData = jwtDecode(access);
+ // setCurrentUser(decodedData);
+ toast.dismiss(toastId);
       toast.success(t('Login_sucess'), {
         id: toastId,
       });
       form.reset();
-      navigate("/feed");
+      setTimeout(() => {
+          navigate("/feed");
+        }, 800);
     },
     onError: () => {
       toast.error(t('Login_error'), {

@@ -4,6 +4,7 @@ import MenuPanel from "./MenuPanel";
 import ReactionPanel from "./ReactionPanel";
 import ActionPanel from "./ActionPanel";
 import { useState } from "react";
+import { UseMe } from "@/hook/UseQueryMe";
 const CommentItem = ({
   item,
   level = 0,
@@ -15,6 +16,7 @@ const CommentItem = ({
   istranslate,
   translate,
   counts,
+ countreply = {},
   handleReaction,
   handleTranslate,
   handleReplyClick,
@@ -27,7 +29,9 @@ const CommentItem = ({
   viewreply,currentUser,
   t
 }) => {
- const [visibleReplies, setVisibleReplies] = useState(5); // عرض أول 2 رد
+ const [visibleReplies, setVisibleReplies] = useState(5);
+const {data}=UseMe()
+  // عرض أول 2 رد
   const replies = replydata[item.id] || [];
   const hasMore = replies.length > visibleReplies;
   const MAX_LEVEL = 1;
@@ -40,12 +44,12 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
       {/* header + menu */}
       <div className="flex justify-between items-center">
         <HeaderPanel
-          user={item.user}
-          createdAt={item.createdAt}
+          user={item}
+          createdAt={item.created_at}
           type={type}
           level={level}
         />
-        {item.user?.username === /*currentUser?.id*/"You" && (
+       { Number(item?.user_id) === Number(data?.id) &&(
           <MenuPanel
             id={item.id}
             menu={menu}
@@ -58,7 +62,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
       <div className=" flex justify-between ml-12">
       {/* text */}
       <p className="text-md dark:text-gray-100">
-        {istranslate[item.id] ? translate[item.id] : item.text}
+        {istranslate[item.id] ? translate[item.id] : item.content}
       </p>
       {/* reactions */}
       {type === "comments" && (
@@ -74,6 +78,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
         <div>
         <ActionPanel
           item={item}
+          repliesCount={countreply?.[item.id] ?? item.replies_count ?? 0}
           istranslate={istranslate}
           handleTranslate={handleTranslate}
           handleReplyClick={handleReplyClick}
@@ -104,6 +109,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
             <CommentItem
               key={reply.id}
               item={reply}
+              countreply={countreply}
               level={level + 1}
               type={type}
               menu={menu}

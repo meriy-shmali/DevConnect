@@ -49,10 +49,11 @@ const {data: posts = []}=usechoich(category)
       <div className='flex-col  space-y-12 md:ml-0 md:w-[60%]'>
         <Choiches setCategory={setcategory} />
         {/*posts */}
-        {staticposts.map((post,index)=>(
+        {posts.map((post,index)=>(
           <div key={post.id}>
-            <PostCard key={post.id} post={post}/>
-            {index!==0 && index%2===0 && (<Suggestion/>)}
+            <PostCard post={post}/>
+           {/* {index!==0 && index%1===0 && (<Suggestion/>)}*/} 
+           {index === 0 && <Suggestion />}
           </div>
         ))}
       </div>

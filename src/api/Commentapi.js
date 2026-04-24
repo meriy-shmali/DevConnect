@@ -14,17 +14,15 @@ export const addcomment=({ postId, content })=>{
     content
   })
 }
-// reply comment
-export const replycomment=(data)=>{
-    return api.post("",data)
-}
+
+
 //like comment
 export const likecomment=(commentId)=>{
     return api.post(`/comments/${commentId}`)
 }
 //translate comment
 export const translateComment=({ commentId })=>{
-    return api.post("/translate-comment/",{ commentId });
+    return api.post("/translate-comment/",{ comment_id: commentId });
 }
 //comment reaction
 export const commentreaction=({ commentId, reaction_type })=>{
@@ -34,9 +32,7 @@ export const commentreaction=({ commentId, reaction_type })=>{
 }
 //comment get replies
 export const commentgetreplies=(commentId)=>{
-return api.get(`/comments/${commentId}/replies/`,{
-    params:{commentId }
-})
+return api.get(`/comments/${commentId}/replies/`)
 }
 //add reply
 export const addreply=({ postId, content, parent })=>{

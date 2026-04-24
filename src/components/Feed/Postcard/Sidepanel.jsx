@@ -5,6 +5,7 @@ import { LiaUserAltSlashSolid } from "react-icons/lia";
 import { useTranslation } from "react-i18next";
 import {useCommentLogic} from "@/hook/CommentLogic";
 import CommentItem from "./Sidepanel/CommentItem";
+import HeaderPanel from "./Sidepanel/HeaderPanel";
 import { useEffect } from "react";
 const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,postId}) => {
   const isComments = type === "comments";
@@ -40,7 +41,7 @@ const logic = useCommentLogic(
   const { t } = useTranslation();
 useEffect(() => {
   if (type !== "comments") {
-     logic.resetCommentState();;
+     logic.resetCommentState();
   }
 }, [type]);
   return (
@@ -109,6 +110,7 @@ useEffect(() => {
             </div>
           ) : (
             items.map(item => (
+              isComments?(
               <CommentItem
                 key={item.id}
                 item={item}
@@ -131,7 +133,8 @@ useEffect(() => {
                 handlesendreply={handlesendreply}
                 viewreply={viewreply}
                 t={t}
-              />
+              />):
+              <HeaderPanel user={item} type={type} />
             ))
           )}
         </div>
