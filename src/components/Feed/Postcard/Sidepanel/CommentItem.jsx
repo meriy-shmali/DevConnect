@@ -26,7 +26,7 @@ const CommentItem = ({
   replyText,
   setreplyText,
   handlesendreply,
-  viewreply,currentUser,
+  viewreply,currentUser,pendingTranslateId,
   t
 }) => {
  const [visibleReplies, setVisibleReplies] = useState(5);
@@ -39,7 +39,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
   return (
     <div
       style={{ paddingLeft: indent }}
-      className="flex flex-col space-y-2"
+      className="flex flex-col space-y-2 mt-5"
     > 
       {/* header + menu */}
       <div className="flex justify-between items-center">
@@ -55,7 +55,9 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
             menu={menu}
             toggleMenu={toggleMenu}
             onEdit={() => handleEditClick(item)}
-            onDelete={() => handleDeleteComment(item.id)}
+            onDelete={() =>{
+               console.log("item.id:", item.id, "item.parent_id:", item.parent_id, "item.parentId:", item.parentId);
+                handleDeleteComment(item.id, item.parent_id || item.parentId)}}
           />
         )}
       </div>
@@ -83,6 +85,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
           handleTranslate={handleTranslate}
           handleReplyClick={handleReplyClick}
           handleViewreply={handleViewreply}
+         pendingTranslateId={pendingTranslateId}
           replydata={replydata}
           t={t}
         /></div>
@@ -129,6 +132,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
               setreplyText={setreplyText}
               handlesendreply={handlesendreply}
               viewreply={viewreply}
+              pendingTranslateId={pendingTranslateId}
               t={t}
             />
           ))}

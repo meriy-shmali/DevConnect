@@ -57,7 +57,7 @@ const Header = ({ onNotificationClick,setTheme }) => {
 
 
   return (
-    <header className="bg-black dark:bg-gray-50 shadow-lg border-b border-gray-200 fixed top-0 z-30 w-full ">
+    <header className="bg-black dark:bg-gray-50 shadow-lg  fixed top-0 z-30 w-full ">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" style={{ direction: 'ltr' }}>
         
         {/* 1. شعار التطبيق - DevConnect */}

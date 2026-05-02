@@ -1,48 +1,47 @@
 import hljs from "highlight.js";
-/*const  iscodline=(line)=>{
-  return (
-    line.includes("{")||
-    line.includes("}")||
-    line.includes(";")||
-    line.includes("console.")||
-    line.includes("function")||
-    line.includes("=>")
-  )
-}*/
- export const parsecontent = (content) => {
+
+export const parsecontent = (content) => {
   const lines = content.split('\n');
   let textlines = [];
   let codelines = [];
-  let isCodeStarted = false; // مؤشر لبدء كتلة الكود
+  let isCodeStarted = false;
 
   lines.forEach((line) => {
     const trimmedLine = line.trim();
-    
-    // فحص السطر: هل يحتوي على كلمات مفتاحية برمجية قوية؟
-    const isStrongCodeIndicator = /^(def\s|class\s|import\s|from\s|if\s|return\s|print\(|#)/.test(trimmedLine);
-    
-    // استخدام highlightAuto لفحص السطر
-    const result = hljs.highlightAuto(line);
+    if (!trimmedLine) {
+      if (isCodeStarted) codelines.push(line);
+      else textlines.push(line);
+      return;
+    }
 
-    // المنطق: إذا وجدنا مؤشر كود قوي، نعتبر أن كل ما يليه هو كود
-    if (isStrongCodeIndicator || (result.relevance > 2 && result.language)) {
+    // 1. فحص التاغات: الهاشتاج الملتصق بالكلمة (مثل #react) يعتبر نص
+    const isTagOnly = /^#\w+(\s+#\w+)*$/.test(trimmedLine);
+
+    // 2. فحص التعليق البرمجي: هاشتاج وبعده مسافة (مثل # This is a comment) يعتبر كود
+    const isCodeComment = trimmedLine.startsWith('# ');
+
+    // 3. المؤشرات البرمجية القوية
+    const isStrongCodeIndicator = /^(def\s|class\s|import\s|from\s|if\s|return\s|print\(|const\s|let\s|var\s|function\s)/.test(trimmedLine);
+
+    // تفعيل وضع الكود إذا وجدنا مؤشر كود أو تعليق برمجي بشرط ألا يكون مجرد تاغات
+    if ((isStrongCodeIndicator || isCodeComment) && !isTagOnly) {
       isCodeStarted = true;
     }
 
     if (isCodeStarted) {
       codelines.push(line);
     } else {
-      // طالما لم يبدأ الكود بعد، كل شيء يعتبر نصاً
       textlines.push(line);
     }
   });
 
-  // تحديد اللغة للكتلة البرمجية كاملة لضمان التلوين الصحيح
-  const detected = hljs.highlightAuto(codelines.join("\n"));
+  const codeString = codelines.join("\n").trim();
+  // التأكد من وجود نص قبل التمرير لـ highlightAuto لتجنب الأخطاء
+  const detected = codeString ? hljs.highlightAuto(codeString) : { language: "plaintext" };
 
   return {
     text: textlines.join("\n").trim(),
-    code: codelines.join("\n").trim(),
+    code: codeString,
     language: detected.language || "plaintext",
   };
 };

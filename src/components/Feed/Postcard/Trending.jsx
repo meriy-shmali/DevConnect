@@ -2,10 +2,13 @@ import React from 'react'
 import { FaFire } from "react-icons/fa6";
 import { motion } from 'framer-motion';
 const Trending = ({post}) => {
-     
+     const shouldShowSuggestion = 
+  post.suggestion_reason && // التأكد من وجود قيمة
+  post.suggestion_reason.trim() !== "" && // التأكد أنها ليست فراغ
+  post.suggestion_reason.trim() !== "Following"; // التأكد أنها ليست Following
   return (
  <>
- {post.suggestion_reason!=="Following"&&(
+ { shouldShowSuggestion&&(
    <motion.div
   animate={{ scale: [1, 1.05, 1] }}
   transition={{ repeat: Infinity, duration: 1.5 }}

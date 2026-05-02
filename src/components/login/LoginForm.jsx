@@ -5,7 +5,8 @@ import loginschema from '@/components/Schema/LoginSchema.jsx';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
-//import jwtDecode from 'jwt-decode';
+import { getchoichreq } from '@/api/Getchoichapi';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
@@ -23,7 +24,7 @@ import { uselogin } from '@/hook/UseMutaionLogin';
 
 const LoginForm=()=>{
   const{t}=useTranslation()
-//  const {setCurrentUser }=useAuth()
+const queryClient = useQueryClient();
     const navigate=useNavigate();
 const form = useForm({
     resolver: zodResolver(loginschema),
@@ -45,25 +46,26 @@ const toastId = toast.loading("Logging in...");
   const refresh = res.data.refresh;
    localStorage.setItem("access", access);
   localStorage.setItem("refresh", refresh);
-//const decodedData = jwtDecode(access);
- // setCurrentUser(decodedData);
+queryClient.prefetchQuery({
+          queryKey: ['posts', undefined], 
+           queryFn: ()=>getchoichreq(),
+           staleTime: 1000 * 60 * 5,
+        });
  toast.dismiss(toastId);
       toast.success(t('Login_sucess'), {
         id: toastId,
+        duration: 2000
       });
       form.reset();
-      setTimeout(() => {
-          navigate("/feed");
-        }, 800);
-    },
+      navigate("/feed", { replace: true })},
     onError: () => {
       toast.error(t('Login_error'), {
         id: toastId,
       });
     }
-  });
     
-  };
+    
+    })};
  return (
    <Form {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -75,7 +77,7 @@ const toastId = toast.loading("Logging in...");
         <FormItem>
           <FormLabel className="text-[30px] md:text-[48px]">{t('email')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="email"
@@ -99,11 +101,11 @@ const toastId = toast.loading("Logging in...");
         <FormItem>
           <FormLabel className=" text-[30px] md:text-[48px]">{t('password')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="password"
-                placeholder="•••••••"
+                placeholder="enter your password"
                 className="placeholder:text-[22px] mt-2"
               />
               <InputGroupAddon>
@@ -115,12 +117,12 @@ const toastId = toast.loading("Logging in...");
         </FormItem>
       )}
     />
-   <div> <Button variant='link' className=' underline text-[24px] text-gray-700'>{t('forgot_password')}</Button></div>
+   <div> <Button variant='link' className=' underline text-[22px] text-gray-700 hover:text-gray-500'>{t('forgot_password')}</Button></div>
            <div className='flex justify-center p-4'><Buttons type="login" disabled={loginMutaion.isPending} /></div> 
             
-            <div className='flex-col  justify-center justify-items-center space-y-8 mt-8 '>
-            <div className='flex-col space-y-2'><p className='text-[24px]'>{t('dont_have_account')}</p>
-            <div><Button onClick={()=>navigate('/register') } variant='link' className=' underline text-[24px] text-gray-700'>{t('createaccount')}</Button></div></div>
+            <div className='flex-col  justify-center justify-items-center space-y-3 mt-5 '>
+            <div className='flex justify-center items-center'><p className='text-[22px]'>{t('Noaccount')}</p>
+            <Button onClick={()=>navigate('/register') } variant='link' className=' underline text-[22px] text-gray-700 hover:text-gray-500'>{t('createaccount')}</Button></div>
             </div>
   </form>
 </Form>

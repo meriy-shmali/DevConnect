@@ -72,8 +72,8 @@ const data = usequeryreaction(
 const reactionData = [
   { key: "useful", label: "useful", count: post.reaction_counts?.useful , icon: <AiOutlineLike /> },
   { key: "not_useful", label: "not useful", count: post.reaction_counts?.not_useful, icon: <AiOutlineDislike /> },
-  { key: "same_problem", label: "same problem", count: post.reaction_counts?.same_problem , icon: <PiBugBeetle /> },
-  { key: "creative_solution", label: "creative solution", count:  post.reaction_counts?.creative_solution, icon: <MdLightbulbOutline /> }
+    { key: "creative_solution", label: "creative solution", count:  post.reaction_counts?.creative_solution, icon: <MdLightbulbOutline /> },
+  { key: "same_problem", label: "same problem", count: post.reaction_counts?.same_problem , icon: <PiBugBeetle /> }
 ];
 const reactionMap = Object.fromEntries(
   reactionData.map(item => [item.key, item])
@@ -82,35 +82,54 @@ const addcommntMutation=useaddcomment()
 const handleAddComment = ({ postId, text }) => {
   if (!text.trim()) return;
 
+  // 1. تحديث العداد فوراً
+  setCommentCount(prev => prev + 1);
+
+  const tempId = Date.now();
+  const optimisticComment = {
+    id: tempId,
+    content: text,
+    user_username: currentUser?.username,
+    user_photo_url: currentUser?.personal_photo_url,
+    created_at: new Date().toISOString(),
+    likes: 0,
+    dislikes: 0,
+    replies_count: 0,
+    is_optimistic: true
+  };
+
+  // 2. تحديث الكاش (مهم جداً: استهدفي المفتاح الرئيسي ['comment', postId])
+  queryClient.setQueriesData({ queryKey: ['comment', postId] }, (oldData) => {
+    if (!oldData) return [optimisticComment];
+    // إذا كانت البيانات داخل data (مثل Axios)
+    if (oldData.data) {
+      return { ...oldData, data: [optimisticComment, ...oldData.data] };
+    }
+    // إذا كانت مصفوفة مباشرة
+    return [optimisticComment, ...oldData];
+  });
+
+  // 3. Mutation
   addcommntMutation.mutate(
-    { 
-      postId, 
-      content: text // تأكدي أنها content
-    }, 
+    { postId, content: text },
     {
-      onSuccess: (response) => { 
-        setCommentCount(prev => prev + 1);
-
-        // تحديث الكاش بالأسماء التي يحبها السيرفر وتفهمها الواجهة
-        queryClient.setQueryData(['comment', postId], (oldData) => {
-          const newComment = {
-            id: response.data?.id || Date.now(), 
-            content: text, // استخدام المحتوى النصي
-            user_username: currentUser?.username, // المسمى الصحيح للاسم
-            user_photo_url: currentUser?.personal_photo_url, // المسمى الصحيح للصورة
-            created_at: new Date().toISOString(), // التاريخ بصيغة ISO
-            likes: 0,
-            dislikes: 0,
-            replies_count: 0
-          };
-          return oldData ? [newComment, ...oldData] : [newComment];
+      onSuccess: (res) => {
+        // استبدال الوهمي بالحقيقي
+        queryClient.setQueriesData({ queryKey: ['comment', postId] }, (oldData) => {
+          const serverComment = res.data?.comment;
+          const update = (list) => list.map(c => c.id === tempId ? serverComment : c);
+          if (oldData?.data) return { ...oldData, data: update(oldData.data) };
+          return Array.isArray(oldData) ? update(oldData) : oldData;
         });
-
+      },
+      onError: () => {
+        setCommentCount(prev => prev - 1);
         queryClient.invalidateQueries({ queryKey: ['comment', postId] });
       }
     }
   );
 };
+
   return (
     <div className='bg-white dark:bg-dark-post-background rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center'>
     <Trending post={post}/>
@@ -138,6 +157,7 @@ const handleAddComment = ({ postId, text }) => {
     setSort={setsort}
     onClose={handleClose}
     postId={post.id}
+    setCommentCount={setCommentCount}
   />
 )}
     </AnimatePresence>

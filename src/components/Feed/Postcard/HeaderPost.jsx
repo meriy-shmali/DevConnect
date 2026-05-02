@@ -6,12 +6,14 @@ import MenuPanel from './Sidepanel/MenuPanel'
 import { useEffect } from 'react'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+
 import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
 import { UseMe } from '@/hook/UseQueryMe'
 dayjs.extend(relativeTime);
 const HeaderPost = ({post}) => {
   const {data}=UseMe()
+
   const { followMutation, unfollowMutation } = useFollow();
   const navigate=useNavigate()
   const [menu, setMenu] = useState({});
@@ -21,8 +23,8 @@ const HeaderPost = ({post}) => {
     [id]: !prev[id]
   }));
 };
-  const { i18n } = useTranslation();
- 
+  const { i18n,t } = useTranslation();
+
   //في حال الباك ما رجع isfollowing
  const [isfollowing, setisfollowing] = useState(post.is_following);
 const [isInitiallyFollowing] = useState(post.is_following);
@@ -38,14 +40,16 @@ mutation.mutate(post.user.id, {
   }
 });
   }
-   const locale = i18n.language === 'ar' ? 'ar' : 'en';
-  dayjs.locale(locale);
+const formattedDate = post.created_at 
+  ? dayjs(post.created_at).locale(i18n.language).fromNow() 
+  : '';
 
-  const formattedDate = post.created_at
-    ? dayjs(post.created_at).fromNow()
-    : '';
+
+
 const shouldShowFollowLogic = 
-      Number(post.user?.id) !== Number(data?.id) && isInitiallyFollowing === false;
+  post.user?.id &&                              // ← guard جديد
+  Number(post.user?.id) !== Number(data?.id) && 
+  isInitiallyFollowing === false;
   return (
     <div className='flex justify-between items-center '>
       <div className='flex justify-center items-center space-x-9'>
@@ -76,9 +80,10 @@ ${isfollowing
     </div>
     <div className='flex justify-center items-center space-x-4'>
     <div className=' rounded-3xl border border-black dark:border-white w-[100px] md:w-[120px] text-center'>
-     <p className=' text-lg md:text-xl p-1 dark:text-white '>{post.post_type||"general"}</p> 
+    {post?.post_type ?(
+     <p className=' text-lg md:text-xl p-1 dark:text-white '>{t(`post_types.${post.post_type}`,post.post_type)}</p> ):null}
       </div>
-{Number(post.user.id) === Number(data?.id) && (
+{Number(post.user?.id) === Number(data?.id) && (
       <MenuPanel
         id={post.id}
         menu={menu}

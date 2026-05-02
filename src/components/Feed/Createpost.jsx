@@ -44,23 +44,12 @@ const Createpost = () => {
           {/* TEXT */}
           <Textarea
             placeholder={t('share')}
-            value={post.text}
+            value={`${post.text}${post.displayCategory ? `\n\ncategory: ${post.displayCategory}` : ""}`}
             onChange={(e) => post.setText(e.target.value)}
-            className="bg-white dark:bg-gray-100 h-20 overflow-y-auto resize-none"
+            className="bg-white dark:bg-gray-100 h-20 overflow-y-auto "
           />
-        
-         {/*showmodel */}
-         {
-          post.showModel&&(
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div className="bg-white p-6 rounded-xl w-[500px]">
-      <Textarea value={post.aiResult} />
-    <Button className='bg-blue-button text-text-button md:text-[25px]' onClick={post.handleUseAi}>use</Button>
-    <Button className='bg-cancel-button text-text-button text-[24px]'onClick={()=>post.setshowModel(false)}>cancel</Button>
-    </div>
-  </div>
-          )
-         }
+      
+      
           {/* PREVIEW AREA */}
           {post.previewUrl.length>0 && (
             <div className="flex items-center gap-4 p-3 rounded-lg shadow">
@@ -108,8 +97,7 @@ const Createpost = () => {
               <Button
                 className="text-white bg-cancel w-[100px] h-[41px] text-[24px]"
                 onClick={() => {
-                  post.setText("");
-                  post.removeImage();
+                  post.resetForm();
                 }}
               >
                 {t("cancel")}
@@ -152,7 +140,14 @@ const Createpost = () => {
     <AiModal open={post.showModel}
      result={post.aiResult}
      onuse={post.handleUseAi}
-     onclose={()=>post.setshowModel(false)} />
+     onclose={()=>post.setshowModel(false)}
+     onRegenerate={() => post.aiaction.regenerate(post.aiType)}
+  // نمرر حالة التحميل بناءً على النوع الحالي ليظهر الانيميشن على الزر
+  isPending={
+    post.improveMutation.isPending || 
+    post.generateMutation.isPending || 
+    post.summarizeMutation.isPending
+  } />
     </div>
   );
 }

@@ -47,5 +47,6 @@ export const editcomment=({commentId,content})=>{
 }
 //delete comment
 export const deletecomment=(commentId)=>{
+    console.log("URL الحذف:", `/comments/${commentId}/`);
     return api.delete(`/comments/${commentId}/`)
 }

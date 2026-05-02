@@ -19,7 +19,7 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
       // للتعديل لاحقًا
     });
     setText("");
-    setEditingComment(null);
+    if (setEditingComment) setEditingComment(null);
   }
   return (
     <div className='flex space-x-4 items-center'>

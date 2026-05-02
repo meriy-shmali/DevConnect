@@ -5,7 +5,7 @@ import { staticReplies } from "@/Utils/data/staticReplies";
 import { useAuth } from "@/context/AuthContext";
 import {useQueryClient } from "@tanstack/react-query";
 import { UseMe } from "./UseQueryMe";
-export const useCommentLogic = (items = [],postId) => {
+export const useCommentLogic = (items = [],postId,setCommentCount) => {
   const [activeCommentId, setActiveCommentId] = useState(null);//لمعرفة الردود تابعة لاي تعليق
   const [showmenu, setshowmenu] = useState(false);
   const[countreply,setcountreply]=useState({})
@@ -21,19 +21,13 @@ export const useCommentLogic = (items = [],postId) => {
   const editComment=useEditcomment();
   const commentreactionMutation = usecommentreaction();
   const TranslatecommentMutaion = usetranslatecomment();
+  const [pendingTranslateId, setPendingTranslateId] = useState(null);
+  console.log(TranslatecommentMutaion) 
   const deletecomment = useDeletecomment();
   const addreplyMutation = useaddreply()
   const  queryClient=useQueryClient()
 const { data: fetchedReplies = [] } = usegetreplies(activeCommentId, !!activeCommentId);
-useEffect(() => {
-  if (items && items.length > 0) {
-    const initialCounts = {};
-    items.forEach(c => {
-      initialCounts[c.id] = c.replies_count || 0;
-    });
-    setcountreply(prev => ({ ...initialCounts, ...prev }));
-  }
-}, [items]);
+
   const toggleMenu = (id) => {
   setMenu(prev => ({
     ...prev,
@@ -42,24 +36,20 @@ useEffect(() => {
 };
 const [counts, setCounts] = useState({});
 const [active, setActive] = useState({});
+// التعديل في useEffect الخاص بالردود
 useEffect(() => {
-  if (items && items.length > 0) {
-    const newCounts = {};
-    const newActive = {};
-    
-    items.forEach(c => {
-      // نستخدم useful و not_useful لتطابق الـ ReactionPanel
-      newCounts[c.id] = { 
-        useful: c.likes || 0, 
-        not_useful: c.dislikes || 0 
+  if (activeCommentId && fetchedReplies && fetchedReplies.length > 0) {
+    setreplydata(prev => {
+      // لا تحدث البيانات إذا كانت موجودة مسبقاً ولديكِ تعديلات يدوية عليها
+      if (prev[activeCommentId] && prev[activeCommentId].some(r => r.is_optimistic)) return prev;
+      
+      return {
+        ...prev,
+        [activeCommentId]: fetchedReplies
       };
-      newActive[c.id] = c.userReaction || null;
     });
-
-    setCounts(prev => ({ ...newCounts, ...prev }));
-    setActive(prev => ({ ...newActive, ...prev }));
   }
-}, [items]);
+}, [fetchedReplies, activeCommentId]);
   // Fetch replies when activeCommentId changes
 useEffect(() => {
   if (activeCommentId && fetchedReplies) {
@@ -115,73 +105,237 @@ const handleViewreply = (commentId) => {
   }
 
   setActiveCommentId(commentId);
-  queryClient.invalidateQueries({ queryKey:["replies", commentId]})
+ 
 };
-const handlesendreply = (parentId) => {
+/*const handlesendreply = (parentId) => {
   const text = replyText[parentId];
   if (!text?.trim()) return;
-  //edit
+
+  const tempId = Date.now();
+  const optimisticReply = {
+    id: tempId,
+    content: text,
+    user_username: currentUser?.username,
+    user_photo_url: currentUser?.personal_photo_url,
+    created_at: new Date().toISOString(),
+    likes: 0, dislikes: 0, replies_count: 0,
+    is_optimistic: true
+  };
+
+  // الحالة الأولى: التعديل
   if (editing[parentId]) {
-    setreplydata(prev => {
-      const updated = { ...prev };
-
-      Object.keys(updated).forEach(key => {
-        updated[key] = updated[key].map(c =>
-          c.id === parentId ? { ...c, content: text} : c
-        );
-      });
-
-      return updated;
-    });
-
+    setreplydata(prev => ({
+      ...prev,
+      [parentId]: (prev[parentId] || []).map(r => r.id === parentId ? { ...r, content: text } : r)
+    }));
     setEditing(prev => ({ ...prev, [parentId]: false }));
     setReplyInput(prev => ({ ...prev, [parentId]: false }));
-    setreplyText(prev => ({ ...prev, [parentId]: "" }));
-
-  editComment.mutate({ commentId: parentId,
-    content: text }, {
-  onSuccess: () => {
-    queryClient.invalidateQueries({queryKey:["comment", postId]}
-      );
-  }
-}); //  الصح
-
+    editComment.mutate({ commentId: parentId, content: text });
     return;
   }
 
-  //  reply عادي
+  // الحالة الثانية: إضافة رد جديد 🚀
+  // 1. زيادة عداد الردود المحلي فوراً
+  setcountreply(prev => ({ ...prev, [parentId]: (Number(prev[parentId]) || 0) + 1 }));
 
-
- 
-  setreplyText(prev => ({ ...prev, [parentId]: "" }));
-
-addreplyMutation.mutate(
-  {
-    postId,
-    content: text,
-    parent: parentId
-  },
-  {
-    onSuccess: (res) => {
-      const serverReply = res.data;
-
-      setreplydata(prev => ({
-        ...prev,
-        [parentId]: [
-          ...(prev[parentId] || []),
-          serverReply   // ✔️ هيك الصح
-        ]
-      }));
- setcountreply(prev => ({
+  // 2. إظهار الرد في القائمة فوراً
+  setreplydata(prev => ({
     ...prev,
-    [parentId]: (Number(prev[parentId]) || 0) + 1 
+    [parentId]: [...(prev[parentId] || []), optimisticReply]
   }));
-      setReplyInput(prev => ({ ...prev, [parentId]: false }));
-      setreplyText(prev => ({ ...prev, [parentId]: "" }));
+
+  // 3. تحديث العداد داخل الكاش الرئيسي (ليظهر في الواجهة)
+  queryClient.setQueriesData({ queryKey: ['comment', postId] }, (old) => {
+    const update = (list) => list.map(c => c.id === parentId ? { ...c, replies_count: (c.replies_count || 0) + 1 } : c);
+    if (old?.data) return { ...old, data: update(old.data) };
+    return Array.isArray(old) ? update(old) : old;
+  });
+
+  setreplyText(prev => ({ ...prev, [parentId]: "" }));
+  setReplyInput(prev => ({ ...prev, [parentId]: false }));
+
+  addreplyMutation.mutate(
+    { postId, content: text, parent: parentId },
+    {
+     // داخل onSuccess تبع addreplyMutation في ملف CommentLogic
+onSuccess: (res) => {
+  console.log("server reply raw:", res.data);
+
+ const raw = res.data.comment;
+  const serverReply = {
+      ...raw,
+  likes: raw.useful_count ?? 0,
+  dislikes: raw.not_useful_count ?? 0,
+ user_id: raw.user_id ?? currentUser?.id,
+ is_optimistic: false
+  };
+
+  setreplydata(prev => ({
+    ...prev,
+    [parentId]: (prev[parentId] || []).map(r =>
+      r.id === tempId ? serverReply : r
+    )
+  }));
+
+  queryClient.setQueryData(['replies', parentId], (old) => {
+    return old
+      ? [...old.filter(r => r.id !== tempId), serverReply]
+      : [serverReply];
+  });
+  
+},
+      onError: () => {
+        // Rollback
+        setreplydata(prev => ({ ...prev, [parentId]: (prev[parentId] || []).filter(r => r.id !== tempId) }));
+        setcountreply(prev => ({ ...prev, [parentId]: Math.max(0, (prev[parentId] || 1) - 1) }));
+      }
     }
+  );
+};*/
+const handlesendreply = (parentId) => {
+  if (!postId) {
+    console.error("Post ID is missing!");
+    return;
   }
-);
+  const text = replyText[parentId];
+  if (!text?.trim()) return;
+
+  const tempId = Date.now();
+  
+
+  // --- الحالة الأولى: التعديل (نفس منطق الحذف السريع) ---
+  if (editing[parentId]) {
+    const newText = text;
+
+    // 1. تحديث الردود في الحالة المحلية (Local State) فوراً
+    setreplydata(prev => {
+      const newData = { ...prev };
+      Object.keys(newData).forEach(key => {
+        if (newData[key]) {
+          newData[key] = newData[key].map(r => 
+            r.id === parentId ? { ...r, content: newText } : r
+          );
+        }
+      });
+      return newData;
+    });
+
+    // 2. تحديث الكاش الرئيسي (React Query) فوراً (لتعليقات المنشور)
+   // 2. تحديث الكاش الرئيسي (React Query) فوراً
+queryClient.setQueryData(['comment', postId], (old) => {
+  if (!old) return old;
+
+  const updateInList = (list) => {
+    if (!Array.isArray(list)) return list;
+    return list.map(c => c.id === parentId ? { ...c, content: newText } : c);
+  };
+
+  // إذا كان Infinite Query (يحتوي على صفحات)
+  if (old.pages) {
+    return {
+      ...old,
+      pages: old.pages.map(page => ({
+        ...page,
+        // نتحقق إذا كانت النتائج داخل results أو هي الصفحة نفسها
+        results: page.results ? updateInList(page.results) : updateInList(page)
+      }))
+    };
+  }
+
+  // إذا كانت البيانات مصفوفة مباشرة أو داخل كائن data
+  if (Array.isArray(old)) return updateInList(old);
+  if (old.data) return { ...old, data: updateInList(old.data) };
+
+  return old;
+});
+
+    // 3. تحديث كاش الردود المنفصل (لو كان العنصر ردّاً)
+    // نبحث عن الأب الحقيقي لهذا الرد ونحدثه في كاش الردود
+    queryClient.setQueriesData({ queryKey: ['replies'] }, (old) => {
+      if (!old) return old;
+      return old.map(r => r.id === parentId ? { ...r, content: newText } : r);
+    });
+
+    // تنظيف الواجهة فوراً
+    setEditing(prev => ({ ...prev, [parentId]: false }));
+    setReplyInput(prev => ({ ...prev, [parentId]: false }));
+    setreplyText(prev => ({ ...prev, [parentId]: "" }));
+    
+    // إرسال للسيرفر في الخلفية
+    editComment.mutate({ commentId: parentId, content: newText }, {
+      onError: () => {
+        // لو فشل السيرفر، اعمل ريفريش للتصحيح
+      /*  queryClient.invalidateQueries({ queryKey: ['comment', postId] });*/
+      }
+    });
+    return;
+  }
+
+  // --- الحالة الثانية: إضافة رد جديد (كودك الأصلي كما هو) ---
+  const optimisticReply = {
+    id: tempId,
+    content: text,
+    user_username: currentUser?.username,
+    user_photo_url: currentUser?.personal_photo_url,
+    created_at: new Date().toISOString(),
+    likes: 0, 
+    dislikes: 0, 
+    replies_count: 0,
+    is_optimistic: true
+  };
+
+  setcountreply(prev => ({ ...prev, [parentId]: (Number(prev[parentId]) || 0) + 1 }));
+
+  setreplydata(prev => ({
+    ...prev,
+    [parentId]: [...(prev[parentId] || []), optimisticReply]
+  }));
+
+  queryClient.setQueriesData({ queryKey: ['comment', postId] }, (old) => {
+    const update = (list) => list.map(c => c.id === parentId ? { ...c, replies_count: (c.replies_count || 0) + 1 } : c);
+    if (!old) return old;
+    if (old.pages) {
+        return {
+          ...old,
+          pages: old.pages.map(page => ({ ...page, results: update(page.results) }))
+        };
+    }
+    return old.data ? { ...old, data: update(old.data) } : update(old);
+  });
+
+  setreplyText(prev => ({ ...prev, [parentId]: "" }));
+  setReplyInput(prev => ({ ...prev, [parentId]: false }));
+
+  addreplyMutation.mutate(
+    { postId, content: text, parent: parentId },
+    {
+      onSuccess: (res) => {
+        const raw = res.data.comment;
+        const serverReply = {
+          ...raw,
+          likes: raw.useful_count ?? 0,
+          dislikes: raw.not_useful_count ?? 0,
+          user_id: raw.user_id ?? currentUser?.id,
+          is_optimistic: false
+        };
+
+        setreplydata(prev => ({
+          ...prev,
+          [parentId]: (prev[parentId] || []).map(r => r.id === tempId ? serverReply : r)
+        }));
+
+        queryClient.setQueryData(['replies', parentId], (old) => {
+          return old ? [...old.filter(r => r.id !== tempId), serverReply] : [serverReply];
+        });
+      },
+      onError: () => {
+        setreplydata(prev => ({ ...prev, [parentId]: (prev[parentId] || []).filter(r => r.id !== tempId) }));
+        setcountreply(prev => ({ ...prev, [parentId]: Math.max(0, (prev[parentId] || 1) - 1) }));
+      }
+    }
+  );
 };
+
   const handleReaction = (commentId, type) => {
    const current = active[commentId]; // like | dislike | null
 
@@ -227,16 +381,17 @@ addreplyMutation.mutate(
     },
     {
       onSuccess: (res) => {
-        queryClient.invalidateQueries({
-          queryKey: ["comment", postId]
-        });
+       
       }
     }
   );
   };
+  
   const handleTranslate = (comment) => {
   const id = comment.id;
-
+console.log("before set pending:", pendingTranslateId);
+  setPendingTranslateId(id);
+  console.log("after set pending:", id);
   if (istranslate[id]) {
     return setistranslate(prev => ({
       ...prev,
@@ -249,7 +404,7 @@ addreplyMutation.mutate(
       ...prev,
       [id]: true
     }));
-  }
+  } 
   TranslatecommentMutaion.mutate(
     { commentId: id },
     {
@@ -262,44 +417,49 @@ addreplyMutation.mutate(
           ...prev,
           [id]: true
         }));
+         setPendingTranslateId(null);
       }
     }
   );
+
   };
-  const handleDeleteComment = (commentId) => {
+const handleDeleteComment = (commentId, parentId = null) => {
+  // 1. تحديث الواجهة فوراً (Optimistic UI)
   setreplydata(prev => {
     const newData = { ...prev };
-    Object.keys(newData).forEach(parentId => {
+    // إذا كان parentId موجود، نحذف من قائمته، وإذا لم يوجد، نبحث في كل القوائم
+    if (parentId && newData[parentId]) {
       newData[parentId] = newData[parentId].filter(c => c.id !== commentId);
-    });
+    } else {
+      Object.keys(newData).forEach(key => {
+        newData[key] = newData[key].filter(c => c.id !== commentId);
+      });
+    }
     return newData;
   });
 
-deletecomment.mutate(commentId, {
-  onSuccess: (res) => {
-    setreplydata(prev => {
-      const newData = { ...prev };
+  // 2. طلب الحذف من السيرفر
+  deletecomment.mutate(commentId, {
+    onSuccess: () => {
+      // تحديث كاش React Query لإخفاء التعليق نهائياً
+      queryClient.invalidateQueries({ queryKey: ['comment', postId] });
 
-      Object.keys(newData).forEach(parentId => {
-        newData[parentId] = newData[parentId].filter(
-          c => c.id !== commentId
-        );
-      });
-
-      return newData;
-    });
-
-    setCounts(prev => {
-      const newCounts = { ...prev };
-      delete newCounts[commentId];
-      return newCounts;
-    });
-
-    queryClient.invalidateQueries({
-      queryKey: ["comment", postId]
-    });
-  }
-})
+      if (parentId) {
+        // تنقيص عداد الردود للأب
+        setcountreply(prev => ({
+          ...prev,
+          [parentId]: Math.max(0, (prev[parentId] || 1) - 1)
+        }));
+      } else {
+        // إذا كان تعليقاً أساسياً، ننقص عداد المنشور
+        if (typeof setCommentCount === 'function') {
+           setCommentCount(prev => Math.max(0, prev - 1));
+        }
+      }
+      // إزالة كاش الردود الخاص بهذا العنصر
+      queryClient.removeQueries({ queryKey: ['replies', commentId] });
+    }
+  });
 };
 const handleEditClick = (comment) => {
   const id = comment.id;
@@ -333,7 +493,7 @@ const resetCommentState = () => {
   handleTranslate, istranslate, translate,
   handleReaction, counts,
   handleReplyClick, handleViewreply, handlesendreply, handleEditClick,
-  viewreply, replydata, replyText, replyInput, setreplyText,
+  viewreply, replydata, replyText, replyInput, setreplyText,pendingTranslateId,
   handleDeleteComment, currentUser, editing, menu, toggleMenu,setreplydata,resetCommentState,setcountreply,countreply
 };
 };

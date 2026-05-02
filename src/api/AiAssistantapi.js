@@ -14,6 +14,9 @@ export const summarizecoderewq=(data)=>{
 export const addtagsreq=(text)=>{
    return  api.post("/suggest-tags/",{ content: text });
 }
-export const categoriesreq=(content)=>{
-  return  api.post("/classify-post/",{content});
+export const categoriesreq=(data)=>{
+  return  api.post("/classify-post/",{
+   content:data.content,
+   language:data.language
+  });
 }

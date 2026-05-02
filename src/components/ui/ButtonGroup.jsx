@@ -14,7 +14,7 @@ const Buttons = ({ type ,onClick,...props }) => {
     
     return (
       <Button {...props}
-        className='bg-blue-button text-text-button md:text-[25px] hover:bg-hover-startnow md:p-6 md:h-10 md:px-6 '
+        className='bg-blue-button text-text-button md:text-[25px] hover:bg-hover-blue md:p-6 md:h-10 md:px-6 '
         variant='secondary'
         onClick={()=>navigate('/login') }
         /*size='lg'*/
@@ -68,8 +68,13 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
   if(type=='login'){
     return(
-  <Button type='submit' className='bg-blue-button text-text-button text-[20px] md:text-[25px] ' variant='default' size='lg' >
+  <Button type='submit' className='bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' size='lg' >
     {t('login')}
+  </Button>)}
+  if(type=='register'){
+    return(
+  <Button type='submit' className=' bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' size='lg' >
+    {t('register')}
   </Button>)}
   if(type=='send'){
     return(

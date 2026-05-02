@@ -6,13 +6,15 @@ import { useTranslation } from "react-i18next";
 import {useCommentLogic} from "@/hook/CommentLogic";
 import CommentItem from "./Sidepanel/CommentItem";
 import HeaderPanel from "./Sidepanel/HeaderPanel";
-import { useEffect } from "react";
-const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,postId}) => {
+import { FaRegCommentDots } from "react-icons/fa";
+import { useEffect,useRef } from "react";
+const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,postId,setCommentCount}) => {
   const isComments = type === "comments";
 
 const logic = useCommentLogic(
   isComments ? items : [],
-  isComments ? postId : null
+  isComments ? postId : null,
+   isComments ? setCommentCount : null 
 );
   const {
     showmenu,
@@ -44,6 +46,20 @@ useEffect(() => {
      logic.resetCommentState();
   }
 }, [type]);
+const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showmenu && menuRef.current && !menuRef.current.contains(event.target)) {
+        setshowmenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showmenu]);
   return (
     <>
       {/* overlay */}
@@ -69,14 +85,22 @@ useEffect(() => {
         </div>
 
         {/* filter */}
-        {type === "comments" && showFilter && (
-          <div className="flex justify-end mr-1">
-            <button onClick={() => setshowmenu(prev => !prev)}>
-              <HiOutlineAdjustments className="text-2xl dark:text-gray-50" />
+        {type === "comments" && showFilter &&items?.length>0 && (
+          <div className="flex justify-end mr-1 "ref={menuRef} >
+            <button className="p-2 rounded-full transition-all duration-300 hover:bg-gray-200/50 dark:hover:bg-gray-900/20 backdrop-blur-lg flex items-center justify-center" onClick={() => setshowmenu(prev => !prev)}>
+              <HiOutlineAdjustments className="text-2xl hover:text-black dark:text-gray-50 relative z-10 " />
             </button>
 
             {showmenu && (
-              <div className="absolute right-14 mt-2 bg-white shadow-md rounded-md p-2 flex flex-col z-50 border border-gray-300">
+                <motion.div
+                         initial={{ y: 0,x:0 }}
+                      animate={{ y: 2 ,x:-2 }}
+                      exit={{ y: 2 }}
+                      transition={{ type:"tween" ,duration: 0.1 }}
+                     className="absolute right-16 mt-6 bg-white shadow-md rounded-md p-2 flex flex-col z-50 border border-gray-300"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+               
                 <button
                   onClick={() => {
                     setSort("latest");
@@ -96,7 +120,7 @@ useEffect(() => {
                 >
                   {t("oldest")}
                 </button>
-              </div>
+              </motion.div>
             )}
           </div>
         )}
@@ -104,9 +128,9 @@ useEffect(() => {
         {/* items */}
         <div className="flex-col space-y-4">
           {items.length === 0 ? (
-            <div className=" flex flex-col items-center justify-center  h-full text-gray-500 dark:text-gray-50 space-y-2 relative -bottom-48 text-3xl">
-              <LiaUserAltSlashSolid className="text-8xl" />
-              <p>No items</p>
+            <div className=" flex flex-col  items-center justify-center  h-full text-gray-500 dark:text-gray-50 space-y-4 relative -bottom-48 text-3xl">
+             <div> {type=='comments'?<FaRegCommentDots className="text-8xl"/>:<LiaUserAltSlashSolid className="text-8xl" />}</div>
+             <div> {type=='comments'?(t('nocomments')):(t('noitems'))}</div>
             </div>
           ) : (
             items.map(item => (

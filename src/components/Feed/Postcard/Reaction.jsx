@@ -1,8 +1,5 @@
 import React, {useEffect,  useState } from 'react'
-import { AiOutlineLike } from "react-icons/ai";
-import { AiOutlineDislike } from "react-icons/ai";
-import { PiBugBeetle } from "react-icons/pi";
-import { VscLightbulbSparkle } from "react-icons/vsc";
+import CustomTooltip from './ReactioHover';
 import { FaRegCommentDots } from "react-icons/fa";
 import { usereaction } from '@/hook/UseMutationreact';
 import { useQueryClient} from '@tanstack/react-query';
@@ -11,16 +8,18 @@ const Reaction = ({post,onOpenReaction,onClose,reactionData, incrementComment, c
 const [active, setactive] = useState({
         useful: post.user_reaction === "useful",
         not_useful: post.user_reaction === "not_useful",
+          creative_solution: post.user_reaction === "creative_solution",
         same_problem: post.user_reaction === "same_problem",
-        creative_solution: post.user_reaction === "creative_solution",
+      
     });
     const [localCounts, setLocalCounts] = useState(post.reaction_counts || {});
     useEffect(() => {
         setactive({
             useful: post.user_reaction === "useful",
             not_useful: post.user_reaction === "not_useful",
-            same_problem: post.user_reaction === "same_problem",
             creative_solution: post.user_reaction === "creative_solution",
+            same_problem: post.user_reaction === "same_problem",
+          
         });setLocalCounts(post.reaction_counts || {});
     }, [post.user_reaction, post.reaction_counts]);
 const queryClient=useQueryClient()
@@ -78,27 +77,30 @@ const handlereaction = async (type) => {
       <div className='md:text-lg text-md font-semibold text-gradient'onClick={(e) => {
     e.stopPropagation();
     onOpenComments();  
-  }}>{post.total_comments || 0}</div>
+  }}>{commentCount ?? post.total_comments ?? 0}</div>
      </button>
      </div>
     <div className='flex space-x-3.5  '>
       {reactionData.map((items)=>(
-        <div  key={items.key}>
+        <CustomTooltip  key={items.key} text={items.label}>
           <button
     onClick={(e) => e.stopPropagation()
     }
-    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl border border-gray-200 shadow text-lg w-fit dark:bg-gray-100 `}
+    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl  ${ active[items.key]?' border border-follow-button':' border border-gray-200 '} shadow text-lg w-fit dark:bg-gray-100 `}
   >
  <div onClick={(e)=>{
   e.stopPropagation()
   handlereaction(items.key)
-   onClose()}} className='md:text-xl text-lg text-gray-700 '>
+   onClose()}}
+  
+    className={`md:text-xl text-lg transition-colors ${ active[items.key]?' text-follow-button':'text-gray-700'} `}>
   {items.icon}</div>
-  <div className='text-gradient font-semibold md:text-lg text-md' onClick={(e)=>{ e.stopPropagation(); 
+  <div className={` font-semibold md:text-lg text-md transition-colors ${
+    active[items.key]?'text-edit-button ':'text-gradient'}`} onClick={(e)=>{ e.stopPropagation(); 
     onOpenReaction(items.key)}
   }>{localCounts[items.key] || 0}</div>
 </button>
-  </div>
+  </CustomTooltip>
       ))}
       </div>
     

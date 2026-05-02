@@ -26,6 +26,7 @@ import { useregister } from '@/hook/UseMutationRegister';
 const RegisterForm = () => {
     const { t } = useTranslation();
     const form = useForm({
+      mode: "onSubmit",
     resolver: zodResolver(registerschema),
     defaultValues: {
    first_name: "",
@@ -43,47 +44,49 @@ const RegisterForm = () => {
   const registerMutation=useregister();
   const navigate=useNavigate();
     const onSubmit = async (data) => {
-const toastId = toast.loading("Creating account...");
+      const toastId = toast.loading("Creating account...");
 
   registerMutation.mutate(data, {
-
-    onSuccess: () => {
-
-      toast.success(t('Register_success'), {
-        id: toastId,
-      });
-     form.reset();
-     setTimeout(() => {
-          navigate("/login");
-        }, 800);
-
+    onSuccess: (res) => {
+      // 1. إذا كان الباك-أند يرسل التوكن فوراً (Auto-login)، احفظيها هنا لتخطي خطوة اللوجين
+      if (res.data?.access) {
+        localStorage.setItem("access", res.data.access);
+        localStorage.setItem("refresh", res.data.refresh);
+        
+        // الانتقال للـ Feed مباشرة وحذف اللوجين من التاريخ
+        toast.success(t('Register_success'), { id: toastId });
+        navigate("/feed", { replace: true });
+      } else {
+        // 2. إذا كان لا بد من اللوجين، انتقلي فوراً
+        // لا تستخدمي setTimeout، دعي التوست يظهر في صفحة اللوجين
+        toast.success(t('Register_success'), { id: toastId });
+        
+        // تمرير البيانات لصفحة اللوجين لملء الحقول تلقائياً (سرعة إضافية للمستخدم)
+        navigate("/login", { 
+          state: { email: data.email },
+          replace: true 
+        });
+      }
+      form.reset();
     },
     onError: (error) => {
-      //اغلاق التحميل فور حدوث الخطأ
       toast.dismiss(toastId);
-
-      // إذا كان الخطأ بسبب بيانات مكررة (Email, Phone, Username)
       const serverErrors = error.response?.data;
 
       if (serverErrors && typeof serverErrors === 'object') {
-        // نمر على كل حقل أرسله السيرفر كخطأ ونعرضه تحت الإدخال المناسب
         Object.keys(serverErrors).forEach((field) => {
           form.setError(field, {
             type: "server",
-            message: serverErrors[field][0], // مثلاً: "email already exists"
+            message: serverErrors[field][0],
           });
         });
-        
-        // إظهار توست عام ينبه المستخدم لوجود أخطاء في الحقول
-        toast.error("Please check the highlighted fields");
+        toast.error("Please check the fields");
       } else {
-        // خطأ عام في حال انقطاع السيرفر أو مشكلة غير متوقعة
         toast.error(t('Register_error'));
       }
     }
-  
-  },
-  )}
+  });
+}
     
    
   ;
@@ -100,7 +103,7 @@ const toastId = toast.loading("Creating account...");
           <FormLabel className="text-[30px] md:text-[48px]">{t('firstname')}</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="text"
@@ -124,7 +127,7 @@ const toastId = toast.loading("Creating account...");
           <FormLabel className="text-[30px] md:text-[48px]">{t('lastname')}</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="text"
@@ -148,7 +151,7 @@ const toastId = toast.loading("Creating account...");
           <FormLabel className="text-[30px] md:text-[48px]">{t('username')}</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="text"
@@ -172,7 +175,7 @@ const toastId = toast.loading("Creating account...");
         <FormItem>
           <FormLabel className="text-[30px] md:text-[48px]">{t('email')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="email"
@@ -196,11 +199,11 @@ const toastId = toast.loading("Creating account...");
         <FormItem>
           <FormLabel className=" text-[30px] md:text-[48px]">{t('password')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="password"
-                placeholder="•••••••"
+                placeholder="enter your password"
                 className="placeholder:text-[22px] mt-3"
               />
               <InputGroupAddon>
@@ -219,11 +222,11 @@ const toastId = toast.loading("Creating account...");
         <FormItem>
           <FormLabel className=" text-[30px] md:text-[48px]">{t('confirm_password')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="password"
-                placeholder="•••••••"
+                placeholder="confirm your password"
                 className="placeholder:text-[22px] mt-3"
               />
               <InputGroupAddon>
@@ -242,12 +245,12 @@ const toastId = toast.loading("Creating account...");
         <FormItem>
           <FormLabel className=" text-[30px] md:text-[48px]">{t('age')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="number"
                 placeholder=""
-                className="placeholder:text-[22px] mt-3"
+                className="placeholder:text-[24px] mt-3"
               />
               <InputGroupAddon>
               </InputGroupAddon>
@@ -291,7 +294,7 @@ const toastId = toast.loading("Creating account...");
         <FormItem>
           <FormLabel className=" text-[30px] md:text-[48px]">{t('phone_number')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px]">
+            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="tel"
@@ -307,7 +310,7 @@ const toastId = toast.loading("Creating account...");
         </FormItem>
       )}
     />  
-<div className='flex justify-center p-4'><Buttons type="login"/></div> 
+<div className='flex justify-center p-4'><Buttons type="register"/></div> 
 
   </form>
 </Form>

@@ -85,7 +85,7 @@ const inputGroupButtonVariants = cva("flex items-center gap-2 text-sm shadow-non
     },
   },
   defaultVariants: {
-    size: "xs",
+    size: "sm",
   },
 })
 
