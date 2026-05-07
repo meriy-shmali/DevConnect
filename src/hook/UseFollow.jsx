@@ -14,6 +14,12 @@ queryClient.invalidateQueries({
 queryClient.invalidateQueries({
   queryKey:["profile"]
 });
+queryClient.invalidateQueries({
+  queryKey:["followers"]
+});
+queryClient.invalidateQueries({
+  queryKey:["following"]
+});
         }
      })
     const unfollowMutation = useMutation({
@@ -27,6 +33,12 @@ queryClient.invalidateQueries({
 });
 queryClient.invalidateQueries({
   queryKey:["profile"]
+});
+queryClient.invalidateQueries({
+  queryKey:["followers"]
+});
+queryClient.invalidateQueries({
+  queryKey:["following"]
 });
     },
   });

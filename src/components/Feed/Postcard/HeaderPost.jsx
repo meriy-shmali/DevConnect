@@ -5,15 +5,43 @@ import { useFollow } from '@/hook/UseFollow'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ar';
+import MenuPanel from './Sidepanel/MenuPanel'
 import { useTranslation } from 'react-i18next';
+import EditPostModale from '@/components/Profile.jsx/EditPostModal';
+import { usePostActions } from '@/hook/UsePostMutation'; 
+
 dayjs.extend(relativeTime);
 const HeaderPost = ({post}) => {
   const navigate=useNavigate()
   const { i18n } = useTranslation();
+  const [menu, setMenu] = useState({});
+  const { deleteMutation } = usePostActions();
+  const toggleMenu = (id) => {
+  setMenu(prev => ({
+    ...prev,
+    [id]: !prev[id]
+  }));
+};
+ const handleEditPost = () => {
+  // الانتقال لصفحة التعديل مع تمرير الآيدي في الرابط
+  navigate(`/edit-post/${post.id}`);
+};
+ const handleDeletePost = () => {
+    if (window.confirm("هل أنت متأكد من رغبتك في حذف هذا المنشور؟")) {
+      deleteMutation.mutate(post.id, {
+        onSuccess: () => {
+          // إغلاق المنيو بعد الحذف الناجح
+          setMenu({});
+          // يمكنك إضافة تنبيه بسيط هنا
+          console.log("تم حذف المنشور بنجاح");
+        }
+      });
+    }
+  };
   const {followMutation}=useFollow()
   //في حال الباك ما رجع isfollowing
- const [isfollowing, setisfollowing] = useState(post.user?.is_following || false);
-    const { currentUser } = useAuth();
+  const [isfollowing, setisfollowing] = useState(post.user?.is_following || false);
+  const { currentUser } = useAuth();
   const handleFollow=(e)=>{
 e.stopPropagation(); // يمنع الانتقال للصفحة
 followMutation.mutate(post.user.id)
@@ -56,7 +84,14 @@ ${isfollowing
     <div className=' rounded-3xl border border-black w-[100px] md:w-[120px] text-center'>
      <p className=' text-lg md:text-xl p-1 '>{post.post_type||"general"}</p> 
       </div>
-
+<MenuPanel
+        id={post.id}
+        menu={menu}
+        toggleMenu={toggleMenu}
+        size={28}
+        onEdit={handleEditPost}
+        onDelete={handleDeletePost}
+      />
     </div>
   )
 }

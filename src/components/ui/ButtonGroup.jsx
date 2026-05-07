@@ -7,7 +7,7 @@ import { FiLogOut } from "react-icons/fi";
 import { FaRobot } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
-const Buttons = ({ type }) => {
+const Buttons = ({ type ,onClick}) => {
   const navigate=useNavigate();
   const { i18n,t } = useTranslation();
   if (type === "start now") {
@@ -54,6 +54,7 @@ const Buttons = ({ type }) => {
   if(type=='cancel'){
     return(
       <Button variant='default'
+      onClick={onClick}
       className='bg-cancel-button text-text-button text-[24px]'
       size='default'>
 {t('cancel')}
@@ -83,6 +84,11 @@ const Buttons = ({ type }) => {
    if(type=='use'){
     return(
       <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('use')}</Button>
+    )
+  }
+   if(type=='ok'){
+    return(
+      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default' onClick={onClick}>{t('ok')}</Button>
     )
   }
    if(type=='save' || type==='submit'){

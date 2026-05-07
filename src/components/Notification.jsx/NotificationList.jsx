@@ -5,86 +5,22 @@ import NotificationItem from './NotificationItem';
 import { useNotificationLogic } from '@/hook/UseNotificationLogic';
 import { IoIosClose } from "react-icons/io";
 import { motion } from "framer-motion";
-// مصفوفة البيانات (يمكنك نقلها لملف constants لاحقاً إذا فضلت)
-const NOTIFICATIONS_DATA = [
-  {
-    id: 1,
-    action: "followed you",
-    time: "2h",
-    is_read: false,
-    notification_type:'follow',
-    from_user:{
-       username: "meriy",
-       personal_photo_url: "https://i.pravatar.cc/150?u=1",
-    }
-  },
-  {
-    id: 2,
-    action: "liked your post",
-    time: "3h",
-    is_read: true,
-    target_type:'post',
-    postImg:'https://i.pravatar.cc/150?u=1',
-    notification_type:'follow',
-     from_user:{
-       username: "ritta",
-       personal_photo_url: "https://i.pravatar.cc/150?u=1",
-    }
-  },
-  {
-    id: 3,
-    action: "commented on your post",
-    time: "5h",
-    is_read: false,
-    notification_type:'follow',
-    target_type:'post',
-    postImg:'https://i.pravatar.cc/150?u=1',
-     from_user:{
-       username: "sara",
-       personal_photo_url: "https://i.pravatar.cc/150?u=1",
-    }
-  },
-  {
-    id: 4,
-    action: "followed you",
-    time: "1d",
-    is_read: true,
-    notification_type:'follow',
-     from_user:{
-       username: "john_doe",
-       personal_photo_url: "https://i.pravatar.cc/150?u=1",
-    }
-  },
-   {
-    id: 5,
-    action: "followed you",
-    time: "2h",
-    is_read: false,
-    notification_type:'follow',
-    from_user:{
-       username: "meriy",
-       personal_photo_url: "https://i.pravatar.cc/150?u=1",
-    }
-  },
-   {
-    id: 6,
-    action: "followed you",
-    time: "1d",
-    is_read: true,
-    notification_type:'follow',
-    from_user:{
-       username: "john_doe",
-       personal_photo_url: "https://i.pravatar.cc/150?u=1",
-    }
-  },
-];
+import { useQuery } from '@tanstack/react-query'; 
+import { getNotificationsReq } from '@/api/NotificationApi';
 
-const NotificationList = ({ isOpen,notifications, onClose,type }) => {
+const NotificationList = ({ isOpen, onClose,type }) => {
   const { t } = useTranslation();
   const { handleItemClick} = useNotificationLogic();
+  const { data: notificationsResponse, isLoading } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: getNotificationsReq,
+    enabled: isOpen, // لا يجلب البيانات إلا إذا كانت القائمة مفتوحة
+  });
+
+  // الوصول للمصفوفة (حسب axios غالباً تكون في response.data)
+   const notifications = notificationsResponse?.data || [];
 
   if (!isOpen) return null;
-
   return (
     <>
       {/* overlay */}
@@ -112,16 +48,22 @@ const NotificationList = ({ isOpen,notifications, onClose,type }) => {
 
         {/* محتوى الإشعارات */}
         <div className="flex flex-col flex-1">
-             {(notifications?.length> 0 ? notifications : NOTIFICATIONS_DATA).map((item) => (
-             <div 
-            key={item.id} 
-            onClick={() => handleItemClick(item)}>
-            <NotificationItem item={item}/>
-          </div>
-        ))}
-      </div>
-   
-     </motion.div>
+            {isLoading ? (
+            <p className="text-center text-gray-500">{t('is_loading')}</p>
+          ) : notifications.length > 0 ? (
+            notifications.map((item) => (
+              <div 
+                key={item.id} 
+                onClick={() => handleItemClick(item)}
+              >
+                <NotificationItem item={item} />
+         </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-400 mt-10">{t('no_notifications_yet')}</p>
+          )}
+        </div>
+      </motion.div>
     
       
     </>

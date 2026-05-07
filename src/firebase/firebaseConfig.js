@@ -3,32 +3,51 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey:  "AIzaSyDjUA09ZY95YeemNU1nnlAw34_Ko3mF6EE",
+  authDomain: "devconnect-d1e7f.firebaseapp.com",
+  projectId: "devconnect-d1e7f",
+  storageBucket: "devconnect-d1e7f.firebasestorage.app",
+  messagingSenderId: "1031177598815",
+  appId: "1:1031177598815:web:d420025354c60a5b75e8ea", 
+  measurementId: "G-LGC0HFFG1V"
 };
-
 const app = initializeApp(firebaseConfig);
 export const messaging = getMessaging(app);
 
+// دالة طلب التوكن
 export const requestForToken = async (updateTokenMutation) => {
+  console.log("بداية تشغيل دالة طلب التوكن..."); // فحص 1
   try {
     const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      const currentToken = await getToken(messaging, {
-        // نضع المفتاح الذي أرسلتِه هنا بالضبط
-        vapidKey: "BGI1F_hVeDCMO4tHOorJ5tuo5k4TyygXZE77nPUkH2KV2rSLnnagL-PkFt8nmR5KSz52GEQMiy8TEuemr0VQSLc"
-      });
+    console.log("حالة الصلاحية:", permission); // فحص 2
+
+    if (permission === 'granted') {
+      console.log("جاري محاولة جلب التوكن من Firebase...");
       
+      const currentToken = await getToken(messaging, { 
+        vapidKey: "BGI1F_hVeDCMO4tHOorJ5tuo5k4TyygXZE77nPUkH2KV2rSLnnagL-PkFt8nmR5KSz52GEQMiy8TEuemr0VQSLc" 
+      });
+
       if (currentToken) {
-        updateTokenMutation(currentToken); // إرسال التوكن للباك إند
-        console.log("FCM Token:", currentToken);
+        console.log("COPY_THIS_TOKEN:", currentToken);
+        if (updateTokenMutation?.mutate) {
+          updateTokenMutation.mutate(currentToken);
+        }
+      } else {
+        console.log("فشل جلب التوكن - تأكدي من الـ Service Worker في مجلد public");
       }
+    } else {
+      console.log("المستخدم رفض صلاحية الإشعارات");
     }
   } catch (err) {
-    console.log("Error retrieving token: ", err);
+    console.error("خطأ تقني في Firebase:", err); // سيخبرك هنا إذا كانت المشكلة في الإعدادات
   }
-};
+};;
+
+// دالة المستمع (المعدلة لاستقبال رسائل متعددة)
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      resolve(payload);
+    });
+  });

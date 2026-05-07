@@ -2,13 +2,15 @@ import React from 'react';
 import { X, Users, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useUnFollowMutation,useGetFollowing } from '@/hook/UseGetFollowing';
+import { useGetFollowing } from '@/hook/UseGetFollowing';
 
-const FollowingModal = ({ isOpen, onClose, following, isLoading, error }) => {
+const FollowingModal = ({  isOpen, onClose, userId }) => {
   const { t } = useTranslation();
   const navigate=useNavigate();
-  const handleUserClick = (user) => {
-    navigate(`/profile/${user.username}`); // 3. المسار الخاص ببروفايل المستخدم
+   const { data: following, isLoading ,error} = useGetFollowing(userId);
+   const listData = Array.isArray(following) ? following : (following?.data || following?.results || []);
+  const handleUserClick = (user_id) => {
+    navigate(`/profile/${user_id}`);  // 3. المسار الخاص ببروفايل المستخدم
     onClose(); // إغلاق المودال بعد الانتقال
   };
   if (!isOpen) return null;
@@ -40,15 +42,15 @@ const FollowingModal = ({ isOpen, onClose, following, isLoading, error }) => {
             <div className="text-center py-10 text-red-500 text-sm">
               حدث خطأ أثناء جلب البيانات.
             </div>
-          ) : following?.length > 0 ? (
-            following.map((user) => (
+          ) : (listData.length > 0 ? (
+             listData.map((user) => (
               <div
                key={user.id} 
-               onClick={()=>handleUserClick(user.username)}
+               onClick={()=>handleUserClick(user.id)}
                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-xl transition-all
                 group cursor-pointer border border-transparent hover:border-gray-200">
                 <img 
-                  src={user.avatar || "https://ui-avatars.com/api/?name=" + user.username} 
+                 src={user.personal_photo_url || "/src/images/default-avatar.png"} 
                   className="w-12 h-12 rounded-full border border-gray-100 object-cover" 
                   alt={user.username}
                 />
@@ -58,7 +60,7 @@ const FollowingModal = ({ isOpen, onClose, following, isLoading, error }) => {
             ))
           ) : (
             <p className="text-center py-10 text-gray-400 italic">{t('no_following_yet')}</p>
-          )}
+          ))}
         </div>
       </div>
     </div>

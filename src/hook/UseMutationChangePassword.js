@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { changePasswordApi } from '@/api/ChangeApi';
+import { changePasswordApi ,sendOtpApi, resetPasswordApi} from '@/api/ChangeApi';
 
 export const useChangePasswordMutation = (form) => {
   return useMutation({
@@ -8,25 +8,41 @@ export const useChangePasswordMutation = (form) => {
       alert('تمت العملية بنجاح');
       form.reset(); // مسح الحقول بعد النجاح
     },
-    onError: (error) => {
-      const serverErrors = error.response?.data?.errors; // هيكلة الأخطاء المتوقعة من لارافيل أو نود
-      
-      if (serverErrors) {
-        // نمر على كل خطأ قادم من الباك اند ونضعه تحت الحقل المناسب
-        Object.keys(serverErrors).forEach((key) => {
-          // نربط اسم الحقل في الباك اند باسم الحقل في الفورم عندك
-          const fieldName = key === 'current_password' ? 'password' : 
-                            key === 'new_password' ? 'newpassword' : 
-                            key === 'new_password_confirmation' ? 'confirmpassword' : key;
-          
-          form.setError(fieldName, {
-            type: 'server',
-            message: serverErrors[key][0], // نأخذ أول رسالة خطأ للحقل
-          });
+     onError: (error) => {
+      const backendErrors = error?.response?.data;
+
+      if (backendErrors && typeof backendErrors === 'object') {
+        Object.keys(backendErrors).forEach((field) => {
+          let formFieldName = field;
+
+          // تحويل أسماء حقول الباك إيند لتطابق أسماء حقولك في الفرونت إيند
+          if (field === "new_password") formFieldName = "newpassword";
+          if (field === "confirm_new_password") formFieldName = "confirmpassword";
+          if (field === "old_password") formFieldName = "password";
+
+          form.setError(formFieldName, {
+            type: "server",
+            message: Array.isArray(backendErrors[field]) 
+              ? backendErrors[field][0] 
+              : backendErrors[field],
         });
-      } else {
-        alert('حدث خطأ غير متوقع');
-      }
+      });
     }
+  }})};
+export const useSendOtp = () => {
+  return useMutation({
+    mutationFn: (email) => {
+      return sendOtpApi(email); // ✅ تأكد أن الاسم هنا يطابق الـ import أعلاه
+    },
+    onError: (error) => {
+       console.error("Mutation Error:", error); // نصيحة: أضف هذا السطر لرؤية الخطأ الحقيقي
+    }
+  });
+};
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: (data)=> resetPasswordApi(data),
+    //onSuccess: () => toast.success("Password reset successfully!"),
+   // onError: () => toast.error("Invalid OTP or error occurred"),
   });
 };

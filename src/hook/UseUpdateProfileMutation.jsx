@@ -1,21 +1,29 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateProfilereq } from '../api/profileApi'; // تأكد من المسار الصحيح
+import {updateProfilereq, deleteProfilePhotoReq } from '@/api/ProfilePageApi'; // تأكد من المسار الصحيح
 //import { toast } from 'react-hot-toast'; // أو أي مكتبة تنبيهات تستخدمها
 
-export const useUpdateProfileMutation = () => {
+export const useUpdateProfilePhoto = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (formData) => updateProfilereq(formData),
-    onSuccess: (response) => {
-      // تحديث بيانات المستخدم في الكاش لكي تظهر التعديلات فوراً في البروفايل
-      queryClient.invalidateQueries(['user-profile']); 
-     // toast.success('Profile updated successfully!');
+    // استخدمي الدالة المستوردة مباشرة لأنها تحتوي على api.put والرابط الصحيح
+    mutationFn: updateProfilereq, 
+    onSuccess: () => {
+       
+        queryClient.invalidateQueries({ queryKey: ["profile"] });
+        console.log("تم تحديث الكاش بنجاح");
     },
     onError: (error) => {
-      const errorMessage = error?.response?.data?.message || "Something went wrong";
-     // toast.error(errorMessage);
-    },
-    onSettled:()=>{}
+      console.error("فشل التحديث:", error?.response?.data || error.message);
+    }
+  });
+};
+export const useDeleteProfilePhoto = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteProfilePhotoReq,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      console.log("تم حذف الصورة وتحديث البيانات");
+    }
   });
 };

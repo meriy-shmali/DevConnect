@@ -1,14 +1,22 @@
-import axios from 'axios';
+import api from "./Api";
 
-const BASE_URL = 'http://127.0.0.1:8000'; // كما يظهر في صور Postman
-
-export const updatePost = async (postId, data) => {
-  // data يمكن أن تحتوي على content أو delete_images
-  const response = await axios.patch(`${BASE_URL}/posts/${postId}/edit/`, data);
+// تعديل منشور (PATCH)
+// دالة لتعديل أي حقل (نص، كود، لغة البرمجة)
+export const updatePost = async ( postId, data ) => {
+  const response = await api.patch(`/posts/${postId}/edit/`, data);
   return response.data;
 };
 
+// دالة مخصصة إذا أردتِ حذف صورة معينة من المنشور
+export const deletePostImage = async (postId, imageId) => {
+    const response = await api.patch(`/posts/${postId}/edit/`, {
+        delete_images: imageId
+    });
+    return response.data;
+};
+
+// حذف منشور (DELETE)
 export const deletePost = async (postId) => {
-  const response = await axios.delete(`${BASE_URL}/posts/${postId}/edit/`);
-  return response.data;
+    const response = await api.delete(`/posts/${postId}/edit/`);
+    return response.data; // سيعيد { "message": "Post deleted successfully" }
 };

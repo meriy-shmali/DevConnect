@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Value } from '@radix-ui/react-select';
 import { useTranslation } from 'react-i18next';
 import { X ,Loader2} from 'lucide-react';
-import { useUpdatePersonalInfo } from '@/hook/UseProfileMutation';
+import { useUpdateProfileMutation } from '@/hook/UseProfileMutation';
 //import { useUpdateProfileMutation } from '@/hook/UseUpdateProfileMutation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editProfileSchema } from '../Schema/EditProfileSchema';
@@ -31,23 +31,24 @@ const EditProfileModal = ({ isOpen, onClose, initialData }) => {
      links:""
     }
   })
-  useEffect(()=>{
-    if (initialData){
-      form.reset({
-        specialization:initialData.info?.specialization || "",
-        bio:initialData.info?.bio || "",
-        links:initialData.info?.links || "",
-      })
-    }
-  },[initialData,form,isOpen]);
+  useEffect(() => {
+  if (isOpen && initialData) {
+    // الوصول المباشر للخصائص لأن initialData هو نفسه كائن info المرسل من الأب
+    form.reset({
+      specialization: initialData.specialization || "",
+      bio: initialData.bio || "",
+      links: initialData.links || "",
+    });
+  }
+}, [initialData, form, isOpen]);
   // 2. استخدام الميوتيشن لتحديث البيانات
-  const { mutate, isPending } = useUpdatePersonalInfo( initialData?.username);
+  const { mutate: updateProfile, isLoading ,isPending} = useUpdateProfileMutation();
   
   // 3. دالة التعامل مع الإرسال
-  const onSubmit = (data) => {
-    mutate(data, {
-      onSuccess: () => {
-        onClose(); // إغلاق المودال عند النجاح
+  const onSubmit = (formData) => {
+   updateProfile(formData, {
+    onSuccess: () => {
+      onClose() // إغلاق المودال عند النجاح
       },
     });
   };

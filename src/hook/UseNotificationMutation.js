@@ -14,10 +14,11 @@ export const useNotificationMutation = () => {
   });
 
   // ميوتيشن إرسال توكن الجهاز
-  const updateToken = useMutation({
-    mutationFn: (token) => updateFcmTokenReq(token),
-    onSuccess: () => console.log("Device Token Registered Successfully")
+   const updateToken = useMutation({
+    // نمرر الـ tokenValue مباشرة للدالة، وهي ستتكفل بالباقي
+    mutationFn: (tokenValue) => updateFcmTokenReq(tokenValue), 
+    onSuccess: () => console.log("✅ Device Token Registered Successfully")
   });
 
-  return { markAsRead, updateToken };
+  return { markAsRead, updateToken }; 
 };

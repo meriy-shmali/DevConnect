@@ -74,7 +74,17 @@ i18n.use(initReactI18next).init({
         current_pass:"Current Password",
         new_pass:"New Password",
         no_followers_yet:"No Followers Yet.",
-        no_following_yet:"No Following Yet."
+        no_following_yet:"No Following Yet.",
+        notifications_msg: {
+        follow: "started following you",
+        post_reaction: "reacted to your post",
+        comment_reaction: "reacted to your comment",
+        new_comment: "commented on your post",
+        reply_comment: "replied to your comment"
+},
+
+        is_loading: "Loading...",
+        no_notifications_yet: "No notifications yet"
 
       }
     },
@@ -150,7 +160,16 @@ i18n.use(initReactI18next).init({
         current_pass:"كلمة المرور الحالية",
         new_pass:"كلمة المرور الجديدة",
         no_followers_yet:"لا يوجد متابعين بعد",
-        no_following_yet:""
+        no_following_yet:"لا توجد متابعات بعد",
+        notifications_msg: {
+        follow: "بدأ بمتابعتك",
+        post_reaction: "تفاعل مع منشورك",
+        comment_reaction: "أعجب بتعليقك",
+        new_comment: "علق على منشورك",
+        reply_comment: "رد على تعليقك"
+},
+       is_loading: "جاري التحميل...",
+       no_notifications_yet: "لا توجد إشعارات بعد"
       }
     }
   },

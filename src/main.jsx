@@ -5,7 +5,7 @@ import { QueryClientProvider,QueryClient } from '@tanstack/react-query';
 import { RouterProvider } from "react-router-dom";
 import { AuthProvider } from './context/AuthContext';
 //import AccountSettings from './components/AccountSettings';
-import router from './Router'
+import router from './Router';
 import './i18next'
 //import { BrowserRouter } from 'react-router-dom';
 const queryClient = new QueryClient();

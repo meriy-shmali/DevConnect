@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
   const { t } = useTranslation();
   const navigate=useNavigate();
-  const handleUserClick = (user) => {
-    navigate(`/profile/${user.username}`); // 3. المسار الخاص ببروفايل المستخدم
+  const listData = Array.isArray(followers) ? followers : (followers?.results || followers?.data || []);
+  const handleUserClick = (user_id) => {
+    navigate(`/profile/${user_id}`); // 3. المسار الخاص ببروفايل المستخدم
     onClose(); // إغلاق المودال بعد الانتقال
   };
   if (!isOpen) return null;
@@ -39,15 +40,15 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
             <div className="text-center py-10 text-red-500 text-sm">
               حدث خطأ أثناء جلب البيانات.
             </div>
-          ) : followers?.length > 0 ? (
-            followers.map((user) => (
+          ) : (listData.length > 0 ? (
+               listData.map((user) => (
               <div
                key={user.id} 
-               onClick={()=>handleUserClick(user.username)}
+               onClick={()=>handleUserClick(user.id)}
                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-xl transition-all
                 group cursor-pointer border border-transparent hover:border-gray-200">
                 <img 
-                  src={user.avatar || "https://ui-avatars.com/api/?name=" + user.username} 
+                  src={user.personal_photo_url || "/src/images/default-avatar.png"} 
                   className="w-12 h-12 rounded-full border border-gray-100 object-cover" 
                   alt={user.username}
                 />
@@ -57,11 +58,11 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
             ))
           ) : (
             <p className="text-center py-10 text-gray-400 italic">{t('no_followers_yet')}</p>
-          )}
+          ))}
         </div>
       </div>
     </div>
-  );
+);
 };
 
 export default FollowersModal;

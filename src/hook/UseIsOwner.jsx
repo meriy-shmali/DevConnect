@@ -1,10 +1,16 @@
 // src/hooks/useIsOwner.js
+import { useParams } from "react-router-dom";
+
 export const useIsOwner = (profileId) => {
-  // جلب آيدي المستخدم المسجل من localStorage
+  const { username } = useParams();
   const currentUserId = localStorage.getItem('userId');
 
-  // المقارنة (نحولهم لنصوص لضمان الدقة)
-  const isOwner = String(currentUserId) === String(profileId);
+  // إضافة console.log هنا ستكشف لكِ فوراً سبب الفشل في الكونسول
+  // console.log("Checking Owner:", { username, currentUserId, profileId });
 
-  return isOwner;
+  if (username === 'me') return true;
+
+  if (!currentUserId || !profileId) return false;
+
+  return String(currentUserId) === String(profileId);
 };

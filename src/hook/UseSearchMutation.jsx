@@ -8,35 +8,45 @@ export const useSearch = (query, activeTab) => {
   const [page, setPage] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
 
+
   // 1. جلب السجل (Recents) - يتم تحديثه تلقائياً عند الحذف
-  const { data: recents = [], isLoading: isRecentsLoading } = useQuery({
-    queryKey: ['recentSearches'],
-    queryFn: searchApi.getRecents,
-  });
+ const { data: recentsData, isLoading: isRecentsLoading } = useQuery({
+  queryKey: ['recentSearches'],
+  queryFn: searchApi.getRecents,
+});
+ const recents = recentsData?.results || [];
+ console.log("Recents from Hook:", recents);
 
   // 2. جلب الاقتراحات أثناء الكتابة (مع منع الطلبات الفارغة)
-  const { data: suggestions = [] } = useQuery({
+  const { data: suggestionsData = [] } = useQuery({
     queryKey: ['suggestions', query, activeTab],
     queryFn: () => searchApi.getSuggestions(query, activeTab),
     enabled: query.length > 0 && !isSearching,
   });
+    const suggestions = suggestionsData.results || [];
+ 
 
   // 3. ميوتيشن البحث الكامل (عند Enter)
   const searchMutation = useMutation({
     mutationFn: ({ q, type, p }) => searchApi.getResults(q, type, p),
     onSuccess: (data) => {
-      if (page === 1) setResults(data.results);
-      else setResults(prev => [...prev, ...data.results]);
-    }
-  });
+      const newResults = data.results || []; 
+    if (page === 1) setResults(newResults);
+    else setResults(prev => [...prev, ...newResults]);
+  }
+});
 
   // 4. ميوتيشن الحذف (مع تحديث الواجهة فوراً)
-  const deleteMutation = useMutation({
-    mutationFn: (id) => searchApi.deleteRecent(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['recentSearches']);
-    }
-  });
+ const deleteMutation = useMutation({
+  mutationFn: (id) => searchApi.deleteRecent(id),
+  onSuccess: () => {
+    // لن تعمل هذه السطور إلا إذا كان الرد من السيرفر 200 أو 204
+    queryClient.invalidateQueries({ queryKey: ['recentSearches'] });
+  },
+  onError: (error) => {
+    console.error("فشل الحذف. تأكدي من الرابط والـ ID:", error.response?.status);
+  }
+});
 
   // 5. ميوتيشن الحفظ في السجل
   const saveHistoryMutation = useMutation({

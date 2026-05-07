@@ -1,28 +1,31 @@
-// src/api/ProfilePageApi.jsx
-import axios from "axios";
+import { User } from "lucide-react";
+import api from "./Api";
 
-export const getuserprofilereq = async (username) => {
-  return Promise.resolve({
-    data: {
-      id:'user_abc_123',
-      username: username || "meriy_shmali",
-      avatar: "",
-      followersCount: 12,
-      info: {
-        id:'user_abc_123',
-        specialization: "",
-        bio: "",
-        links:""
-      }
-    }
-  });
+// جلب بروفايل مستخدم آخر (يستخدم المعرف الرقمي id بناءً على تجربة Postman)
+export const getuserprofilereq = async (userId) => {
+  const { data } = await api.get(`/profile/${userId}/`); 
+  return data;
 };
 
-export const getuserpostsreq = async (username) => {
-  return Promise.resolve({
-    data: [
-      { id: 1, author: "Ritta7", content: "منشور تجريبي رقم 1", userAvatar: "https://via.placeholder.com/40" },
-      { id: 2, author: "Ritta7", content: "منشور تجريبي رقم 2", userAvatar: "https://via.placeholder.com/40" }
-    ]
-  });
+// جلب بروفايلك الشخصي (المسار الصحيح هو me)
+export const getMyProfileReq = async () => {
+  const { data } = await api.get('/profile/me/');
+  return data;
+};
+
+// تحديث المعلومات الشخصية
+export const updateProfilereq = async (formData) => {
+  // استخدام PUT والرابط الموضح في البوستمان
+  const { data } = await api.put('/profile/me/update/photo/', formData);
+  return data;
+};
+export const deleteProfilePhotoReq = async () => {
+  const { data } = await api.delete('/profile/me/update/photo/'); // تأكدي من الرابط من الباك إند
+  return data;
+};
+// دالة تحديث بيانات البروفايل
+export const updateProfileInfo = async (profileData) => {
+  // ملاحظة: تأكدي من المسار في الباك إند، غالباً ما يكون /profile/update/ أو مشابه
+  const { data } = await api.patch('/profile/me/update/info', profileData);
+  return data;
 };

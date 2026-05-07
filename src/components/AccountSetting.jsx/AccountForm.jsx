@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useForm  } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import changepasswordschema from '../Schema/ChangePasswordSchema';
+import accountschema from '../Schema/AccountSchema';
 import { useNavigate } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
+import { LogOut,Sun,Moon,Monitor } from 'lucide-react';
+import { UseTheme } from './UseTheme';
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
@@ -19,48 +20,52 @@ import {
 } from "@/components/ui/input-group"
 import Buttons from '../ui/ButtonGroup';
 //import { useChangePasswordMutation } from '@/hook/UseMutationChangePassword';
-import { useUpdateAccount,useGetAccountData,useLogout } from '@/hook/UseMutationAccount';
+import { useUpdateAccount,useGetAccountData } from '@/hook/UseMutationAccount';
 import i18next from 'i18next';
 import { email } from 'zod';
 import { languages } from 'prismjs';
 const AccountForm=()=>{
-    const savedEmail =localStorage.getItem('userEmail')
+    const { theme , setTheme} = UseTheme();
     const {data : accountData}=useGetAccountData();
     const navigate = useNavigate();
     const [isOpen,setIsOpen]=useState (false);
+    const [isOpens,setIsOpens]=useState (false);
     const form = useForm({
-    resolver: zodResolver(changepasswordschema),
+    resolver: zodResolver(accountschema),
     defaultValues: {
      username:"",
-     email:savedEmail,
+     email:"",
      language:"en",
     },
     
   });
-    const { isDirty } = form.formState;
+   
    
     const updateMutation=useUpdateAccount();
-    const logoutMutation =useLogout();
-    const handleLogout = () =>{
-     logoutMutation.mutate();
-    }
    const Values = form.watch();
    const hasData = 
-    Values.username?.length>0 ;
+    Values.username !==accountData?.data?.username ;
    // const { mutate,isPending}=useChangePasswordMutation(form);
-    const onSubmit = (Values)=>{updateMutation.mutate(Values)};
+    const onSubmit = (Values) => {
+    console.log("OnSubmit Triggered!", Values); // أضيفي هذا السطر
+    updateMutation.mutate({username: Values.username});
+};
    const { i18n,t } = useTranslation();
    const currentLang=i18n.language;
-   const languagePlaceholder=currentLang==='ar'?'العربية' : 'English';
+   const languagePlaceholder=currentLang==='ar'?t('arabic') : t('english');
+   const themePlaceholder = theme === 'system' ? t('system') : theme === 'dark' ? t('dark') : t('light');
     useEffect(()=>{
-      if(accountData){
+      console.log("Account Data Received:", accountData);
+      if(accountData && accountData.data){
         form.reset({
-          username:accountData.username||"",
-          email:accountData.email||"",
+          username:accountData?.data?.username||"",
+          email:accountData?.data?.email||"",
           language:accountData.language || "en"
         })
       }
     },[accountData,form.reset])
+    console.log("Form Errors:", form.formState.errors);
+console.log("Is Submitting:", form.formState.isSubmitting);
  return (
    <Form {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)} className="w-full h-full min-h-screen pb-20 space-y-6 text-black dark:text-white">
@@ -82,7 +87,7 @@ const AccountForm=()=>{
              focus-within: outline-none dark:bg-dark-post-background dark:border-white/20 ">
               <InputGroupInput
                 {...field}
-                type='username'
+                type='text'
                 placeholder=""
                 className=" flex-shrink-0  md:text-[22px] text-[22px] dark:text-dark-text whitespace-nowrap overflow-x-auto
                 overflow-y-hidden scrollbar-hide" 
@@ -122,6 +127,7 @@ const AccountForm=()=>{
               <InputGroupInput
                 {...field}
                 type='email'
+                readOnly
                 placeholder=""
                 className=" md:text-[22px] text-[22px] dark:text-dark-text 
                 whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide cursor-not-allowed"
@@ -136,12 +142,14 @@ const AccountForm=()=>{
 
     <FormField
       control={form.control}
-      name="langauge"
+      name="language"
       render={({ field }) => (
-        <FormItem className='flex flex-col md:flex-row md:item-center gap-2 md:gap-1'>
+        <FormItem className='flex flex-col md:flex-row md:items-start gap-2 md:gap-1'>
           <FormLabel className="text-main-text md:min-w-[250px] lg:min-w-[400px] flex-shrink-0
            text-[30px] md:text-[40px]  lg:text-[40px]">{t('language')}: </FormLabel>
-          <div className='flex flex-col w-full max-w-[500px]'>
+          <div className='flex flex-col w-full max-w-[500px] transition-all ease-in-out duration-300 overflow-visible '
+           style={{marginBottom : isOpen?'90px' : '0px',
+            textAlign:'left',display:'block'}}>  
           <FormControl>
             <Select onOpenChange={
               (open)=>setIsOpen(open)} defaultValues={currentLang} onValueChange={(value)=>{field.onChange(value);
@@ -166,10 +174,58 @@ const AccountForm=()=>{
         </FormItem>
       )}
     />
+     <FormField
+      control={form.control}
+      name="mode"
+      render={({ field }) => (
+        <FormItem className='flex flex-col md:flex-row md:item-center gap-2 md:gap-1'>
+          <FormLabel className="text-main-text md:min-w-[250px] lg:min-w-[400px] flex-shrink-0
+           text-[30px] md:text-[40px]  lg:text-[40px]">{t('mode')}: </FormLabel>
+          <div className='flex flex-col w-full max-w-[500px]'>
+          <FormControl>
+            <Select onValueChange={(value)=>{field.onChange(value); setTheme(value)}} onOpenChange={
+              (opens)=>setIsOpens(opens)} defaultValues={theme}
+              >
+            <SelectTrigger className=" group bg-white border-black border w-full px-3 lg:max-w-[500px] md:max-w-[400px] h-[46px] mb-4
+            focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all
+             focus-within: outline-none dark:bg-dark-post-background dark:border-white/20  translate-y-1 md:translate-y-2">
+             <div className='md:text-[22px] text-[22px] dark:text-dark-text pl-3'> 
+              <SelectValue placeholder={themePlaceholder} />
+             </div>
+            </SelectTrigger>
+          
+          <SelectContent className='bg-white border-black border-[1px] max-h-[200px] overflow-y-auto w-[var(--radix-select-trigger-width)] '
+          side='bottom' align='start' sideOffset={5} position='popper' avoidCollisions={false}>
+           <SelectItem value='light' className='md:text-[18px] text-[18px] dark:text-dark-text'>
+             <div className="flex items-center gap-2">
+             <span className="md:text-[18px] text-[18px]">{t('light')}</span>
+              <Sun className="w-4 h-4" /> 
+             </div>
+           </SelectItem>
+            <SelectItem value='dark' className='md:text-[18px] text-[18px] dark:text-dark-text'>
+              <div className="flex items-center gap-2">
+             <span className="md:text-[18px] text-[18px]">{t('dark')}</span>
+              <Moon className="w-4 h-4" /> 
+             </div>
+            </SelectItem>
+           <SelectItem value='system' className='md:text-[18px] text-[18px] dark:text-dark-text'>
+           <div className="flex items-center gap-2">
+             <span className="md:text-[18px] text-[18px]">{t('system')}</span>
+              <Monitor className="w-4 h-4" /> 
+             </div>
+           </SelectItem>
+           </SelectContent>
+           </Select>
+          </FormControl>
+          </div>
+        </FormItem>
+      )}
+    />
             
            <div className='w-full transition-all ease-in-out duration-300 overflow-visible '
-           style={{marginTop : isOpen?'90px' : '40px',marginBottom : isOpen?'20px' : '0',
+           style={{marginTop : isOpens?'120px' : '40px',marginBottom : isOpens?'20px' : '0',
             textAlign:'left',display:'block'}}>  
+            
            <div className='w-full flex justify-start items-start '>
             <Button variant='link' type='button'
             onClick={()=>navigate('/change')}
@@ -185,8 +241,8 @@ const AccountForm=()=>{
         <div className="flex justify-center pt-8 ">
         <button 
           type="button"
-          onClick={handleLogout}
-          disabled={logoutMutation.isPending}
+          onClick={()=>{ localStorage.clear(); 
+          window.location.href = '/login'; }}
           className="bg-[#AF2F51] hover:bg-red-700 text-white px-8 py-2.5 rounded-lg flex items-center
            gap-2 transition-transform active:scale-95 shadow-md justify-center text-[17px] font-medium"
         >  
@@ -195,7 +251,6 @@ const AccountForm=()=>{
         </button>
       </div>
           
-            
   </form>
 </Form>
 

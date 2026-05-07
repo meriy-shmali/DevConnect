@@ -1,21 +1,49 @@
 import axios from "axios";
 
-// وظيفة تحديث بيانات الحساب
-export const updateaccountreq = (data) => {
-    return axios.post("YOUR_API_ENDPOINT_HERE/update", data);
-};
+// الرابط الأساسي بناءً على إعدادات السيرفر لديك
+const BASE_URL = "https://devconnect-vbiy.onrender.com/profile/me/settings";
 
-// وظيفة جلب بيانات الحساب (إذا كنتِ ستحتاجينها لاحقاً)
+/**
+ * دالة جلب بيانات الحساب
+ * تم تغيير اسمها ليتوافق مع استدعاء useGetAccountData في الميوتيشن
+ */
 export const getaccountdatareq = () => {
-    return axios.get("YOUR_API_ENDPOINT_HERE/profile");
+  const token = localStorage.getItem('token')
+    return axios.get(`${BASE_URL}/`, {
+        headers: {
+            // هذا السطر هو الذي سيجعل الداتا تظهر تلقائياً
+            'Authorization': `Bearer ${token} `
+         }
+    });
 };
 
-export const sendotpreq = (email) => {
-    return axios.post("YOUR_API_ENDPOINT_HERE/forgot-password",{email});
+/**
+ * دالة تحديث اسم المستخدم
+ * تم تغيير اسمها إلى updateusernamereq لتطابق الميوتيشن والبوستمان
+ */
+export const updateusernamereq = (data) => {
+  const token = localStorage.getItem('token');
+  
+  // إنشاء FormData لإرسال البيانات بالشكل الذي يتوقعه الباك-أند
+  const formData = new FormData();
+  formData.append('username', data.username);
+
+  return axios.put(`https://devconnect-vbiy.onrender.com/profile/me/settings/change-username/`, formData, {
+    headers: {
+      'Authorization':` Bearer ${token}`,
+      // عند استخدام FormData، المتصفح سيقوم بتحديد Content-Type تلقائياً مع الـ boundary
+    }
+  });
 };
-export const logoutreq = () => {
-    return axios.post("YOUR_API_ENDPOINT_HERE/logout");
+
+/**
+ * دالة تغيير كلمة المرور
+ */
+export const updatepasswordreq = (data) => {
+  return axios.put(`${BASE_URL}/change-password/`, data);
 };
- export const resetpasswordreq = (data) => {
-    return axios.post("YOUR_API_ENDPOINT_HERE/reset-password",data);
-};
+
+
+/**
+ * دالة إرسال كود التحقق (OTP)
+ */

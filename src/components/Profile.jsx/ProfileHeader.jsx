@@ -11,69 +11,26 @@ import FollowersModal from './FollowersModal';
 import FollowingModal from './FollowingModal';
 import { followUser } from '@/api/FollowersApi';
 import AiModal from './AiModal';
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import { useParams } from "react-router-dom";
+import { useUpdateProfilePhoto,useDeleteProfilePhoto } from '@/hook/UseUpdateProfileMutation';
+import { useFollow } from '@/hook/UseFollow';
 const ProfileHeader = ({ userData }) => {
-  // --- بيانات اختبارية (Dummy Data) ---
-  const dummyFollowers = [
-    {
-      id: 1,
-      username: "RittaMakdissi",
-      avatar: "https://i.pravatar.cc/150?u=1",
-      fullName: "Ritta Makdissi",
-      isFollowing: false
-    },
-    {
-      id: 2,
-      username: "meriy_shmali",
-      avatar: "https://i.pravatar.cc/150?u=2",
-      fullName: "Meriya Shmali",
-      isFollowing: true
-    },
-    {
-      id: 3,
-      username: "dev_connect_user",
-      avatar: "https://i.pravatar.cc/150?u=3",
-      fullName: "Developer User",
-      isFollowing: false
-    },
-    {
-      id: 4,
-      username: "ahmad_react",
-      avatar: "https://i.pravatar.cc/150?u=4",
-      fullName: "Ahmad JS",
-      isFollowing: false
-    },
-     {
-      id: 5,
-      username: "RittaMakdissi",
-      avatar: "https://i.pravatar.cc/150?u=1",
-      fullName: "Ritta Makdissi",
-      isFollowing: true
-    },
-     {
-      id: 6,
-      username: "RittaMakdissi",
-      avatar: "https://i.pravatar.cc/150?u=1",
-      fullName: "Ritta Makdissi",
-      isFollowing: false
-    },
-     {
-      id: 7,
-      username: "RittaMakdissi",
-      avatar: "https://i.pravatar.cc/150?u=1",
-      fullName: "Ritta Makdissi",
-      isFollowing: false
-    },
-  ];
 
   const { t } = useTranslation();
+  const { followMutation, unfollowMutation } = useFollow(); 
+  const [menu, setMenu] = useState({});
   const [showEditMenu,setShowEditMenu]=useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(null);
   const [ModalOpen, setModalOpen] = useState(null);
-  const { data: followers, isLoading, error } = useGetFollowers(userData?.id);
-  const { data: following} = useGetFollowing(userData?.id);
+  const { data: followers } = useGetFollowers(userData?.id); 
+  const { data: following } = useGetFollowing(userData?.id);
   const fileInputRef = useRef(null);
-  const isOwner = useIsOwner(userData?.id);
+  const { username } = useParams();
+  const deleteMutation = useDeleteProfilePhoto();
+  //const isOwner = true;
+  const isOwner = username === 'me' || String(userData?.id) === String(localStorage.getItem('userId'));
   const handleEditClick = () => {
     setShowEditMenu(false);
     fileInputRef.current.click();
@@ -81,51 +38,50 @@ const ProfileHeader = ({ userData }) => {
 
   const [ showUnfollowModal,setShowUnfollowModal] = useState(false);
   const handleFollowClick = () => {
-    if ( userData?.isFollowing){
-      setShowUnfollowModal(true);
-    }else{
-      followUser.mutate(userData?.id)
-    }
+  if (userData?.is_following|| userData?.data?.is_following) { // تأكدي من مسمى الحقل القادم من الباك إند
+    setShowUnfollowModal(true);
+  } else {
+    // نستخدم followMutation المستخرج من الهوك
+    followMutation.mutate(userData?.id || userData?.data?.id);
   }
+};
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    //if (!file) return;
-    if(file){console.log(file.name)}
+ const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  if (file) {
     const formData = new FormData();
-    formData.append('image', file); 
-    updateMutation.mutate(formData)
-    setIsUploading(true);
-    try {
-      // هنا نستدعي دالة الـ API الخاصة بكِ
-      // await updateProfileImageReq(formData); 
-      
-      toast.success("تم تحديث الصورة بنجاح");
-    } catch (error) {
-      toast.error("فشل في رفع الصورة");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-const updateMutation = useUpdatePersonalInfo(userData?.username);
-const handleDeletePhoto = async () => {
-  const confirmDelete = window.confirm("هل أنتِ متأكدة من حذف الصورة الشخصية؟");
-  
-  if (confirmDelete) {
-    setShowEditMenu(false); 
-    setIsUploading(true);  
-
-    try {
+    formData.append('personal_photo', file); 
     
-      await updateMutation.mutateAsync({ avatar: null }); 
-      toast.success("تم حذف الصورة بنجاح");
+    try {
+      setIsUploading(true);
+      // استخدمي mutateAsync بدلاً من mutate لكي يعمل الـ await والـ try/catch
+      await updateMutation.mutateAsync(formData); 
+      console.log("تم الإرسال للشبكة بنجاح");
     } catch (error) {
-      toast.error("فشل حذف الصورة");
+      console.error("خطأ أثناء الإرسال:", error);
     } finally {
       setIsUploading(false);
     }
   }
 };
+
+const updateMutation = useUpdateProfilePhoto();
+const handleDeletePhoto = async () => {
+  const confirmDelete = window.confirm("هل أنتِ متأكدة من حذف الصورة الشخصية؟");
+  
+  if (confirmDelete) {
+    try {
+      setIsUploading(true);
+      setShowEditMenu(false); 
+      await deleteMutation.mutateAsync(); // إرسال طلب الحذف للسيرفر
+    } catch (error) {
+      console.error("خطأ في حذف الصورة:", error);
+    } finally {
+      setIsUploading(false);
+    }
+  }
+};
+
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 max-w-6xl mx-auto">
         <input 
@@ -137,24 +93,33 @@ const handleDeletePhoto = async () => {
       />
       <div className="flex flex-col md:flex-row items-center gap-4">
         <div className="relative mt-4">
-          <img src={userData?.avatar ||  'https://i.pravatar.cc/150?u=1'}  className={`w-28 h-28 md:w-32 md:h-32
+          <img  
+                 src={
+                 userData?.data?.personal_photo_url || 
+                 userData?.personal_photo_url || 
+                 "/src/images/default-avatar.png"
+               } 
+            key={userData?.data?.personal_photo_url || userData?.personal_photo_url } 
+             className={`w-28 h-28 md:w-32 md:h-32
              rounded-full border-4 border-white shadow-lg object-cover transition-opacity
               ${isUploading ? 'opacity-50' : 'opacity-100'}`} 
-              onError={(e)=>{e.target.onError=null;
-                e.target.src = 'src/images/default-avatar.png'
-              }}/>
+             
+             />
             {isOwner && (
           <div>
            <button className="absolute bottom-1 right-2 bg-white p-2 rounded-full shadow-md border border-gray-200 hover:bg-gray-50 transition-all transform hover:scale-110 "onClick={()=>setShowEditMenu(!showEditMenu)}>
             <Edit2 className="w-3 h-3 text-gray-600" />
            </button>
             {showEditMenu && (
-              <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-100 shadow-2xl rounded-xl z-50 py-1">
-                <button className="flex items-center gap-2 w-full px-4 py-2.5 text-[12px] text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-50" onClick={handleEditClick}>
-                  <MdEdit className="w-3 h-3 text-blue-500" /> {t('edit')}
+               <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow py-2 flex flex-col z-50 w-[100px] text-lg">
+          
+                <button onClick={handleEditClick}
+                 className="px-3 py-1  flex items-center w-fit text-blue-500 hover:text-blue-400  ">
+                           <MdEdit className='mr-1 '/> {t('edit')} 
                 </button>
-                <button className="flex items-center gap-2 w-full px-4 py-2.5 text-[12px] text-red-600 hover:bg-red-50 transition-colors" onClick={handleDeletePhoto}>
-                  <Trash2 className="w-3 h-3" /> {t('delete')}
+               <button onClick={handleDeletePhoto}
+                 className="px-3 py-1  flex items-center w-fit text-red-500 hover:text-red-400">
+                         <RiDeleteBin6Fill className='mr-1  '/> {t('delete')}
                 </button>
               </div>
              )}
@@ -162,16 +127,18 @@ const handleDeletePhoto = async () => {
         </div>
         <div className="flex flex-col items-center md:items-start  ">
         <h2 className="text-4xl font-medium text-gray-900 mb-3 mt-5">{userData?.username}</h2>
+        {!isOwner &&(
            <button 
            variant='secondary' type='edit'  size='sm'
            onClick={handleFollowClick}
            className=" md:w-[100px] w-[100px]  bg-follow-button text-text-button md:text-[24px] text-[24px] 
-           hover:bg-hover-purple rounded-lg justify-center items-center"> {userData?.isFollowing ? t('unfollow') : t('follow')}
+           hover:bg-hover-purple rounded-lg justify-center items-center"> {(userData?.is_following || userData?.data?.is_following) ? t('unfollow') : t('follow')}
            </button>
+        )}
       </div>
       </div>
       <div className='flex flex-row items-center justify-center gap-5 sm:gap-5 mt-0'>
-      
+      {isOwner && (
        <div className="flex  gap-1">
         <div  className="flex flex-col items-center gap-2 cursor-pointer group active:scale-95 transition-transform "
           onClick={() => setModalOpen(true)}>
@@ -179,9 +146,9 @@ const handleDeletePhoto = async () => {
             <Users className="w-7 h-7 sm:w-8 sm:h-8  text-gray-900" />
             <span className="sm:text-3xl text-xl  font-medium text-gray-900  ">{t('following')}</span>
           </div>
-          <span className="sm:text-3xl text-xl font-medium text-gray-900">{userData?.followingCount || 0}k</span>
+          <span className="sm:text-3xl text-xl font-medium text-gray-900">  {userData?.following_count || userData?.data?.following_count || 0}</span>
         </div>
-      </div>
+      </div>)}
       <div className="flex  gap-1">
         <div  className="flex flex-col items-center gap-2 cursor-pointer group active:scale-95 transition-transform "
           onClick={() => setIsModalOpen(true)}>
@@ -189,30 +156,33 @@ const handleDeletePhoto = async () => {
             <Users className="w-7 h-7 sm:w-8 sm:h-8  text-gray-900" />
             <span className="sm:text-3xl text-xl  font-medium text-gray-900  ">{t('followers')}</span>
           </div>
-          <span className="sm:text-3xl text-xl font-medium text-gray-900">{userData?.followersCount || 0}k</span>
+          <span className="sm:text-3xl text-xl font-medium text-gray-900">  {userData?.followers_count || userData?.data?.followers_count || 0}</span>
         </div>
       </div>
       
       <FollowersModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        followers={dummyFollowers} 
+        followers={followers} 
         isLoading={false} 
       />
       <FollowingModal 
         isOpen={ModalOpen} 
-        onClose={() => setModalOpen(false)} 
-        followingList={dummyFollowers} 
+        onClose={() => setModalOpen(false)}
+        userId={userData?.id || userData?.data?.id}  
+        followingList={following} 
         isLoading={false} 
       />
-      <AiModal 
-        isOpen={showUnfollowModal} 
-        onClose={() => setShowUnfollowModal(false)} 
-        onuse={()=>{followUser.mutate(userData?.id);
-                    setShowUnfollowModal(false);
-        }}
-        result={t('Are you sure you want to unfollow')}
-        isLoading={false} 
+     <AiModal 
+       isOpen={showUnfollowModal} 
+       onClose={() => setShowUnfollowModal(false)} 
+       onuse={() => {
+       const userId = userData?.id || userData?.data?.id;
+       unfollowMutation.mutate(userId);
+       setShowUnfollowModal(false);
+       }}
+       result={t('Are you sure you want to unfollow')}
+       isLoading={unfollowMutation.isPending} // تمرير حالة التحميل للمودال
       />
       </div>
     </div>

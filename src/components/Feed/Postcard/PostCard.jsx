@@ -19,7 +19,13 @@ import { useEffect } from 'react'
 import { FaRegCommentDots } from 'react-icons/fa6';
 import { useQueryClient } from "@tanstack/react-query";
 import Trending from './Trending';
-const PostCard = ({post, customWidth,customHeight }) => {
+const PostCard = ({ post, 
+  customWidth, 
+  customHeight, 
+  headerClass = "", 
+  bodyClass = "",   
+  reactionClass = "",
+  commentClass = "" }) => {
   const{t}=useTranslation()
   const [sort,setsort]=useState('latest');//المستخدم يغير الفلترة
   const[paneltype,setpaneltype]=useState(null)
@@ -98,15 +104,24 @@ const handleAddComment = (text) => {
   ); // إرسال للباك
 };
   return (
-    <div className={`bg-white rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center  ${customWidth ? customWidth : 'w-full'} ${customHeight ? customHeight : 'h-auto'} 
+    <div className={`bg-white rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center  ${customWidth } ${customHeight} 
       overflow-hidden flex flex-col}`}>
-    <Trending post={post}/>
-    <HeaderPost post={post}/>
-    <BodyPost post={post} />
+     <div className={headerClass}>
+        <HeaderPost post={post} />
+    </div>
+
+    {/* محتوى البوست */}
+    <div className={bodyClass}>
+        <BodyPost post={post} />
+    </div>
+
+    {/* التفاعلات */}
+    <div className={reactionClass}>
     <Reaction post={post}  onOpenReaction={handleTogglePanel} onClose={handleClose} reactionData={reactionData}
      incrementComment={() => setCommentCount(prev => prev + 1)}
      commentCount={commentCount}
-     onOpenComments={ handleToggleComments}/>
+     onOpenComments={ handleToggleComments}/> 
+    </div>
       <AnimatePresence>
     {paneltype && (
   <SidebarPanel
@@ -131,9 +146,10 @@ const handleAddComment = (text) => {
   />
 )}
     </AnimatePresence>
+    <div className={commentClass}>
     <Comment post={post}
     onAddComment={handleAddComment } />
-    </div>
+    </div></div>
   )
 }
 

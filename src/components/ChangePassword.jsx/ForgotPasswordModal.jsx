@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import changepasswordschema from '../Schema/ChangePasswordSchema';
-import { useSendOtp, useResetPassword } from "@/hook/UseMutationAccount";
+import { useSendOtp, useResetPassword } from "@/hook/UseMutationChangePassword";
 import { Input } from "../ui/input"; 
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
@@ -47,38 +47,65 @@ export const ForgotPasswordModal = ({ isOpen, onClose }) => {
     defaultValues: { email: "", otp: "", newpassword: "", confirmpassword: "" },
   });
   
-  const onSubmit = async(e) => {
-    if (e) e.preventDefault();
-  const fields = step === 1 
-    ? ["email"] 
-    : ["otp", "newpassword", "confirmpassword"];
-    const isValid = await form.trigger(fields);
-    if (isValid){
-      const values=form.getValues();
-    if (step === 1) {
-      sendOtp.mutate(values.email, {
-        onSuccess: () => {
-          setStep(2);
-          setEmail(values.email);
-          form.clearErrors(); // تصفير الحقول للخطوة التالية
-        },
-        onError: (error) => {
-          const errorMessage = error?.response?.data?.message || "Email not found";
-          form.setError("email", { type: "server", message: errorMessage });
-        }
-      });
+  const onSubmit = async () => {
+  // 1. تحديد الحقول المراد فحصها يدوياً
+  const fields = step === 1 ? ["email"] : ["otp", "newpassword", "confirmpassword"];
+  
+  // 2. تفعيل التحقق من صحة البيانات (Zod)
+  const isValid = await form.trigger(fields);
+  
+  if (isValid) {
+    const values = form.getValues();
+     if (step === 1) {
+        sendOtp.mutate(values.email, {
+          onSuccess: () => {
+            setStep(2);
+            setEmail(values.email);
+            form.clearErrors();
+          },
+          onError: (error) => {
+            const errorMessage = error?.response?.data?.message || t("Email not found");
+            form.setError("email", { type: "server", message: errorMessage });
+          },
+        });
+      } else {
+        resetPass.mutate({ ...values, email }, {
+          onSuccess: () => {
+            onClose();
+          },
+         onError: (error) => {
+  const backendErrors = error?.response?.data;
+
+  if (backendErrors && typeof backendErrors === 'object') {
+    // نمر على كل الأخطاء القادمة (سواء كانت واحداً أو أكثر)
+    Object.keys(backendErrors).forEach((field) => {
+      let formFieldName = field;
+      
+      // تأكدي أن هذه التحويلات تطابق الأسماء في الباك إيند عندك
+      if (field === "old_password") formFieldName = "password"; 
+      if (field === "new_password") formFieldName = "newpassword";
+      if (field === "confirm_new_password") formFieldName = "confirmpassword";
+
+      form.setError(formFieldName, {
+        type: "server",
+        // الباك قد يرسل مصفوفة أخطاء [ "error 1", "error 2" ]
+        message: Array.isArray(backendErrors[field]) 
+          ? backendErrors[field][0] 
+          : backendErrors[field],
+                });
+              });
+            } else {
+              const errorMessage = error?.response?.data?.message || t("An error occurred");
+              form.setError("otp", { type: "server", message: errorMessage });
+            }
+          },
+        });
+      }
     } else {
-      resetPass.mutate({ ...values, email }, {
-        onSuccess: () => {
-          onClose();
-        },
-        onError: (error) => {
-          const errorMessage = error?.response?.data?.message || "Invalid OTP";
-          form.setError("otp", { type: "server", message: errorMessage });
-        }
-      });
-    }}
+      console.log("Zod Validation Failed", form.formState.errors);
+    }
   };
+
   if (!isOpen) return null;
 
 

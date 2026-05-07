@@ -1,18 +1,16 @@
-import axios from 'axios';
+import api from "./Api"; // الاستيراد من ملف Api.js الذي يحتوي على رابط render.com
 
-// استبدل هذا بالـ Base URL الخاص بمشروعك
-const API = axios.create({
-  baseURL: 'https://api.yourdomain.com', 
-});
-
-// جلب قائمة المتابعين بناءً على معرف المستخدم
-export const fetchFollowers = async (userId) => {
-  const { data } = await API.get(`/users/${userId}/followers`);
-  return data; // نفترض أن البيانات تعود كمصفوفة [ {id, username, avatar}, ... ]
+export const followUser = async (userId) => {
+  const { data } = await api.post(`/follow/${userId}/`); 
+  return data;
 };
 
-// ميوتيشن للمتابعة (اختياري إذا أردت استخدامه داخل المودال)
-export const followUser = async (targetUserId) => {
-  const { data } = await API.post(`/follow`, { targetUserId });
+export const fetchFollowers = async (userId) => {
+  const { data } = await api.get(`/user/${userId}/followers/`); 
+  return data;
+};
+
+export const fetchFollowing = async (userId) => {
+  const { data } = await api.get(`/user/${userId}/following/`);
   return data;
 };
