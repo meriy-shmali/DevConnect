@@ -35,10 +35,8 @@ export const searchApi = {
   },
 
   // حفظ في السجل (عند زيارة بروفايل أو الضغط على نتيجة)
-  saveToHistory: async (itemId) => {
-    const response = await api.post("/search/people/click/", {
-    username: itemId, 
-    });
-    return response.data;
-  }
-};
+     saveToHistory: async  ({ query, type })  => {
+     const response = await api.post('/search/save/', { query, type });
+  return response.data;
+},
+}

@@ -9,13 +9,9 @@ import { useGetProfile} from '@/hook/useProfileData';
 const ProfilePage = ({ userData }) => {
    const { username } = useParams();
    const navigate = useNavigate();
+   const { data: profile, isLoading } = useGetProfile(username || 'me');
    const isOwner = username === 'me' || !username||String(profile?.id) === String(localStorage.getItem('userId'));
-  // طلب واحد فقط
-  const { data: profile, isLoading } = useGetProfile(username || 'me');
-
-  // استخراج المنشورات بأمان - نتحقق من وجود profile أولاً ثم الوصول للمصفوفة
-  // ريتا قالت أن الرابط يعيد البوستات، لذا غالباً ستكون داخل profile.results أو profile.posts
-  const postsArray = profile?.results || profile?.posts || [];
+   const postsArray = profile?.results || profile?.posts || [];
 
   if (isLoading) {
     return (
