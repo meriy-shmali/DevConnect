@@ -8,44 +8,49 @@ const PostPage = () => {
    const { id } = useParams();
    const location = useLocation();
    const commentIdToScroll = location.state?.scrollToComment;
-   
-  // محاولة أخذ البيانات من الـ state إذا جاء المستخدم من صفحة الـ Feed
   const statePost = location.state?.post;
 
   const { data: fetchedPost, isLoading, isError } = useQuery({
     queryKey: ['post', id],
     queryFn: async () => {
+      console.log("Fetching post data for ID:", id); // للتأكد من بدء الطلب
       const response = await getPostByIdReq(id);
-      // بناءً على نمط الباك إند عندك، غالباً البيانات تكون داخل response.data
-      return response.data; 
+      
+      // التعديل هنا: الباك إند عندك غالباً يرسل البيانات مباشرة أو داخل response.data
+      // بناءً على تجاربنا السابقة، جربي إرجاع response مباشرة إذا كان الأكسيوس مهيأ لذلك
+      return response.data || response; 
     },
-    // إذا كان البوست موجود مسبقاً في الـ state، لا تقم بطلب API جديد
+    // التعديل الجوهري: اجعل الطلب يعمل دائماً إذا لم يكن لدينا statePost
     enabled: !!id && !statePost, 
+    staleTime: 1000 * 60 * 5, // اختياري: تخزين مؤقت لـ 5 دقائق
   });
 
-  // تحديد أي بوست سنعرض
+  // تحديد البوست: إذا فشل الـ state، نأخذ الـ fetchedPost
   const post = statePost || fetchedPost;
-   useEffect(() => {
-    // ننتظر حتى يتم تحميل البيانات (البوست والتعليقات)
-    if (!isLoading && commentIdToScroll) {
-      // تأخير بسيط لضمان رندر التعليقات في المتصفح
-      const timer = setTimeout(() => {
-        const commentElement = document.getElementById(`comment-${commentIdToScroll}`);
-        if (commentElement) {
-          commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // إضافة فلاش أو تمييز بصري بسيط (اختياري)
-          commentElement.classList.add('highlight-comment');
-        }
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading, commentIdToScroll]);
 
+  // إضافة معالجة حالة الخطأ (مهمة جداً)
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-screen dark:text-white">
+        <p className="text-red-500">Error loading post. Please try again.</p>
+      </div>
+    );
+  }
 
-  if (isLoading) {
-     return (
+  // حالة التحميل: تظهر فقط إذا لم يكن هناك بوست في الـ state وجاري جلب البيانات
+  if (isLoading && !statePost) {
+    return (
       <div className="flex justify-center items-center h-screen dark:text-white">
         <p className="animate-pulse text-lg">Loading post {id}...</p>
+      </div>
+    );
+  }
+
+  // إذا انتهى التحميل ولم نجد بيانات (بوست غير موجود)
+   if (!post) {
+    return (
+      <div className="flex justify-center items-center h-screen dark:text-white">
+        <p>Post not found.</p>
       </div>
     );
   }
@@ -58,5 +63,4 @@ const PostPage = () => {
     </div>
   );
 };
-
 export default PostPage;

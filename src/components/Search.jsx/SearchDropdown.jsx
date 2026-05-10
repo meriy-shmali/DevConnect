@@ -92,41 +92,48 @@ const SearchDropdown = () => {
     if (value.startsWith('#')) {
       setActiveTab('tags');
     }
-    
-    if (value === '') {
-      setIsExpanded(false);
-    }
-    if (value.length >= 0) setIsOpen(true);
-  };
+    setQuery(value);
+  setIsSearching(false);
+
+  if (value === '') {
+    setIsExpanded(false);
+  }
+  if (value.length >= 0) setIsOpen(true);
+};
 
   const handleItemClick = (item) => {
-  const identifier = item.username || item.query || item.name || item;
+ const userId = item.user?.id || item.id;
+  
+  // للتاغات: نأخذ الاسم أو الكلمة المبحوث عنها
+  const tagName = item.name || item.query || (typeof item === 'string' ? item : "");
+  
+  // للمنشورات: نأخذ أيدي المنشور
+  const postId = item.id;
 
-  // 2. استدعاء الحفظ فوراً (هذا سيحل مشكلة عدم ظهور طلب POST في Network)
-  saveHistory(item, activeTab);
-
+  // 2. التنفيذ بناءً على التبويب النشط
   if (activeTab === 'people') {
-    if (item.id) {
-      // الانتقال بالـ ID حصراً لمنع خطأ 404
-      navigate(`/profile/${item.id}`);
+    if (userId) {
+      console.log("Navigating to user profile:", userId);
+      navigate(`/profile/${userId}`);
       setIsOpen(false);
     } else {
-      // إذا كان قادماً من السجل (نص فقط)، نبحث عنه لجلب الـ ID
-      setQuery(identifier);
+      // حالة احتياطية إذا لم يتوفر ID (مثلاً نص بحث عام)
+      const searchQuery = item.username || item.query || item;
+      setQuery(searchQuery);
       setIsSearching(true);
       executeSearch(1);
     }
-  } 
+  }
   // 2. إذا ضغطنا على منشور (سواء في تبويبة posts أو tags)
   else if (isSearching && (activeTab === 'posts' || activeTab === 'tags')) {
     // ننتقل لصفحة المنشور ونمرر البيانات
-    navigate(`/post/${item.id}`, { state: { post: item } });
+    navigate(`/posts/${item.id}`, { state: { post: item } });
     setIsOpen(false);
   } 
   // 3. إذا كان مجرد اقتراح نصي (قبل البحث الكامل)
   else {
-   // const identifier = item.name || item.query || (typeof item === 'string' ? item : "");
-    setQuery(username);
+    const identifier = item.title || item.query || item;
+    setQuery(identifier); 
     setIsSearching(true);
     executeSearch(1); // تنفيذ البحث فوراً عند الضغط على اقتراح
   }
@@ -187,31 +194,47 @@ const SearchDropdown = () => {
                 </span>
                </div>
             </div>
-                {recents.map((item, index) => (
-                  <div key={`recent-${item.id || index}`} onClick={() => handleItemClick(item)} className="flex items-center justify-between py-3 px-8 hover:bg-gray-100 dark:hover:bg-dark-second-background cursor-pointer">
-                      <div className="flex items-center gap-4">
-          {/* التعديل هنا: التأكد من عرض الصورة في السجل إذا كان الشخص محفوظاً بكامل بياناته */}
-          {activeTab === 'people' && (item.personal_photo_url || item.image) ? (
-            <img 
-              src={item.personal_photo_url || item.image} 
-              className="w-9 h-9 rounded-full object-cover" 
-              alt="" 
-            />
-          ) : (
-            <MdHistory className="text-gray-400 w-6 h-6" />
-          )}
-          
+          {recents.map((item, index) => (
+  <div 
+    key={`recent-${item.id || index}`} 
+    onClick={() => handleItemClick(item)} 
+    className="flex items-center justify-between py-3 px-8 hover:bg-gray-100 dark:hover:bg-dark-second-background cursor-pointer"
+  >
+    <div className="flex items-center gap-4">
+      {/* 1. حالة الأشخاص: نعرض الصورة والاسم من داخل كائن user */}
+      {activeTab === 'people' ? (
+        <>
+          <img 
+            src={item.user?.personal_photo_url || item.user?.image || '/default-avatar.png'} 
+            className="w-9 h-9 rounded-full object-cover" 
+            alt="avatar" 
+          />
           <span className="text-sm font-bold dark:text-white">
-            {/* عرض الاسم أو نص البحث المحفوظ */}
-            {item.username || item.query || item.item_name || (typeof item === 'string' ? item : '')}
+            {item.user?.username || item.query || item.username}
           </span>
-        </div>
-        
-        <button onClick={(e) => { e.stopPropagation(); deleteRecent(item.id); }}>
-          <IoClose className="text-gray-400 hover:text-red-500" />
-        </button>
-      </div>
-    ))}
+        </>
+      ) : (
+        /* 2. حالة التاغات والمنشورات: أيقونة الساعة + النص فقط (بدون صورة) */
+        <>
+          <MdHistory className="text-gray-400 w-6 h-6" />
+          <span className="text-sm font-bold dark:text-white">
+            {activeTab === 'tags' ? `#${item.query || item.name || item}` : (item.query|| item.title || item)}
+          </span>
+        </>
+      )}
+    </div>
+
+    {/* زر الحذف من السجل */}
+    <button 
+      onClick={(e) => { 
+        e.stopPropagation(); 
+        deleteRecent(item.id); 
+      }}
+    >
+      <IoClose className="text-gray-400 hover:text-red-500" />
+    </button>
+  </div>
+))}
   
       </>
     ) : (

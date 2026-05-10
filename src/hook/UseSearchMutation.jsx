@@ -12,7 +12,8 @@ export const useSearch = (query, activeTab) => {
   const { data: recentsData } = useQuery({
   queryKey: ['recentSearches', activeTab],
   queryFn: () => searchApi.getRecents(activeTab),
-  staleTime: 1000 * 60 * 5, // اجلب السجل مرة كل 5 دقائق فقط لمنع التكرار الظاهر في الصورة
+  staleTime: 30000, // 30 ثانية كافية لمنع التكرار المزعج
+  refetchOnWindowFocus: false, // يمنع الطلب عند العودة لتبويب المتصفح
 });
   
   // تصحيح: استخدام || بدلاً من الفراغ
@@ -46,13 +47,14 @@ export const useSearch = (query, activeTab) => {
   });
 
   // 5. ميوتيشن الحفظ (تم تصحيح طريقة التعريف لمنع خطأ Hook Call)
-  const saveHistoryMutation = useMutation({
+ const saveHistoryMutation = useMutation({
   mutationFn: (variables) => searchApi.saveToHistory(variables),
   onSuccess: () => {
-    // تحديث السجل الخاص بالتبويب النشط فقط لضمان ظهور النتيجة فوراً
-    queryClient.invalidateQueries({ queryKey: ['recentSearches', activeTab] });
-  }
-});
+    // تحديث السجل الخاص بالتبويب الحالي فقط
+    queryClient.invalidateQueries({ 
+        queryKey: ['recentSearches', activeTab] 
+    });
+}})
 
   const executeSearch = (newPage = 1) => {
     if (!query.trim()) return;
@@ -70,18 +72,24 @@ export const useSearch = (query, activeTab) => {
     executeSearch,
     deleteRecent: (id) => deleteMutation.mutate(id),
     // تصحيح: تمرير القيم ككائن ليتوافق مع variables في mutationFn
-     saveHistory: (item, type) => {
-    // منطق ذكي لاستخراج القيمة الصحيحة للحفظ
-    // للأشخاص نرسل username، وللتاغات نرسل النص الصافي
-    const valueToSave = type === 'people' 
-      ? (item.username || item.item_name || item) 
-      : (item.query || item.name || item);
+    saveHistory: (item, type) => {
+  // 1. استخراج القيمة النصية الصحيحة (String)
+  // الباك إند يحتاج القيمة كنص وليس ككائن
+  const valueToSave = type === 'people' 
+    ? (item.username || (typeof item === 'string' ? item : '')) 
+    : (item.query || item.name || (typeof item === 'string' ? item : ''));
 
-    saveHistoryMutation.mutate({ 
-      query: typeof valueToSave === 'string' ? valueToSave : String(valueToSave), 
-      type: type 
-    });
-  },
+  if (!valueToSave) return; // منع إرسال قيم فارغة
+  const cleanValue = valueToSave.toString().replace(/^#+/, '');
+
+  console.log("Sending to backend without hash:", cleanValue);
+
+  // 3. إرسال البيانات النظيفة
+  saveHistoryMutation.mutate({ 
+    query: cleanValue, 
+    type: type 
+  });
+},
   isLoading: searchMutation.isPending
 };
   };
