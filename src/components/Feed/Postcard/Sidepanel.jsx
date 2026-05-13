@@ -73,20 +73,20 @@ const menuRef = useRef(null);
         animate={{ x: 0 }}
         exit={{ x: 400 }}
         transition={{ type: "tween", duration: 0.2 }}
-        className="sidebar fixed right-0 top-0 w-[470px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll dark:bg-dark-post-background border border-white"
+        className="sidebar fixed right-0 top-0 w-[500px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background border border-white"
       >
         {/* header */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center space-x-2">
-            <h2 className="text-2xl font-bold dark:text-gray-50">{title}</h2>
-            <p className="text-[25px] dark:text-gray-50">{icon}</p>
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center space-x-3">
+            <h2 className="text-[30px] font-bold dark:text-gray-50">{title}</h2>
+            <p className="text-[26px] dark:text-gray-50">{icon}</p>
           </div>
           <IoIosClose onClick={onClose} className="text-4xl text-red-600" />
         </div>
 
         {/* filter */}
         {type === "comments" && showFilter &&items?.length>0 && (
-          <div className="flex justify-end mr-1 "ref={menuRef} >
+          <div className="flex justify-end mr-1 -mt-4"ref={menuRef} >
             <button className="p-2 rounded-full transition-all duration-300 hover:bg-gray-200/50 dark:hover:bg-gray-900/20 backdrop-blur-lg flex items-center justify-center" onClick={() => setshowmenu(prev => !prev)}>
               <HiOutlineAdjustments className="text-2xl hover:text-black dark:text-gray-50 relative z-10 " />
             </button>

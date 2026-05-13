@@ -28,7 +28,7 @@ const AIAssistant = ({ improve,generate,summarize,addtags,category, improveM, ad
  if(type=='sidepanel'){
    return (
     <div >
-        <div className=' text-white flex-col'>
+        <div className=' text-white flex-col '>
             <div className=' flex justify-center items-center space-x-2 text-center text-[40px] p-2'><p>Ai Assistant</p> <BsStars className="size-[30px] text-amber-300" /> </div>
             <div className='flex flex-col items-start mt-10  w-full space-y-8  '> 
               {/* منمنع ارسال اكتر من طلب واحد للباك */}

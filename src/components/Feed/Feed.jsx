@@ -20,6 +20,27 @@ const Feed = () => {
      const { t } = useTranslation();
  const[category,setcategory]=useState('all');
  const loadMoreRef = useRef(null);
+ const [showChoices, setShowChoices] = useState(true);
+const lastScrollY = useRef(0);
+
+useEffect(() => {
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+      // سكرول لتحت → اخفي
+      setShowChoices(false);
+    } else {
+      // سكرول لفوق → أظهر
+      setShowChoices(true);
+    }
+    
+    lastScrollY.current = currentScrollY;
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
 const { 
     data, 
     isLoading, 
@@ -48,11 +69,11 @@ const {
  //const posts = data?.data || staticposts||[];
  //const posts = data || staticposts || []; اذا رجع مصفوفة
  return (
-    <div className="dark:bg-dark-main-background">
+    <div className="">
       <Header theme={theme} setTheme={setTheme} />
 
       {/* أزلت h-screen لكي يسمح للمحتوى بالتمدد والسكول أن يعمل بشكل طبيعي */}
-      <div className="bg-main-background dark:bg-dark-main-background relative min-h-screen mt-16">
+      <div className="  relative min-h-screen mt-16 bg-transparent">
         
         {/* زر إنشاء على الموبايل */}
         <div className="md:hidden flex items-center justify-center">
@@ -64,9 +85,13 @@ const {
           </div>
         </div>
 
-        <div className="flex items-center justify-between ml-14 ">
+        <div className="flex items-center ml-20 ">
           <div className="flex-col space-y-12 md:ml-0 md:w-[60%] ">
-            <Choiches setCategory={setcategory} />
+       <div className={`sticky top-16 z-10 bg-main-background dark:bg-dark-main-background py-2
+  transition-transform duration-1000 ease-in-out
+  ${showChoices ? "translate-y-0" : "-translate-y-full"}`}>
+  <Choiches setCategory={setcategory} />
+</div>
 
             {isLoading && !isPlaceholderData ? (
              <div className="flex flex-col w-full">
@@ -83,7 +108,7 @@ const {
                     className={isPlaceholderData ? "opacity-50" : "opacity-100"}
                   >
                     <PostCard post={post} />
-                    {index === 0 && <Suggestion />}
+                    {(index+1)%6===0 &&( <Suggestion /> )}
                   </div>
                 ))}
 
@@ -108,14 +133,14 @@ const {
 
           {/* هنا نضيف Createpost ثابت */}
           <div className="hidden md:block">
-            <div className="fixed top-32 right-10 w-[400px]">
+            <div className="fixed top-28 right-25 w-[400px]">
               <Createpost />
             </div>
           </div>
         </div>
 
         {/* على الموبايل يبقى طبيعي تحت choices */}
-        <div className="md:hidden mt-6 px-4">
+        <div className="md:hidden mt-14 px-4">
           <Createpost />
         </div>
       </div>

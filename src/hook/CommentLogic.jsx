@@ -204,72 +204,69 @@ const handlesendreply = (parentId) => {
   
 
   // --- الحالة الأولى: التعديل (نفس منطق الحذف السريع) ---
-  if (editing[parentId]) {
-    const newText = text;
+  // داخل دالة handlesendreply في ملف CommentLogic.jsx
+if (editing[parentId]) {
+  const newText = text;
 
-    // 1. تحديث الردود في الحالة المحلية (Local State) فوراً
-    setreplydata(prev => {
-      const newData = { ...prev };
-      Object.keys(newData).forEach(key => {
-        if (newData[key]) {
-          newData[key] = newData[key].map(r => 
-            r.id === parentId ? { ...r, content: newText } : r
-          );
-        }
-      });
-      return newData;
-    });
-
-    // 2. تحديث الكاش الرئيسي (React Query) فوراً (لتعليقات المنشور)
-   // 2. تحديث الكاش الرئيسي (React Query) فوراً
-queryClient.setQueryData(['comment', postId], (old) => {
-  if (!old) return old;
-
-  const updateInList = (list) => {
-    if (!Array.isArray(list)) return list;
-    return list.map(c => c.id === parentId ? { ...c, content: newText } : c);
-  };
-
-  // إذا كان Infinite Query (يحتوي على صفحات)
-  if (old.pages) {
-    return {
-      ...old,
-      pages: old.pages.map(page => ({
-        ...page,
-        // نتحقق إذا كانت النتائج داخل results أو هي الصفحة نفسها
-        results: page.results ? updateInList(page.results) : updateInList(page)
-      }))
-    };
-  }
-
-  // إذا كانت البيانات مصفوفة مباشرة أو داخل كائن data
-  if (Array.isArray(old)) return updateInList(old);
-  if (old.data) return { ...old, data: updateInList(old.data) };
-
-  return old;
-});
-
-    // 3. تحديث كاش الردود المنفصل (لو كان العنصر ردّاً)
-    // نبحث عن الأب الحقيقي لهذا الرد ونحدثه في كاش الردود
-    queryClient.setQueriesData({ queryKey: ['replies'] }, (old) => {
-      if (!old) return old;
-      return old.map(r => r.id === parentId ? { ...r, content: newText } : r);
-    });
-
-    // تنظيف الواجهة فوراً
-    setEditing(prev => ({ ...prev, [parentId]: false }));
-    setReplyInput(prev => ({ ...prev, [parentId]: false }));
-    setreplyText(prev => ({ ...prev, [parentId]: "" }));
-    
-    // إرسال للسيرفر في الخلفية
-    editComment.mutate({ commentId: parentId, content: newText }, {
-      onError: () => {
-        // لو فشل السيرفر، اعمل ريفريش للتصحيح
-      /*  queryClient.invalidateQueries({ queryKey: ['comment', postId] });*/
+  // 1. تحديث الـ local state للردود (هذا الجزء عندك يعمل بشكل جيد)
+  setreplydata(prev => {
+    const newData = { ...prev };
+    Object.keys(newData).forEach(key => {
+      if (newData[key]) {
+        newData[key] = newData[key].map(r => 
+          r.id === parentId ? { ...r, content: newText } : r
+        );
       }
     });
-    return;
+    return newData;
+  });
+
+  // 2. تحديث الكاش الرئيسي للتعليقات (هنا كان النقص)
+  queryClient.setQueryData(['comment', postId], (old) => {
+    if (!old) return old;
+
+    // دالة مساعدة لتحديث النص داخل أي مصفوفة تعليقات
+    const updateInList = (list) => {
+      if (!Array.isArray(list)) return list;
+      return list.map(c => c.id === parentId ? { ...c, content: newText } : c);
+    };
+
+    // التعامل مع Infinite Query (وجود صفحات)
+    if (old.pages) {
+      return {
+        ...old,
+        pages: old.pages.map(page => {
+          // نتحقق إذا كانت التعليقات داخل page.results أو الصفحة هي المصفوفة نفسها
+          const currentResults = page.results || page;
+          const updatedResults = updateInList(currentResults);
+          
+          return page.results 
+            ? { ...page, results: updatedResults } 
+            : updatedResults;
+        })
+      };
+    }
+
+    // التعامل مع المصفوفة العادية
+    if (Array.isArray(old)) return updateInList(old);
+    if (old.data) return { ...old, data: updateInList(old.data) };
+
+    return old;
+  });
+
+  // تنظيف الواجهة وإغلاق وضع التعديل
+  setEditing(prev => ({ ...prev, [parentId]: false }));
+  setReplyInput(prev => ({ ...prev, [parentId]: false }));
+  setreplyText(prev => ({ ...prev, [parentId]: "" }));
+  
+  // إرسال الطلب للسيرفر في الخلفية
+editComment.mutate({ commentId: parentId, content: newText }, {
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['comment', postId] });
   }
+});
+  return;
+}
 
   // --- الحالة الثانية: إضافة رد جديد (كودك الأصلي كما هو) ---
   const optimisticReply = {

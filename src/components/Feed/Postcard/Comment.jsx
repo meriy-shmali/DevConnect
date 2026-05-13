@@ -2,8 +2,13 @@ import Buttons from '@/components/ui/ButtonGroup'
 import React, { useState } from 'react'
 import { IoSend } from "react-icons/io5";
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { BsStars } from "react-icons/bs";
+import { motion } from 'framer-motion';
+import PostAi from './PostAi';
 const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
   const [text,setText]=useState("")//to add comment
+  const{t}=useTranslation()
   useEffect(() => {
     if (editingComment) {
       setText(editingComment.text);
@@ -22,10 +27,12 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
     if (setEditingComment) setEditingComment(null);
   }
   return (
+    <div className='flex items-center space-x-56'>
     <div className='flex space-x-4 items-center'>
       <img src={post.user?. personal_photo_url||"/images/default avatar1.jpg"}
-    className='w-10 h-10 rounded-full'/>
-      <input placeholder='Add Comment'
+    className='w-10 h-10 rounded-full '/>
+      <input
+       placeholder='Add Comment'
       value={text}
       onChange={(e)=>setText(e.target.value)}
       onKeyDown={(e) => {
@@ -34,8 +41,14 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
       handleSend();
     }
   }}
-      className=" md:text-lg text-sm w-[400px] border border-gray-300 rounded-md  p-2  dark:bg-gray-100"/>
+      className=" md:text-lg text-sm w-[400px] border border-gray-300 hover:bg-gray-50 rounded-md  p-2  dark:bg-dark-placeholder dark:border-gray-500 dark:hover:bg-gray-300 dark:placeholder:text-gray-300 dark:hover:placeholder:text-gray-500"/>
       < IoSend  onClick={handleSend}className='md:text-[30px] text-[25px] text-blue-700 '/>
+    </div>
+<div className='flex flex-row justify-center space-x-2 items-center border border-follow-button w-fit py-0.5 px-2.5 rounded-3xl cursor-pointer bg-white dark:bg-[#1E1E1E]'>
+  <PostAi id={post.id}/>
+</div>
+      
+
     </div>
   )
 }

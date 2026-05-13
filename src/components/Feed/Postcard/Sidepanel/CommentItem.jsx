@@ -5,6 +5,7 @@ import ReactionPanel from "./ReactionPanel";
 import ActionPanel from "./ActionPanel";
 import { useState } from "react";
 import { UseMe } from "@/hook/UseQueryMe";
+import {AnimatePresence, motion } from "framer-motion";
 const CommentItem = ({
   item,
   level = 0,
@@ -37,10 +38,17 @@ const {data}=UseMe()
   const MAX_LEVEL = 1;
 const indent = Math.min(level, MAX_LEVEL) * 20;
   return (
-    <div
+   <motion.div
+  layout // ضروري جداً لجعل العناصر "تنزلق" مكان العنصر المحذوف
+      initial={{ opacity: 1 }} // نبدأ من الحالة الظاهرة مباشرة
+      exit={{ 
+        opacity: 0, 
+        x: -20, // إزاحة بسيطة لليسار تشبه تليغرام
+        transition: { duration: 0.4, ease: "easeIn" } 
+      }}
       style={{ paddingLeft: indent }}
-      className="flex flex-col space-y-2 mt-5"
-    > 
+      className="flex flex-col space-y-2 mt-5 bg-white dark:bg-transparent"
+    >
       {/* header + menu */}
       <div className="flex justify-between items-center">
         <HeaderPanel
@@ -108,6 +116,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
       {/* replies */}
       {viewreply[item.id] && (
         <div className="relative  pl-3 mt-2 space-y-3">
+          <AnimatePresence mode="popLayout">
           {replies.slice(0, visibleReplies).map(reply => (
             <CommentItem
               key={reply.id}
@@ -143,12 +152,12 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
         >
           Show more ({replies.length - visibleReplies} more)
         </button>
-      )}
+      )}</AnimatePresence>
         </div>
         
       )}
       
-    </div>
+    </motion.div>
   );
 };
 

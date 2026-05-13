@@ -4,10 +4,11 @@ i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
-        welcome: "welcome to",
-        description: "join thousands of programmers, share your projects , learn from the experiences of others.",
+        welcome: "Welcome to",
+        description: "join thousands of programmers, share your projects and learn from the experiences of others.",
         start:"start now",
         translate:"Translate",
+        Arabic:"Arabic",
         login:"Login",
         email:"Email:",
         password:"Password:",
@@ -32,6 +33,7 @@ i18n.use(initReactI18next).init({
         cancel:"Cancel",
         help:"Do you need help creating your post ? use",
         ai:"Ai Assistant",
+         askai:"Ask Ai",
         send:"Send",
         questions:"Questions",
         projects:"Projects",
@@ -124,9 +126,10 @@ i18n.use(initReactI18next).init({
     ar: {
       translation: {
         welcome: "مرحبًا بك في",
-        description: "انضم إلى آلاف المبرمجين، وشارك مشاريعك ,تعلم من تجارب الآخرين.",
+        description: "انضم إلى آلاف المبرمجين، وشارك مشاريعك و تعلم من تجارب الآخرين.",
         start:"ابدأ الان",
         translate:"الترجمة",
+        Arabic:"عربي",
         login:"تسجيل الدخول",
          email:"الايميل:",
         password:"كلمة المرور:",
@@ -151,6 +154,7 @@ i18n.use(initReactI18next).init({
         cancel:"الغاء",
         help:"هل تحتاج مساعدة في انشاء منشورك ؟ استخدم",
         ai:"المساعد الذكي",
+        askai:"اسأل الذكاءالاصطناعي",
         send:"ارسال",
         questions:"اسئلة",
         projects:"مشاريع",

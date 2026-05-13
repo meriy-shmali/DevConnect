@@ -162,7 +162,7 @@ className="text-xs  bg-gray-700 p-2 rounded-md"
 {/* حطينا اشارة الاستفهام لان بدونها رح يكون الشرط عطول صح */}
 {post.media?.length > 0 && (
 
-<div className="w-fit h-fit">
+<div className="w-full h-auto flex flex-col items-center justify-center">
 
 <motion.img
   key={currentImage}
@@ -181,12 +181,12 @@ className="text-xs  bg-gray-700 p-2 rounded-md"
   animate={{ opacity: 1, x: 0 }}
   exit={{ opacity: 0, x: -50 }}
   transition={{ duration: 0.8 }}
-  className="rounded-xl md:w-full w-[500px]"
+  className="rounded-xl md:w-full w-[500px] object-cover mx-auto "
 />
 
 {/* dots */}
 {post.media.length>1 &&(
-<div className="flex justify-center gap-2 mt-2">
+<div className="flex justify-center gap-2 mt-4 w-full">
 
 {post.media?.map((img,index)=>(
 

@@ -19,7 +19,7 @@ const CustomTooltip = ({ children, text }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.20 }}
-            className="absolute bottom-full mb-3 px-3 py-1.5 bg-gray-50  text-black  text-sm  rounded-md shadow-lg whitespace-nowrap z-50 pointer-events-none"
+            className="absolute bottom-full mb-3 px-3 py-1.5 bg-gray-50  text-gray-800  text-sm rounded-md shadow-lg whitespace-nowrap z-50 pointer-events-none"
           >
             {text}
             {/* السهم الصغير */}

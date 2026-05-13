@@ -139,7 +139,7 @@ if (!users || users.length === 0) return null;
                   transition={{ duration: 0.3 }}
                 >
 
-                  <div className='border border-gray-300 p-5 rounded-2xl shadow-xl mb-6 w-[250px]  h-fit flex-col space-y-5 dark:bg-dark-post-background'
+                  <div className='border border-gray-300 p-5 rounded-2xl shadow-xl mb-6 w-[250px]  h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'
                        onClick={() => navigate(`/profile/${user.id}`)}>
 
                     <div className='flex justify-center items-center space-x-3'>

@@ -4,17 +4,19 @@ import Buttons from '../ui/ButtonGroup'
 import { Button } from '../ui/button'
 import { useTranslation } from "react-i18next";
 const Login = () => {
-  const { t } = useTranslation();
+  const { t ,} = useTranslation();
   return (
-    <div className='bg-main-background  dark:text-dark-text min-h-screen flex flex-col items-center md:flex-row md:justify-between'>
-      <div className='mt-4 md:ml-10 md:mt-3 flex flex-col items-center md:items-start'>
-        <div><p className='text-[48px] md:text-[96px] font-semibold text-center md:text-left'>{t('login')}</p></div>
+    <div className='bg-main-background   relative z-50   dark:text-dark-text  flex flex-col items-center md:flex-row md:justify-between md:overflow-hidden md:h-screen'>
+      <div className='mt-4 md:ms-40  flex flex-col md:space-y-3 items-center md:items-start '>
+        <div className='flex-col space-y-6'><p className='title-font text-[48px] md:text-[70px] font-bold  text-center md:text-left'>Welcome back</p>
+       {/* <p className='font-subtitle text-[20px]'> continue building and connecting with developers</p>*/}</div>
         <div className=' mt-10 flex-col justify-start space-y-8 '>
         <LoginForm />
         </div>
+        
         </div>
         
-      <div className='w-[400px] h-[700px] md:w-[759px] md:h-[814px]'><img src='src/images/login.png'/></div>
+      <div className='w-[400px]  md:w-[700px] md:h-[800px]  md:me-24 h-screen sticky top-0 flex-shrink-0  '><img src='src/images/login.png'/></div>
     </div>
   )
 }

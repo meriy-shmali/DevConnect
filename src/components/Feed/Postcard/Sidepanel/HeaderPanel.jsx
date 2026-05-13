@@ -36,7 +36,7 @@ const getCommentDate = (date) => {
     
     <div className="flex items-center space-x-3 relative">
       <img src={displayPhoto} className="w-10 h-10 rounded-full" />
-      <div className="text-md font-semibold capitalize dark:text-gray-50">
+      <div className="text-md  capitalize font-semibold dark:text-gray-50">
         {displayName}
       </div>
       {/* يظهر فقط بالتعليقات */}

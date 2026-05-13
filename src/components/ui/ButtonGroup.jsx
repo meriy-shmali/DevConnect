@@ -14,7 +14,7 @@ const Buttons = ({ type ,onClick,...props }) => {
     
     return (
       <Button {...props}
-        className='bg-blue-button text-text-button md:text-[25px] hover:bg-hover-blue md:p-6 md:h-10 md:px-6 '
+        className='bg-blue-button text-text-button md:text-[25px] text-[18px] hover:bg-hover-blue md:p-6 md:h-10 md:px-6 p-3 '
         variant='secondary'
         onClick={()=>navigate('/login') }
         /*size='lg'*/
@@ -28,12 +28,12 @@ const Buttons = ({ type ,onClick,...props }) => {
     return (
       <Button
         variant='link'
-        className='text-text-button text-2xl'
+        className='text-text-button md:text-2xl text-lg '
         onClick={() => i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")}
         
       >
-        <MdOutlineGTranslate className='text-text-button  size-8' />
-        {t("translate")}
+        <MdOutlineGTranslate className='text-text-button  md:size-8 size-6' />
+        {t("Arabic")}
       </Button>
     );
   }

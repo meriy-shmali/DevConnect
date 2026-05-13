@@ -67,6 +67,7 @@ queryClient.prefetchQuery({
     
     })};
  return (
+  
    <Form {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
@@ -75,17 +76,17 @@ queryClient.prefetchQuery({
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[30px] md:text-[48px]">{t('email')}</FormLabel>
+          <FormLabel className="text-[30px] md:text-[38px]">{t('email')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="email"
-                placeholder="example@mail.com"
-                className="placeholder:text-[22px] mt-1"
+                placeholder="Example@mail.com"
+                className="placeholder:text-[18px] mt-1 "
               />
               <InputGroupAddon>
-                <MailIcon className='size-6' />
+                <MailIcon className='size-5' />
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -99,17 +100,17 @@ queryClient.prefetchQuery({
       name="password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[30px] md:text-[48px]">{t('password')}</FormLabel>
+          <FormLabel className=" text-[30px] md:text-[38px]">{t('password')}</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className=" hover:bg-hover-placeholder bg-light-placeholder shadow w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="password"
-                placeholder="enter your password"
-                className="placeholder:text-[22px] mt-2"
+                placeholder="Enter your password"
+                className="placeholder:text-[18px] mt-2 "
               />
               <InputGroupAddon>
-                <LockIcon className='size-6' />
+                <LockIcon className='size-5' />
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -117,12 +118,12 @@ queryClient.prefetchQuery({
         </FormItem>
       )}
     />
-   <div> <Button variant='link' className=' underline text-[22px] text-gray-700 hover:text-gray-500'>{t('forgot_password')}</Button></div>
+   <div> <Button variant='link' className=' underline text-[20px] text-gray-700 hover:text-gray-500 mt-2 '>{t('forgot_password')}</Button></div>
            <div className='flex justify-center p-4'><Buttons type="login" disabled={loginMutaion.isPending} /></div> 
             
             <div className='flex-col  justify-center justify-items-center space-y-3 mt-5 '>
-            <div className='flex justify-center items-center'><p className='text-[22px]'>{t('Noaccount')}</p>
-            <Button onClick={()=>navigate('/register') } variant='link' className=' underline text-[22px] text-gray-700 hover:text-gray-500'>{t('createaccount')}</Button></div>
+            <div className='flex justify-center items-center'><p className='text-[20px]'>{t('Noaccount')}</p>
+            <Button onClick={()=>navigate('/register') } variant='link' className=' underline text-[22px] text-gray-700 hover:text-gray-500 hover:font-semibold'>{t('createaccount')}</Button></div>
             </div>
   </form>
 </Form>

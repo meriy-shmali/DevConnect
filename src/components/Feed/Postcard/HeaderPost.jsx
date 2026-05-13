@@ -79,9 +79,13 @@ ${isfollowing
     </div>
     </div>
     <div className='flex justify-center items-center space-x-4'>
-    <div className=' rounded-3xl border border-black dark:border-white w-[100px] md:w-[120px] text-center'>
+    <div className={` rounded-3xl border ${post.post_type=='question'? 'text-hover-question  border-hover-question':
+      post.post_type=='project'?'text-hover-project  border-hover-project':
+      post.post_type=='information'?'text-hover-information border-hover-information':
+      post.post_type=='article'?'text-hover-articles border-hover-articles':'text-black border-black'
+    } w-[100px] md:w-[120px] text-center`}>
     {post?.post_type ?(
-     <p className=' text-lg md:text-xl p-1 dark:text-white '>{t(`post_types.${post.post_type}`,post.post_type)}</p> ):null}
+     <p className=' text-lg md:text-xl p-1  '>{t(`post_types.${post.post_type}`,post.post_type)}</p> ):null}
       </div>
 {Number(post.user?.id) === Number(data?.id) && (
       <MenuPanel

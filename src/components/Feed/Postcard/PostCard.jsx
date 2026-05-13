@@ -70,10 +70,10 @@ const data = usequeryreaction(
   ? staticuser[paneltype]
   : [];*/
 const reactionData = [
-  { key: "useful", label: "useful", count: post.reaction_counts?.useful , icon: <AiOutlineLike /> },
-  { key: "not_useful", label: "not useful", count: post.reaction_counts?.not_useful, icon: <AiOutlineDislike /> },
-    { key: "creative_solution", label: "creative solution", count:  post.reaction_counts?.creative_solution, icon: <MdLightbulbOutline /> },
-  { key: "same_problem", label: "same problem", count: post.reaction_counts?.same_problem , icon: <PiBugBeetle /> }
+  { key: "useful", label: "Useful", count: post.reaction_counts?.useful , icon: <AiOutlineLike className='dark:text-gray-50' /> },
+  { key: "not_useful", label: "Not useful", count: post.reaction_counts?.not_useful, icon: <AiOutlineDislike className='dark:text-gray-50' /> },
+    { key: "creative_solution", label: "Creative solution", count:  post.reaction_counts?.creative_solution, icon: <MdLightbulbOutline className='dark:text-gray-50' /> },
+  { key: "same_problem", label: "Same problem", count: post.reaction_counts?.same_problem , icon: <PiBugBeetle className='dark:text-gray-50' /> }
 ];
 const reactionMap = Object.fromEntries(
   reactionData.map(item => [item.key, item])

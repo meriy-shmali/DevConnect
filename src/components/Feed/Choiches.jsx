@@ -6,95 +6,61 @@ import { TbAdjustmentsHorizontal } from "react-icons/tb";
 import {motion, AnimatePresence } from 'framer-motion';
 const Choiches = ({ setCategory }) => {
   const {t} =useTranslation();
-  const[show ,setshow]=useState(false);
-  const menuRef = useRef(null);
+const [activeTab, setActiveTab] = useState("all"); // حالة لمعرفة القسم المختار
+  // مصفوفة الخيارات لتسهيل التحكم بالكود
+  const tabs = [
+     { id: 'all', label: t('all'), color: 'text-gray-500' },
+    { id: 'question', label: t('questions'), color: 'text-hover-question' },
+    { id: 'article', label: t('article'), color: 'text-hover-articles' },
+    { id: 'project', label: t('projects'), color: 'text-hover-project' },
+    { id: 'information', label: t('information'), color: 'text-hover-information' },
+   
+  ];
 
-  // 2. إضافة مراقب للضغطات الخارجية
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // إذا كانت القائمة مفتوحة والضغط حصل خارج العنصر المرتبط بالـ Ref
-      if (show && menuRef.current && !menuRef.current.contains(event.target)) {
-        setshow(false);
-      }
-    };
-
-    // إضافة الحدث للمستند بالكامل
-    document.addEventListener('mousedown', handleClickOutside);
-    
-    // تنظيف الحدث عند مسح المكون من الشاشة (Cleanup)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [show]);
+  const handleCategoryChange = (id) => {
+    setActiveTab(id);
+    setCategory(id);
+  };
+  
   return (
-  <div className='w-screen h-screen'>
-  <div className=' mt-8 ml-4  md:mt-8 md:ml-5'>
-    <div className=' flex  items-start space-x-3' ref={menuRef}> 
-      <div className='pt-2.5 relative z-50'>
-      <button onClick={()=>setshow(!show)}>
-        <TbAdjustmentsHorizontal className='text-4xl md:text-5xl dark:text-white ' />
-      </button></div>  <AnimatePresence>
+    <div className=' '>
+      <div className='flex flex-row  justify-start items-center space-x-12 md:space-x-20 mt-8 ml-4 md:mt-12 md:ml-5'>
+        {tabs.map((tab) => (
+          <div key={tab.id} className="relative group">
+            <button
+              onClick={() => handleCategoryChange(tab.id)}
+              className={`
+                relative transition-all duration-300 pb-2
+                text-[20px] md:text-[28px] font-semibold title-font
+                ${tab.color} 
+                
+              `}
+            >
+              {tab.label}
 
-        {show && (
+              {/* هذا هو الخط السفلي الذي "يسافر" بين الكلمات */}
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="underline"
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-current rounded-full"
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 400, 
+                    damping: 30 
+                  }}
+                />
+              )}
 
-        <motion.div
-initial={{ opacity:0, scale:0.3 }}
-animate={{ opacity:1, scale:1 }}
-exit={{ opacity:0, scale:0.3 }}
-
-transition={{ duration:0.25 }}
-
-        className= 'origin-left bg-white shadow-lg text-lg p-3 w-fit flex space-x-5 md:p-4 rounded-2xl md:text-xl dark:text-black '
-        >
-
-        <button className='hover:text-gray-400 duration-200'onClick={()=>{ setCategory("question")
-         setshow(false)
-}}>
-          {t('questions')}
-        </button>
-
-        <button  className='hover:text-gray-400 duration-200' onClick={()=>{setCategory("article")
-          setshow(false)
-        }}>
-          {t('article')}
-        </button>
-
-        <button  className='hover:text-gray-400 duration-200' onClick={()=>{setCategory("project")
-          setshow(false)
-        }}>
-          {t('projects')}
-        </button>
-
-      {/*  <button  className='hover:text-gray-400 duration-200' onClick={()=>{setCategory("problem")
-          setshow(false)
-        }}>
-          {t('problems')}
-        </button>*/}
-
-        <button  className='hover:text-gray-400 duration-200' onClick={()=>{setCategory("information")
-          setshow(false)
-        }}>
-          {t('information')}
-        </button>
-
-        <button  className='hover:text-gray-400 duration-200'onClick={()=>{setCategory("all")
-          setshow(false)
-        }
-      }>
-          {t('all')}
-        </button>
-
-        </motion.div>
-
-        )}
-
-        </AnimatePresence>
-
+              {/* خط شفاف جداً يظهر عند الـ hover للأزرار غير المختارة (اختياري) */}
+              {activeTab !== tab.id && (
+                <div className="absolute bottom-0 left-0 w-0 h-1 bg-current opacity-20 rounded-full transition-all duration-300 group-hover:w-full" />
+              )}
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
-    </div>
-    </div>
-    
-  )
-}
+  );
+};
 
 export default Choiches

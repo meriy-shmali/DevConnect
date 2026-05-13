@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { BsStars } from "react-icons/bs";
 import AIAssistant from "./AIAssistant";
-import { motion, AnimatePresence, spring } from "framer-motion";
+import { motion, AnimatePresence, spring, color } from "framer-motion";
 import CreatepostLogic from "@/hook/CreatepostLogic";
 import { useNavigate } from "react-router-dom";
 import CreatepostMobile from "./CreatepostMobile";
@@ -39,14 +39,14 @@ const Createpost = () => {
     <div ref={containerRef} className="hidden md:block"  onClick={()=>post.setshow(false)}>
       <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45">
         <div className="flex-col justify-center items-center mt-2 p-8 space-y-12 pb-40">
-          <p className="text-white text-[45px] text-center">{t("create")}</p>
+          <p className="text-white text-[45px] text-center title-font">{t("create")}</p>
 
           {/* TEXT */}
           <Textarea
-            placeholder={t('share')}
+            placeholder='Commit your thoughts to the world'
             value={`${post.text}${post.displayCategory ? `\n\ncategory: ${post.displayCategory}` : ""}`}
             onChange={(e) => post.setText(e.target.value)}
-            className="bg-white dark:bg-gray-100 h-20 overflow-y-auto "
+            className="bg-white dark:bg-gray-100 h-20 overflow-y-auto placeholder:text-[18px] placeholder:text-gray-400 "
           />
       
       

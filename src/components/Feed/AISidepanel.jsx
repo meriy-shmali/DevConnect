@@ -17,7 +17,7 @@ const AISidePanel = ({ open, onClose, children }) => {
         animate={{ x: 0 }}
         exit={{ x: 400 }}
         transition={{ type: "tween", duration: 0.3 }}
-            className="sidebar fixed right-0 top-0 w-[450px] h-screen  bg-gradient-background z-50  shadow-xl p-6   mt-16 rounded-bl-2xl rounded-tl-2xl   border border-white"
+            className="sidebar fixed right-0 top-0 w-[500px] h-screen  bg-gradient-background z-50  shadow-xl p-6   mt-16 rounded-bl-2xl rounded-tl-2xl   border border-white"
             onClick={(e) => e.stopPropagation()}
           >
             {children}
