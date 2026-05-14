@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindcssRtl from 'tailwindcss-rtl';
 export default {
   darkMode: 'class',
   content: [
@@ -16,6 +17,8 @@ export default {
    experimental: {
     optimizeUniversalDefaults: true,
   },
-  plugins: [],
+  plugins: [
+    tailwindcssRtl 
+    ],
 }
 

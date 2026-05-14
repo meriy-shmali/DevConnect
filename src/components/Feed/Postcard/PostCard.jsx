@@ -70,10 +70,10 @@ const data = usequeryreaction(
   ? staticuser[paneltype]
   : [];*/
 const reactionData = [
-  { key: "useful", label: "Useful", count: post.reaction_counts?.useful , icon: <AiOutlineLike className='dark:text-gray-50' /> },
-  { key: "not_useful", label: "Not useful", count: post.reaction_counts?.not_useful, icon: <AiOutlineDislike className='dark:text-gray-50' /> },
-    { key: "creative_solution", label: "Creative solution", count:  post.reaction_counts?.creative_solution, icon: <MdLightbulbOutline className='dark:text-gray-50' /> },
-  { key: "same_problem", label: "Same problem", count: post.reaction_counts?.same_problem , icon: <PiBugBeetle className='dark:text-gray-50' /> }
+  { key: "useful", label: t("useful"), count: post.reaction_counts?.useful , icon: <AiOutlineLike className='dark:text-gray-50' /> },
+  { key: "not_useful", label: t("not_useful"), count: post.reaction_counts?.not_useful, icon: <AiOutlineDislike className='dark:text-gray-50' /> },
+    { key: "creative_solution", label: t("creative_solution"), count:  post.reaction_counts?.creative_solution, icon: <MdLightbulbOutline className='dark:text-gray-50' /> },
+  { key: "same_problem", label: t("same_problem"), count: post.reaction_counts?.same_problem , icon: <PiBugBeetle className='dark:text-gray-50' /> }
 ];
 const reactionMap = Object.fromEntries(
   reactionData.map(item => [item.key, item])
@@ -131,7 +131,7 @@ const handleAddComment = ({ postId, text }) => {
 };
 
   return (
-    <div className='bg-white dark:bg-dark-post-background rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 border border-gray-300 flex-col space-y-10  justify-center'>
+    <div className='bg-white dark:bg-dark-post-background rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 dark:border-0 border border-gray-300 flex-col space-y-10  justify-center'>
     <Trending post={post}/>
     <HeaderPost post={post}/>
     <BodyPost post={post} />

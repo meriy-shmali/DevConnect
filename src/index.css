@@ -10,9 +10,7 @@ html {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-* {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+
 .text-title {
   font-size: 70px !important;
 }
@@ -58,6 +56,15 @@ html {
    .bg-gradient-background-hover {
     background: linear-gradient(140deg, #4c6d8d 0%, #715f9f 17%, #90268e 44%, #a3455e 64%, #897C71 100%);
   }
+bg-navbar-gradient {
+    background: linear-gradient(145deg, #ffffff 0%, #e0e0e0 50%, #cfd8dc 100%) !important;
+  }
+
+  /* هاد الكلاس عشان نضمن يشتغل بالدارك مود بدون تضارب */
+  .dark\:bg-navbar-silver:is(.dark *) {
+    background: linear-gradient(145deg, #ffffff 0%, #e0e0e0 50%, #cfd8dc 100%) !important;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+  }
 }
 @layer utilities {
   .text-gradient {
@@ -90,7 +97,7 @@ html[lang='ar'] {
   --font-subtitle: var(--font-sub-title);
   --font-body: var(--font-body-text);
   /*-project color-*/
-  
+  --color-navbar:#E5E4E2;
   --color-blue-button:#0733AD;
   --color-post-button:#B468B4;
   --color-cancel:rgba(180, 104, 180, 0.35);
@@ -109,6 +116,7 @@ html[lang='ar'] {
   --color-text-button:#FFFFFF;
   --color-ai-assistant:#2B3EAC;
   --color-dark-placeholder:#2f2f2f9b;
+--color-dark-button:#282828e6;
 --color-light-placeholder:#f1eeee;
  --color-hover-placeholder:#f6f4f4;
   --color-text-placeholder:#959595;
@@ -230,7 +238,7 @@ background-repeat: repeat;
   
 }
 :root {
-
+  
   --radius: 0.625rem;
   --background: #FFFBFB;
   --foreground: oklch(0.145 0 0);
@@ -266,6 +274,7 @@ background-repeat: repeat;
 }
 
 .dark {
+  
   --background:#1E1E1E ;
  /* --background:#d64ac3 ;
 

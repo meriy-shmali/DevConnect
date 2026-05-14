@@ -47,39 +47,46 @@ useEffect(() => {
   }
 }, [type]);
 const menuRef = useRef(null);
-
+const sidebarRef = useRef(null);
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (showmenu && menuRef.current && !menuRef.current.contains(event.target)) {
-        setshowmenu(false);
-      }
-    };
+  const handleClickOutside = (event) => {
+    // إغلاق الـ Sidebar عند النقر خارجه
+    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      onClose(); // استدعاء دالة الإغلاق الممرة من الأب
+    }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showmenu]);
+    // إغلاق قائمة الفلتر الصغيرة (التي كنتِ تبرمجينها)
+    if (showmenu && menuRef.current && !menuRef.current.contains(event.target)) {
+      setshowmenu(false);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [showmenu, onClose]); // أضفنا onClose هنا لضمان التحديث
   return (
     <>
       {/* overlay */}
-      <div onClick={onClose} className="fixed inset-0 w-[800px] left-1/2" />
+      
 
       {/* sidebar */}
       <motion.div
+      ref={sidebarRef}
         key={type}
         onClick={(e) => e.stopPropagation()}
         initial={{ x: 400 }}
         animate={{ x: 0 }}
         exit={{ x: 400 }}
         transition={{ type: "tween", duration: 0.2 }}
-        className="sidebar fixed right-0 top-0 w-[500px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background border border-white"
+        className="sidebar fixed right-0 top-0 md:w-[500px] w-[400px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background border border-gray-700 md:pb-24 pb-40"
       >
         {/* header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center space-x-3">
-            <h2 className="text-[30px] font-bold dark:text-gray-50">{title}</h2>
-            <p className="text-[26px] dark:text-gray-50">{icon}</p>
+            <h2 className="md:text-[30px] text-[26px] font-bold dark:text-gray-50">{title}</h2>
+            <p className="md:text-[26px] text-[24px] dark:text-gray-50">{icon}</p>
           </div>
           <IoIosClose onClick={onClose} className="text-4xl text-red-600" />
         </div>
@@ -97,7 +104,7 @@ const menuRef = useRef(null);
                       animate={{ y: 2 ,x:-2 }}
                       exit={{ y: 2 }}
                       transition={{ type:"tween" ,duration: 0.1 }}
-                     className="absolute right-16 mt-6 bg-white shadow-md rounded-md p-2 flex flex-col z-50 border border-gray-300"
+                     className="absolute right-16 mt-6 bg-white shadow-md rounded-md p-2 flex flex-col z-50 border border-gray-300 dark:bg-navbar  "
                           onClick={(e) => e.stopPropagation()}
                         >
                
@@ -106,7 +113,7 @@ const menuRef = useRef(null);
                     setSort("latest");
                     setshowmenu(false);
                   }}
-                  className="px-3 py-1 hover:text-gray-600"
+                  className="px-3 py-1 hover:text-gray-600 dark:hover:text-gray-800"
                 >
                   {t("latest")}
                 </button>
@@ -116,7 +123,7 @@ const menuRef = useRef(null);
                     setSort("oldest");
                     setshowmenu(false);
                   }}
-                  className="px-3 py-1 hover:text-gray-600"
+                  className="px-3 py-1 hover:text-gray-600 dark:hover:text-gray-800"
                 >
                   {t("oldest")}
                 </button>
@@ -128,8 +135,8 @@ const menuRef = useRef(null);
         {/* items */}
         <div className="flex-col space-y-4">
           {items.length === 0 ? (
-            <div className=" flex flex-col  items-center justify-center  h-full text-gray-500 dark:text-gray-50 space-y-4 relative -bottom-48 text-3xl">
-             <div> {type=='comments'?<FaRegCommentDots className="text-8xl"/>:<LiaUserAltSlashSolid className="text-8xl" />}</div>
+            <div className=" flex flex-col  items-center justify-center  h-full text-gray-500 dark:text-gray-50 space-y-4 relative -bottom-48 md:text-3xl text-2xl">
+             <div> {type=='comments'?<FaRegCommentDots className="md:text-8xl text-7xl"/>:<LiaUserAltSlashSolid className="text-8xl" />}</div>
              <div> {type=='comments'?(t('nocomments')):(t('noitems'))}</div>
             </div>
           ) : (

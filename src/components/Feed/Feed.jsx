@@ -79,7 +79,7 @@ const {
         <div className="md:hidden flex items-center justify-center">
           <div
             onClick={() => navigate("/post-mobile")}
-            className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500 flex align-middle dark:text-gray-300 dark:border-gray-300"
+            className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500 flex align-middle dark:text-gray-300 dark:border-gray-300 mb-4"
           >
             {t('create')}
           </div>
@@ -88,7 +88,7 @@ const {
         <div className="flex items-center ml-20 ">
           <div className="flex-col space-y-12 md:ml-0 md:w-[60%] ">
        <div className={`sticky top-16 z-10 bg-main-background dark:bg-dark-main-background py-2
-  transition-transform duration-1000 ease-in-out
+  transition-transform duration-500 ease-in-out
   ${showChoices ? "translate-y-0" : "-translate-y-full"}`}>
   <Choiches setCategory={setcategory} />
 </div>

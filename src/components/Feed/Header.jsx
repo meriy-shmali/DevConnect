@@ -57,7 +57,7 @@ const Header = ({ onNotificationClick,setTheme }) => {
 
 
   return (
-    <header className="bg-black dark:bg-gray-50   fixed top-0 z-30 w-full ">
+    <header className="bg-black dark:bg-navbar   fixed top-0 z-30 w-full ">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" style={{ direction: 'ltr' }}>
         
         {/* 1. شعار التطبيق - DevConnect */}
@@ -76,10 +76,10 @@ const Header = ({ onNotificationClick,setTheme }) => {
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onFocus={() => searchTerm.length > 0 && setIsDropdownOpen(true)} // لإظهارها عند التركيز إذا كان هناك نص
-                className="md:w-full w-[250px] py-1 md:py-2 pl-10 md:pl-12 pr-4  border border-gray-300  rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 dark:border-gray-800 dark:bg-gray-50 text-lg  md:text-xl font-semibld text-left placeholder-gray-700 dark:placeholder-gray-800 "
+                className="md:w-full w-[250px] py-1 md:py-2 pl-10 md:pl-12 pr-4  border border-gray-300  rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 dark:border-gray-400 dark:bg-gray-50 text-lg  md:text-xl font-semibld text-left placeholder-gray-700 dark:placeholder-gray-500 "
                 style={{ direction: 'ltr' }} // تأكد من أن البحث يبدأ من اليسار (Ltr)
               />
-              <IoSearchSharp className="absolute left-3 top-1/2 transform -translate-y-1/2 md:h-7 md:w-7 w-5 h-5 text-gray-700 "   />
+              <IoSearchSharp className="absolute left-3 top-1/2 transform -translate-y-1/2 md:h-7 md:w-7 w-5 h-5 text-gray-500 "   />
             </div>
 
             {/* القائمة المنسدلة للبحث */}
@@ -115,7 +115,7 @@ const Header = ({ onNotificationClick,setTheme }) => {
           
           {/* أيقونة الإشعارات */}
           <button 
-            className="p-2 rounded-full  text-gray-300 dark:text-gray-700 relative transition duration-150"
+            className="p-2 rounded-full  text-gray-300 dark:text-gray-800 relative transition duration-150"
             onClick={onNotificationClick}
           >
             {/*<svg
@@ -139,7 +139,7 @@ const Header = ({ onNotificationClick,setTheme }) => {
           <button className="flex items-center p-0.5 rounded-full">
             {renderAvatar(userAvatar,'h-8 w-8')}
           </button>
-          <button className='p-2 rounded-full  text-gray-300 dark:text-gray-700 transition duration-150'>
+          <button className='p-2 rounded-full  text-gray-300 dark:text-gray-800 transition duration-150'>
             <MdSettings className='md:h-9 md:w-9 w-7 h-7'/>
           </button>
            <button

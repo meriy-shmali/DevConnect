@@ -85,7 +85,7 @@ ${isfollowing
       post.post_type=='article'?'text-hover-articles border-hover-articles':'text-black border-black'
     } w-[100px] md:w-[120px] text-center`}>
     {post?.post_type ?(
-     <p className=' text-lg md:text-xl p-1  '>{t(`post_types.${post.post_type}`,post.post_type)}</p> ):null}
+     <p className=' text-md md:text-xl p-1 px-2 md:px-0  '>{t(`post_types.${post.post_type}`,post.post_type)}</p> ):null}
       </div>
 {Number(post.user?.id) === Number(data?.id) && (
       <MenuPanel

@@ -7,11 +7,22 @@ import router from './Router'
 import './i18next'
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+function DirectionWrapper({ children }) {
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
+  return children;
+}
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <DirectionWrapper>
         <Toaster position='top-center' toastOptions={{
           duration: 3000,
           className: "shadow-lg",
@@ -23,6 +34,7 @@ createRoot(document.getElementById('root')).render(
           }
         }} />
      <RouterProvider router={router} />
+     </DirectionWrapper>
      </AuthProvider>
      </QueryClientProvider>
   </StrictMode>

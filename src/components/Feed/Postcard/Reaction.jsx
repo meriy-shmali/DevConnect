@@ -110,7 +110,7 @@ const handlereaction = async (type) => {
   return (
     <div className='flex space-x-30  items-center '>
       <div>
-     <button className='flex space-x-2 items-center rounded-2xl px-2 py-1  shadow-md dark:bg-dark-main-background '>
+     <button className='flex space-x-2 items-center rounded-2xl px-2 py-1  shadow-md dark:bg-dark-button '>
       <FaRegCommentDots className='md:text-xl text-lg text-gray-700 dark:text-gray-50'/>
       <div className='md:text-lg text-md font-semibold text-gradient'onClick={(e) => {
     e.stopPropagation();
@@ -124,7 +124,7 @@ const handlereaction = async (type) => {
           <button
     onClick={(e) => e.stopPropagation()
     }
-    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl  ${ active[items.key]?' border border-follow-button dark:border-follow-button':' border border-gray-200 '} shadow text-lg w-fit dark:bg-dark-main-background dark:border-dark-main-background`}
+    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl  ${ active[items.key]?' border border-follow-button dark:border-follow-button':' border border-gray-200 '} shadow text-lg w-fit dark:bg-dark-button dark:border-dark-button`}
   >
  <div onClick={(e)=>{
   e.stopPropagation()
@@ -155,16 +155,18 @@ const handlereaction = async (type) => {
       ))}
      
       </div>
-<div onClick={handleSaveToggle} className="cursor-pointer ml-20 ">
+<div onClick={handleSaveToggle} className="cursor-pointer md:ml-20 ">
    {localIsSaved ? (
         <GoBookmarkFill 
-            size={36} 
-            className="relative left-32 text-blue-700 transition-colors duration-300" 
+            md:size={36} 
+            size={30}
+            className="relative md:left-32 right-16 text-blue-700 transition-colors duration-300" 
         />
     ) : (
         <GoBookmark 
-            size={36} 
-            className="relative left-32 text-gray-500 transition-colors duration-300" 
+            md:size={36} 
+            size={30}
+            className="relative md:left-32 right-16 text-gray-500 dark:text-gray-300 transition-colors duration-300" 
         />
     )}
 </div>

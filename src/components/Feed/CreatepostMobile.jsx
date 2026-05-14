@@ -15,14 +15,14 @@ const CreatepostMobile = () => {
     const post=CreatepostLogic();
     const {t}=useTranslation();
   return (
-    <div className='flex-col mt-14   space-y-16'>
-    <div> <p className='text-5xl flex justify-center items-center font-semibold'>{t('create')}</p></div>
+    <div className='flex-col mt-14   space-y-18 pb-36'>
+    <div> <p className='text-5xl flex justify-center items-center font-semibold dark:text-gray-50 title-font'>{t('create')}</p></div>
     <div className='flex justify-center'>
      <Textarea
      placeholder={t('share')}
      value={post.text}
      onChange={(e) => post.setText(e.target.value)}
-     className='w-[500px] h-[100px] text-xl'/>
+     className='w-[500px] h-[100px] text-xl dark:placeholder:text-gray-400 dark:bg-gray-200 '/>
      </div>
      
       {/* PREVIEW AREA */}
@@ -51,7 +51,7 @@ const CreatepostMobile = () => {
           />
      <div className="flex justify-center gap-x-6 mt-4">
   <Button onClick={() => post.uploadRef.current.click()}>
-    <RiImageAddFill className="text-gray-600 size-[40px]" />
+    <RiImageAddFill className="text-gray-600 dark:text-gray-200 size-[40px]" />
   </Button>
   <Buttons type='post' onClick={post.handlePost}/>
   <Buttons type='cancel' onClick={() => {
@@ -63,8 +63,8 @@ const CreatepostMobile = () => {
      
      <div className='flex justify-center items-center'>
       <div className=' flex-col space-y-9'>
-     <div className='text-xl'>{t('help')} </div>
-     <div className='flex justify-center items-center'> <Button className="text-[22px] border-2 rounded-[50px]  pt-1 pb-1 text-black border-black  " onClick={()=>post.setshow(!post.show)}>{t('ai')}<BsStars className='size-[22px] text-amber-300'/></Button></div>
+     <div className='text-xl dark:text-gray-200'>{t('help')} </div>
+     <div className='flex justify-center items-center'> <Button className="text-[22px] border-2 rounded-[50px]  pt-1 pb-1 text-black border-black dark:text-gray-200 dark:border-gray-200  " onClick={()=>post.setshow(!post.show)}>{t('ai')}<BsStars className='size-[22px] text-amber-300'/></Button></div>
      <AnimatePresence> 
             {
            post. show&&(

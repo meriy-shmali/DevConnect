@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { BsStars } from 'react-icons/bs'
-
+import { RiFlashlightFill } from "react-icons/ri";
+import { FaCheck } from "react-icons/fa";
 const PostAi = ({ id }) => {
     const { t } = useTranslation();
     const [show, setShow] = useState(false);
@@ -52,10 +53,10 @@ const PostAi = ({ id }) => {
                 <button 
                     onClick={toggleMenu}
                     // أزلت pointer-events-none ليعمل الضغط
-                    className='text-md md:text-lg text-gradient font-semibold cursor-pointer flex flex-row justify-center items-center space-x-1 outline-none'
+                    className='text-xs md:text-lg text-gradient font-semibold cursor-pointer flex flex-row justify-center items-center space-x-1 outline-none'
                 >
                     <div>{t('askai')} </div> 
-                    <div><BsStars size={18} className='text-yellow-400'/></div>
+                    <div><BsStars md:size={18} size={14} className='text-yellow-400'/></div>
                 </button>
             </motion.div>
 
@@ -66,21 +67,29 @@ const PostAi = ({ id }) => {
                         animate={{ opacity: 1, y: 10 }} // ظهور انسيابي للأسفل
                         exit={{ opacity: 0, y: 0 }}
                         transition={{ type: "tween", duration: 0.2 }}
-                        className="absolute -top-28 right-24 bg-white dark:bg-dark-main-background border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 flex flex-col z-[100] w-[160px] text-lg "
+                        className="absolute -top-28 right-24 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 flex flex-col justify-center z-[100] md:w-[200px] w-[180px] text-lg "
                         onClick={(e) => e.stopPropagation()}
                     >
-                      <div>  <button 
-                            onClick={() => handleAction('best_answer')}
-                            className="px-4 py-2 flex items-center justify-center w-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                        >
-                            <p className='text-sm md:text-base'>Best Answer</p>
+                      <div>
+                     <button onClick={() => handleAction('best_answer')}
+                            className="px-4 py-2 flex items-center justify-center w-full hover:font-semibold  dark:hover:text-gray-700 transition-colors" >
+                           <div className='flex flex-row justify-center  items-strat space-x-6'>
+                            <div> <FaCheck className='text-yellow-400'/> </div>
+                           <div><p className='text-sm md:text-base ' >{t('bestanswer')}</p></div> 
+                           
+                            </div> 
                         </button></div>
                        <div>
                         <button 
                             onClick={() => handleAction('summarize_code')}
-                            className="px-4 py-2 flex items-center justify-center w-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                            className="px-4 py-2 flex items-center justify-center dark:hover:text-gray-700 hover:font-semibold  w-full transition-colors"
                         >
-                            <p className='text-sm md:text-base'>Summarize Code</p>
+                            <div className='flex flex-row justify-center items-center space-x-2'>
+                                  <div> <RiFlashlightFill className='text-yellow-400 size-5'/></div>
+                           <div><p className='text-sm md:text-base'>{t('summary')}</p></div> 
+                         
+                            </div>
+                            
                         </button></div>
                     </motion.div>
                 )}

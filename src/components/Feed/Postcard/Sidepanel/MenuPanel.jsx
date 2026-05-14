@@ -25,7 +25,7 @@ const MenuPanel = ({ id, menu, toggleMenu, onEdit, onDelete,size=20 }) => {
     
     <div className="relative" ref={menuRef}>
       <button onClick={() => toggleMenu(id)}>
-        <BsThreeDotsVertical className='text-gray-600 dark:text-gray-400' size={size} />
+        <BsThreeDotsVertical className='text-gray-600 dark:text-gray-300' size={size} />
       </button>
 
       {menu[id] && (
@@ -34,7 +34,7 @@ const MenuPanel = ({ id, menu, toggleMenu, onEdit, onDelete,size=20 }) => {
         animate={{ y: 2 ,x:-2 }}
         exit={{ y: 2 }}
         transition={{ type:"tween" ,duration: 0.1 }}
-        className="absolute right-4 top-5  bg-white dark:bg-dark-main-background border-white border rounded-lg shadow py-2 flex flex-col z-50 w-[100px] text-lg"
+        className="absolute right-4 top-5  bg-white dark:bg-navbar border-white border rounded-lg shadow py-2 flex flex-col z-50 w-[100px] text-lg"
             onClick={(e) => e.stopPropagation()}
           >
        

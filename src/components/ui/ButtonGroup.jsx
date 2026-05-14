@@ -68,12 +68,12 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
   if(type=='login'){
     return(
-  <Button type='submit' className='bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' size='lg' >
+  <Button type='submit' className='bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' md:size='lg' >
     {t('login')}
   </Button>)}
   if(type=='register'){
     return(
-  <Button type='submit' className=' bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' size='lg' >
+  <Button type='submit' className=' bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' md:size='lg' >
     {t('register')}
   </Button>)}
   if(type=='send'){

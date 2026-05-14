@@ -43,7 +43,7 @@ const Createpost = () => {
 
           {/* TEXT */}
           <Textarea
-            placeholder='Commit your thoughts to the world'
+            placeholder={t('share')}
             value={`${post.text}${post.displayCategory ? `\n\ncategory: ${post.displayCategory}` : ""}`}
             onChange={(e) => post.setText(e.target.value)}
             className="bg-white dark:bg-gray-100 h-20 overflow-y-auto placeholder:text-[18px] placeholder:text-gray-400 "

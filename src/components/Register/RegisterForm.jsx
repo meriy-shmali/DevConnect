@@ -41,6 +41,8 @@ const RegisterForm = () => {
     },
     
   });
+  const { i18n } = useTranslation();
+const isRTL = i18n.language === "ar";
   const registerMutation=useregister();
   const navigate=useNavigate();
     const onSubmit = async (data) => {
@@ -100,18 +102,18 @@ const RegisterForm = () => {
       name="first_name"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[30px] md:text-[38px]">{t('firstname')}</FormLabel>
+          <FormLabel className="text-[26px] md:text-[38px]">{t('firstname')}:</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="text"
-                placeholder="First name"
-                className="placeholder:text-[18px] mt-2"
+                placeholder={t('firstname')}
+                className="placeholder:md:text-[18px] text-[16px] text-start "
               />
               <InputGroupAddon>
-                <User className='size-5' />
+                <User className='md:size-5 size-4 ms-1' />
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -124,18 +126,18 @@ const RegisterForm = () => {
       name="last_name"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[30px] md:text-[38px]">{t('lastname')}</FormLabel>
+          <FormLabel className="text-[26px] md:text-[38px]">{t('lastname')}:</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="text"
-                placeholder="Last name"
-                className="placeholder:text-[18px] mt-2"
+                placeholder={t('lastname')}
+                className="placeholder:md:text-[18px] "
               />
               <InputGroupAddon>
-                <User className='size-5' />
+                <User className='md:size-5 size-4 ms-1' />
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -148,18 +150,18 @@ const RegisterForm = () => {
       name="username"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[30px] md:text-[38px]">{t('username')}</FormLabel>
+          <FormLabel className="text-[26px] md:text-[38px]">{t('username')}:</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="text"
-                placeholder="Username"
-                className="placeholder:text-[18px] mt-2"
+                placeholder={t('username')}
+                className="placeholder:md:text-[18px] text-[16px] "
               />
               <InputGroupAddon>
-                <User className='size-5' />
+                <User className='md:size-5 size-4 ms-1' />
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -173,17 +175,17 @@ const RegisterForm = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[30px] md:text-[38px]">{t('email')}</FormLabel>
+          <FormLabel className="text-[26px] md:text-[38px]">{t('email')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="email"
                 placeholder="Example@mail.com"
-                className="placeholder:text-[18px] mt-1"
+                className="placeholder:text-[16px] md:text-[18px] "
               />
               <InputGroupAddon>
-                <MailIcon className='size-5'/>
+                <MailIcon className='md:size-5 size-4 ms-1'/>
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -197,17 +199,17 @@ const RegisterForm = () => {
       name="password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[30px] md:text-[38px]">{t('password')}</FormLabel>
+          <FormLabel className=" text-[26px] md:text-[38px]">{t('password')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="password"
-                placeholder="Enter your password"
-                className="placeholder:text-[18px] mt-1"
+                placeholder={t('enterpass')}
+                className="placeholder:md:text-[18px] text-[16px] "
               />
               <InputGroupAddon>
-                <LockIcon className='size-5'/>
+                <LockIcon className='md:size-5 size-4 ms-1'/>
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -220,17 +222,17 @@ const RegisterForm = () => {
       name="confirm_password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[30px] md:text-[38px]">{t('confirm_password')}</FormLabel>
+          <FormLabel className=" text-[26px] md:text-[38px]">{t('confirm_password')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="password"
-                placeholder="Confirm your password"
-                className=" placeholder:text-[18px] mt-1"
+                placeholder={t('confirm_password')}
+                className=" placeholder:md:text-[18px] text-[16px] "
               />
               <InputGroupAddon>
-                <LockIcon className='size-5'/>
+                <LockIcon className='md:size-5 size-4 ms-1'/>
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -243,14 +245,14 @@ const RegisterForm = () => {
       name="age"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[30px] md:text-[38px]">{t('age')}</FormLabel>
+          <FormLabel className=" text-[26px] md:text-[38px]">{t('age')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="number"
                 placeholder=""
-                className="placeholder:text-[18px] mt-3"
+                className="placeholder:md:text-[18px] text-[16px] "
               />
               <InputGroupAddon>
               </InputGroupAddon>
@@ -265,18 +267,19 @@ const RegisterForm = () => {
       name="gender"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[30px] md:text-[38px]">{t('gender')}</FormLabel>
+          <FormLabel className=" text-[26px] md:text-[38px]">{t('gender')}:</FormLabel>
           <FormControl>
-            <div className='ml-2'>
+            <div className='w-full flex flex-col items-start ms-2'>
            <RadioGroup onValueChange={field.onChange}
-  defaultValue={field.value}>
-  <div className="flex items-center space-x-2 ">
+  defaultValue={field.value}
+  dir={isRTL ? "rtl" : "ltr"}>
+  <div className="flex items-center gap-2 ">
     <RadioGroupItem value="male" id="male" />
-    <Label htmlFor="male" className='text-gray-500 text-[20px]'>{t('male')}</Label>
+    <Label htmlFor="male" className='text-gray-500 md:text-[20px] text-[18px]'>{t('male')}</Label>
   </div>
-  <div className="flex items-center space-x-2 ">
+  <div className="flex items-center gap-2 ">
     <RadioGroupItem value="female" id="female" />
-    <Label htmlFor="female" className='text-gray-500 text-[20px]'>{t('female')}</Label>
+    <Label htmlFor="female" className='text-gray-500 md:text-[20px] text-[18px]'>{t('female')}</Label>
   </div>
 </RadioGroup> </div>
           </FormControl>
@@ -284,32 +287,30 @@ const RegisterForm = () => {
         </FormItem>
       )}
     />  
-    
-       
-            
-  <FormField
+      <FormField
       control={form.control}
       name="phone_number"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[30px] md:text-[38px]">{t('phone_number')}</FormLabel>
+          <FormLabel className=" text-[26px] md:text-[38px]">{t('phone')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder shadow hover:bg-hover-placeholder w-[500px] h-[46px] rounded-2xl">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="tel"
-                placeholder="Phone"
-                className="placeholder:text-[18px] mt-1"
+                
+                className=" placeholder:md:text-[18px] text-[16px]  "
               />
               <InputGroupAddon>
-             <Phone className='size-5' />
+                <Phone className='md:size-5 size-4 ms-1  '/>
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
           <FormMessage />
         </FormItem>
       )}
-    />  
+    />
+  
 <div className='flex justify-center p-4'><Buttons type="register"/></div> 
 
   </form>

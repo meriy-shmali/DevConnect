@@ -76,17 +76,17 @@ queryClient.prefetchQuery({
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[30px] md:text-[38px]">{t('email')}</FormLabel>
+          <FormLabel className="text-[26px] md:text-[38px]">{t('email')}:</FormLabel>
           <FormControl>
             <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="email"
                 placeholder="Example@mail.com"
-                className="placeholder:text-[18px] mt-1 "
+                className="placeholder:md:text-[18px] text-[16px] mt-1  "
               />
               <InputGroupAddon>
-                <MailIcon className='size-5' />
+                <MailIcon className='md:size-5 size-4 mr-2' />
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
@@ -100,17 +100,17 @@ queryClient.prefetchQuery({
       name="password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[30px] md:text-[38px]">{t('password')}</FormLabel>
+          <FormLabel className=" text-[26px] md:text-[38px]">{t('password')}:</FormLabel>
           <FormControl>
             <InputGroup className=" hover:bg-hover-placeholder bg-light-placeholder shadow w-[500px] h-[46px] rounded-2xl">
               <InputGroupInput
                 {...field}
                 type="password"
-                placeholder="Enter your password"
-                className="placeholder:text-[18px] mt-2 "
+                placeholder={t('enterpass')}
+                className="placeholder:md:text-[18px] text-[16px] mt-2 "
               />
               <InputGroupAddon>
-                <LockIcon className='size-5' />
+                <LockIcon className='md:size-5 size-4 mr-3' />
               </InputGroupAddon>
             </InputGroup>
           </FormControl>
