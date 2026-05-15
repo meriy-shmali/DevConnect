@@ -53,7 +53,7 @@ const CreatepostMobile = () => {
   <Button onClick={() => post.uploadRef.current.click()}>
     <RiImageAddFill className="text-gray-600 dark:text-gray-200 size-[40px]" />
   </Button>
-  <Buttons type='post' onClick={post.handlePost}/>
+  <Buttons type='post' onClick={() => post.handlePost({ redirectAfterPost: true })}/>
   <Buttons type='cancel' onClick={() => {
     post.setText("");
     post.removeImage();

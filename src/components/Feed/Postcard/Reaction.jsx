@@ -155,18 +155,18 @@ const handlereaction = async (type) => {
       ))}
      
       </div>
-<div onClick={handleSaveToggle} className="cursor-pointer md:ml-20 ">
+<div onClick={handleSaveToggle} className="cursor-pointer md:ms-20 ">
    {localIsSaved ? (
         <GoBookmarkFill 
             md:size={36} 
             size={30}
-            className="relative md:left-32 right-16 text-blue-700 transition-colors duration-300" 
+            className="relative md:start-32 end-16 text-blue-700 transition-colors duration-300" 
         />
     ) : (
         <GoBookmark 
             md:size={36} 
             size={30}
-            className="relative md:left-32 right-16 text-gray-500 dark:text-gray-300 transition-colors duration-300" 
+            className="relative md:start-32 end-16 text-gray-500 dark:text-gray-300 transition-colors duration-300" 
         />
     )}
 </div>

@@ -4,6 +4,11 @@ i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
+        
+    useful: "Useful",
+    not_useful: "Not useful",
+    creative_solution: "Creative solution",
+    same_problem: "Same problem", 
         welcome: "Welcome to",
         welcome_back:"Welcome Back",
         description: "join thousands of programmers, share your projects and learn from the experiences of others.",
@@ -102,11 +107,7 @@ i18n.use(initReactI18next).init({
           generate_loading:"text being generated",
           tags_loading:"tags are being extracted",
           classify_loading:"text being classify",
-          create_post_loading:"publishing in progress",
-useful: "Useful",
-  not_useful: "Not useful",
-  creative_solution: "Creative solution",
-  same_problem: "Same problem",          //
+          create_post_loading:"publishing in progress",         //
   post_types: {
   question: "Question",
   project: "Project",
@@ -170,7 +171,7 @@ useful: "Useful",
         ai:"المساعد الذكي",
         bestanswer:"أفضل اجابة",
         summary:"تلخيص ذكي",
-        askai:"اسأل الذكاءالاصطناعي",
+        askai:"اسأل الذكاء",
         send:"ارسال",
         questions:"اسئلة",
         projects:"مشاريع",
@@ -216,7 +217,7 @@ useful: "Useful",
         results:"النتائج",
         showmore:"عرض المزيد",
         show:"عرض المزيد من النتائج",
-        View:"عرض السلسلة",
+        View:"عرض الردود",
         see_original:"الأصلي",
         comments:"التعليقات",
          write:"اكتب ردا",
@@ -226,11 +227,12 @@ useful: "Useful",
     "project": "مشروع",
     "information": "معلومة",
     "article": "مقال",
-    useful: "مفيد",
+   
+  },
+   useful: "مفيد",
   not_useful: "غير مفيد",
   creative_solution: "حل ابداعي",
   same_problem: "نفس المشكلة", 
-  },
   nocomments:"لايوجد تعليقات",
       noitems:"لا يوجد تفاعلات ",
          /*sucess message */

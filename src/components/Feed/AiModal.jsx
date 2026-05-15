@@ -3,12 +3,13 @@ import { AnimatePresence,motion } from 'framer-motion'
 import { IoClose } from "react-icons/io5"
 import { LucideRefreshCw } from 'lucide-react';
 import Buttons from '../ui/ButtonGroup'
+import { createPortal } from 'react-dom'
 const AiModal = ({open,result,onuse,onclose,onRegenerate,isPending}) => {
-  return (
+  return createPortal (
     <AnimatePresence>
         {
         open&&(
-        <div className="fixed inset-0 flex items-center justify-center z-50 h-full bg-black/50 backdrop-blur-sm">
+        <div className="fixed inset-0 flex items-center justify-center z-[9999] h-full bg-black/50 backdrop-blur-sm">
             <motion.div
             className="relative bg-white w-[600px] max-w-[90%] rounded-xl p-8 shadow-xl"
             initial={{ scale: 0.8, opacity: 0 }}
@@ -43,7 +44,9 @@ const AiModal = ({open,result,onuse,onclose,onRegenerate,isPending}) => {
         </div>
         )
         }
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
+    
   )
 }
 

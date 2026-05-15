@@ -8,9 +8,10 @@ import { useAiAction } from "./useAiAction";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { UseMe } from "./UseQueryMe";
-
+import { useNavigate } from "react-router-dom";
 const CreatepostLogic = () => {
   const { data: currentUser } = UseMe();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 const infiniteData = queryClient.getQueryData(["posts", "all"]);
 // نستخدم flatMap لدمج المنشورات من كل الصفحات في مصفوفة واحدة للبحث فيها
@@ -149,7 +150,8 @@ const finalTags = tags.length > 0 ? tags : extractTagsFromText(text);
  });
 
 };*/
-const handlePost = () => {
+const handlePost = (options = {}) => {
+  const { redirectAfterPost = false } = options;
   if (!category) {
     toast.error(t('classify_post')); // تأكدي من إضافة المفتاح في ملف الترجمة
     return; // إيقاف تنفيذ الدالة ومنع النشر
@@ -249,6 +251,7 @@ queryClient.setQueriesData(
    /*   queryClient.invalidateQueries({ queryKey: ["posts", category] });*/
    queryClient.invalidateQueries({ queryKey: ["posts"] });
 resetForm();
+if (redirectAfterPost) navigate("/feed");
     },
     onError: () => {
       toast.error(t("create_post_error"), { id: toastId });

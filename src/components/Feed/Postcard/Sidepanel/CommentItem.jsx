@@ -69,7 +69,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
           />
         )}
       </div>
-      <div className=" flex justify-between ml-12">
+      <div className=" flex justify-between ms-12">
       {/* text */}
       <p className="text-md dark:text-gray-100">
         {istranslate[item.id] ? translate[item.id] : item.content}
@@ -147,7 +147,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
           ))}
            {hasMore && (
         <button
-          className="text-blue-500 text-sm ml-4"
+          className="text-blue-500 text-sm ms-4"
           onClick={() => setVisibleReplies(prev => prev + 5)} // عرض 5 زيادة
         >
           Show more ({replies.length - visibleReplies} more)

@@ -78,7 +78,7 @@ const Createpost = () => {
           />
 
           {/* BUTTONS */}
-          <div className="flex space-x-6">
+          <div className="flex gap-6">
             {/* UPLOAD FILE BUTTON */}
             <Button onClick={() => post.uploadRef.current.click()}>
               <RiImageAddFill className="text-white size-[36px]" />
@@ -107,7 +107,7 @@ const Createpost = () => {
 
           <div className="text-white text-[24px] text-center leading-11 ">
             {t("help")}
-            <Button className="text-[22px] border-2 rounded-[50px] ml-4 pt-1 pb-1" onClick={(e) => {
+            <Button className="text-[22px] border-2 rounded-[50px] ms-4 pt-1 pb-1" onClick={(e) => {
               e.stopPropagation();
     post.setshow(prev => !prev);
   }}>

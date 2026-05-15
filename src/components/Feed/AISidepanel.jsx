@@ -1,6 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-
+import { useTranslation } from "react-i18next";
 const AISidePanel = ({ open, onClose, children }) => {
+  const { i18n } = useTranslation();
+const isRTL = i18n.language === "ar";
   return (
     <AnimatePresence>
       {open && (
@@ -13,11 +15,11 @@ const AISidePanel = ({ open, onClose, children }) => {
 
           {/* الـ panel فوق CreatePost */}
           <motion.div
-           initial={{ x: 400 }}
-        animate={{ x: 0 }}
-        exit={{ x: 400 }}
+      initial={{ x: isRTL ? -400 : 400 }}
+animate={{ x: 0 }}
+exit={{ x: isRTL ? -400 : 400 }}
         transition={{ type: "tween", duration: 0.3 }}
-            className="sidebar fixed right-0 top-0 w-[500px] h-screen  bg-gradient-background z-50  shadow-xl p-6   mt-16 rounded-bl-2xl rounded-tl-2xl   border border-white"
+            className="sidebar fixed end-0 top-0 w-[500px] h-screen  bg-gradient-background z-50  shadow-xl p-6   mt-16 rounded-bl-2xl rounded-tl-2xl   border border-white"
             onClick={(e) => e.stopPropagation()}
           >
             {children}

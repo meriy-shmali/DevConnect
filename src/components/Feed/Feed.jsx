@@ -85,8 +85,8 @@ const {
           </div>
         </div>
 
-        <div className="flex items-center ml-20 ">
-          <div className="flex-col space-y-12 md:ml-0 md:w-[60%] ">
+        <div className="flex items-center ms-20 ">
+          <div className="flex-col space-y-12 md:ms-0 md:w-[60%] ">
        <div className={`sticky top-16 z-10 bg-main-background dark:bg-dark-main-background py-2
   transition-transform duration-500 ease-in-out
   ${showChoices ? "translate-y-0" : "-translate-y-full"}`}>
@@ -133,7 +133,7 @@ const {
 
           {/* هنا نضيف Createpost ثابت */}
           <div className="hidden md:block">
-            <div className="fixed top-28 right-25 w-[400px]">
+            <div className="fixed top-28 end-25 w-[400px]">
               <Createpost />
             </div>
           </div>

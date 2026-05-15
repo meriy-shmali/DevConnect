@@ -16,6 +16,8 @@ const logic = useCommentLogic(
   isComments ? postId : null,
    isComments ? setCommentCount : null 
 );
+const { i18n } = useTranslation();
+const isRTL = i18n.language === "ar";
   const {
     showmenu,
     setshowmenu,
@@ -76,12 +78,14 @@ const sidebarRef = useRef(null);
       ref={sidebarRef}
         key={type}
         onClick={(e) => e.stopPropagation()}
-        initial={{ x: 400 }}
-        animate={{ x: 0 }}
-        exit={{ x: 400 }}
+        initial={{ x: isRTL ? -400 : 400 }}
+animate={{ x: 0 }}
+exit={{ x: isRTL ? -400 : 400 }}
         transition={{ type: "tween", duration: 0.2 }}
-        className="sidebar fixed right-0 top-0 md:w-[500px] w-[400px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background border border-gray-700 md:pb-24 pb-40"
+         className={`sidebar fixed end-0 top-0 md:w-[500px] w-[400px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background dark:border border-gray-700 md:pb-24 pb-40`}
       >
+       
+      
         {/* header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center space-x-3">
@@ -93,7 +97,7 @@ const sidebarRef = useRef(null);
 
         {/* filter */}
         {type === "comments" && showFilter &&items?.length>0 && (
-          <div className="flex justify-end mr-1 -mt-4"ref={menuRef} >
+          <div className="flex justify-end me-1 -me-4"ref={menuRef} >
             <button className="p-2 rounded-full transition-all duration-300 hover:bg-gray-200/50 dark:hover:bg-gray-900/20 backdrop-blur-lg flex items-center justify-center" onClick={() => setshowmenu(prev => !prev)}>
               <HiOutlineAdjustments className="text-2xl hover:text-black dark:text-gray-50 relative z-10 " />
             </button>
@@ -104,7 +108,7 @@ const sidebarRef = useRef(null);
                       animate={{ y: 2 ,x:-2 }}
                       exit={{ y: 2 }}
                       transition={{ type:"tween" ,duration: 0.1 }}
-                     className="absolute right-16 mt-6 bg-white shadow-md rounded-md p-2 flex flex-col z-50 border border-gray-300 dark:bg-navbar  "
+                     className="absolute end-16 mt-6 bg-white shadow-md rounded-md p-2 flex flex-col z-50 border border-gray-300 dark:bg-navbar  "
                           onClick={(e) => e.stopPropagation()}
                         >
                
