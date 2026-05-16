@@ -24,14 +24,14 @@ const [activeTab, setActiveTab] = useState("all"); // حالة لمعرفة ال
   
   return (
     <div className=' '>
-      <div className='flex flex-row  justify-start items-center space-x-12 md:space-x-20 mt-8 ml-4 md:mt-12 md:ml-5'>
+      <div className='flex flex-row  justify-start items-center space-x-4 md:space-x-20 mt-8 ml-4 md:mt-12 md:ml-5'>
         {tabs.map((tab) => (
           <div key={tab.id} className="relative group">
             <button
               onClick={() => handleCategoryChange(tab.id)}
               className={`
                 relative transition-all duration-300 pb-2
-                text-[20px] md:text-[28px] font-semibold title-font
+                text-[15px] md:text-[28px] font-semibold title-font
                 ${tab.color} 
                 
               `}

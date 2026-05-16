@@ -82,17 +82,23 @@ const sidebarRef = useRef(null);
 animate={{ x: 0 }}
 exit={{ x: isRTL ? -400 : 400 }}
         transition={{ type: "tween", duration: 0.2 }}
-         className={`sidebar fixed end-0 top-0 md:w-[500px] w-[400px] h-screen bg-white shadow-xl p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background dark:border border-gray-700 md:pb-24 pb-40`}
+         className={`sidebar fixed end-0 top-0 
+    w-[300px] sm:w-[400px] md:w-[500px] 
+    h-full md:h-screen 
+    bg-white shadow-xl p-6 flex flex-col z-50 
+    overflow-auto comment-scroll dark:bg-dark-post-background dark:border border-gray-700 
+    md:mt-16 md:rounded-bl-2xl md:rounded-tl-2xl
+    pb-10 md:pb-24`}
       >
        
       
         {/* header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center space-x-3">
-            <h2 className="md:text-[30px] text-[26px] font-bold dark:text-gray-50">{title}</h2>
-            <p className="md:text-[26px] text-[24px] dark:text-gray-50">{icon}</p>
+            <h2 className="md:text-[30px] text-[24px] font-bold dark:text-gray-50">{title}</h2>
+            <p className="md:text-[26px] text-[22px] dark:text-gray-50">{icon}</p>
           </div>
-          <IoIosClose onClick={onClose} className="text-4xl text-red-600" />
+          <IoIosClose onClick={onClose} className="md:text-4xl text-3xl text-red-600" />
         </div>
 
         {/* filter */}
@@ -117,7 +123,7 @@ exit={{ x: isRTL ? -400 : 400 }}
                     setSort("latest");
                     setshowmenu(false);
                   }}
-                  className="px-3 py-1 hover:text-gray-600 dark:hover:text-gray-800"
+                  className="px-3 py-1 md:text-lg text-sm hover:text-gray-600 dark:hover:text-gray-800"
                 >
                   {t("latest")}
                 </button>
@@ -127,7 +133,7 @@ exit={{ x: isRTL ? -400 : 400 }}
                     setSort("oldest");
                     setshowmenu(false);
                   }}
-                  className="px-3 py-1 hover:text-gray-600 dark:hover:text-gray-800"
+                  className="px-3 py-1 md:text-lg text-sm hover:text-gray-600 dark:hover:text-gray-800"
                 >
                   {t("oldest")}
                 </button>
@@ -137,9 +143,9 @@ exit={{ x: isRTL ? -400 : 400 }}
         )}
 
         {/* items */}
-        <div className="flex-col space-y-4">
+        <div className="flex-col md:space-y-4 ">
           {items.length === 0 ? (
-            <div className=" flex flex-col  items-center justify-center  h-full text-gray-500 dark:text-gray-50 space-y-4 relative -bottom-48 md:text-3xl text-2xl">
+            <div className=" flex flex-col  items-center justify-center  h-full text-gray-500 dark:text-gray-50 space-y-4  relative md:-bottom-48 top-[200px] md:text-3xl text-2xl">
              <div> {type=='comments'?<FaRegCommentDots className="md:text-8xl text-7xl"/>:<LiaUserAltSlashSolid className="text-8xl" />}</div>
              <div> {type=='comments'?(t('nocomments')):(t('noitems'))}</div>
             </div>

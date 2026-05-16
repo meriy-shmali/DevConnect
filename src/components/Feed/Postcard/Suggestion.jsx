@@ -62,7 +62,7 @@ const [users, setusers] = useState([]);
 if (!users || users.length === 0) return null;
   return (
     <div>
-      <div className='md:text-3xl text-2xl mt-10 font-semibold capitalize dark:text-dark-text'>
+      <div className='md:text-3xl text-[20px] ms-1 mt-10 font-semibold capitalize dark:text-dark-text'>
         {t('intersted')}:
       </div>
 
@@ -74,13 +74,13 @@ if (!users || users.length === 0) return null;
             className="min-w-[200px] flex-shrink-0 snap-center "
             onClick={() => navigate(`/src/components/Feed/ProfilePeople/ProfilePeople.jsx`)}
           >
-            <div className='border border-gray-300 p-5 rounded-2xl shadow-xl mb-6 w-[200px]  h-fit flex-col space-y-5 dark:bg-dark-post-background'>
+            <div className='border border-gray-300 dark:border-0 p-5 rounded-2xl shadow-xl mb-6 w-[200px]  h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'>
 
               <div className='flex justify-center items-center space-x-3'>
                 <img src={user.personal_photo_url} className='w-14 h-14 rounded-full'/>
 
                 <div className="w-[100px]"> 
-                  <p className="font-semibold text-md capitalize truncate dark:text-gray-100">{user.username}</p>
+                  <p className="font-semibold md:text-md text-sm capitalize truncate dark:text-gray-100">{user.username}</p>
 
                   <div className='flex items-center space-x-1 text-sm text-black dark:text-gray-100'>
                     <GoPeople />
@@ -90,7 +90,7 @@ if (!users || users.length === 0) return null;
               </div>
 
               <div className="flex-col justify-center items-center space-y-5">
-                <div className="text-gray-500 dark:text-gray-200 text-center text-md">
+                <div className="text-gray-500 dark:text-gray-200 text-center text-sm md:text-md">
                 <p className="truncate w-full px-2 capitalize" title={user.specialization}>
                           {user.specialization || t('no_specialization')}
                         </p>
@@ -98,7 +98,7 @@ if (!users || users.length === 0) return null;
 
                 <button
                   onClick={(e) => handleFollow(user.id, e)}
-                  className="bg-follow-button text-white py-1 rounded-md w-full"
+                  className="bg-follow-button text-[14px] md:text-md text-white py-1 rounded-md w-full"
                 >
                   {t('follow')}
                 </button>
@@ -139,7 +139,7 @@ if (!users || users.length === 0) return null;
                   transition={{ duration: 0.3 }}
                 >
 
-                  <div className='border border-gray-300 p-5 rounded-2xl shadow-xl mb-6 w-[250px]  h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'
+                  <div className='border border-gray-300 dark:border-0 p-5 rounded-2xl shadow-xl mb-6 w-[250px]  h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'
                        onClick={() => navigate(`/profile/${user.id}`)}>
 
                     <div className='flex justify-center items-center space-x-3'>

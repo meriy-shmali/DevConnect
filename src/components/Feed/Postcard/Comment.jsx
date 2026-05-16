@@ -27,10 +27,10 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
     if (setEditingComment) setEditingComment(null);
   }
   return (
-    <div className='flex items-center md:gap-56 gap-3'>
+    <div className='flex items-center md:gap-56 gap-9'>
     <div className='flex gap-4 items-center'>
       <img src={post.user?. personal_photo_url||"/images/default avatar1.jpg"}
-    className='w-10 h-10 rounded-full '/>
+    className='md:w-10 md:h-10 md:block hidden rounded-full '/>
       <input
        placeholder={t('Addcomment')}
       value={text}
@@ -41,10 +41,10 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
       handleSend();
     }
   }}
-      className=" md:text-lg text-sm w-[400px] border border-gray-300 hover:bg-gray-50 rounded-md  p-2  dark:bg-dark-placeholder  dark:placeholder:text-gray-200"/>
-      < IoSend  onClick={handleSend}className='md:text-[30px] text-[25px] text-blue-700 rtl:scale-x-[-1]'/>
+      className=" md:text-lg text-xs md:w-[400px] max-w-full border border-gray-300 hover:bg-gray-50 rounded-md  p-2  dark:bg-dark-placeholder  dark:placeholder:text-gray-200"/>
+      < IoSend  onClick={handleSend}className='md:text-[30px] text-[20px] text-blue-700 rtl:scale-x-[-1]'/>
     </div>
-<div className='flex flex-row justify-center gap-2 items-center border border-follow-button md:w-fit w-full md:py-0.5 md:px-2.5 py-1.5 px-0.5  rounded-3xl cursor-pointer bg-white dark:bg-dark-button'>
+<div className='flex flex-row justify-center md:gap-2 items-center border border-follow-button md:w-fit w-fit md:py-0.5 md:px-2.5 py-1 px-2  rounded-4xl   md:rounded-3xl cursor-pointer bg-white dark:bg-dark-button'>
   <PostAi id={post.id}/>
 </div>
       

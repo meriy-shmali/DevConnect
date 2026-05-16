@@ -131,7 +131,7 @@ const handleAddComment = ({ postId, text }) => {
 };
 
   return (
-    <div className='bg-white dark:bg-dark-post-background rounded-3xl shadow-xl w-[600px] md:w-[900px] h-fit p-8 dark:border-0 border border-gray-300 flex-col space-y-10  justify-center'>
+    <div className='bg-white dark:bg-dark-post-background rounded-3xl shadow-xl max-w-full md:w-[900px] h-fit p-8 dark:border-0 border border-gray-300 flex-col space-y-10  justify-center'>
     <Trending post={post}/>
     <HeaderPost post={post}/>
     <BodyPost post={post} />

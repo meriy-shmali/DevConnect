@@ -5,6 +5,7 @@ import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { BsStars } from "react-icons/bs";
+
 import AIAssistant from "./AIAssistant";
 import { motion, AnimatePresence, spring, color } from "framer-motion";
 import CreatepostLogic from "@/hook/CreatepostLogic";
@@ -36,6 +37,7 @@ const Createpost = () => {
 }, []);
   return (
     <div>
+     
     <div ref={containerRef} className="hidden md:block"  onClick={()=>post.setshow(false)}>
       <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45">
         <div className="flex-col justify-center items-center mt-2 p-8 space-y-12 pb-40">

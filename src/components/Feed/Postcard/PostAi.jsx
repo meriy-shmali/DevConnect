@@ -41,7 +41,7 @@ const PostAi = ({ id }) => {
     return (
         <div className='relative' ref={menuRef}> 
             <motion.div
-                className='flex items-center space-x-2'
+                className='flex items-center md:space-x-2 '
                 // التعديل: يتوقف النبض (scale) تماماً عندما تكون القائمة مفتوحة (show = true)
                 animate={!show ? { scale: [1, 1.08, 1] } : { scale: 1 }}
                 transition={{ 
@@ -67,7 +67,7 @@ const PostAi = ({ id }) => {
                         animate={{ opacity: 1, y: 10 }} // ظهور انسيابي للأسفل
                         exit={{ opacity: 0, y: 0 }}
                         transition={{ type: "tween", duration: 0.2 }}
-                        className="absolute -top-28 end-24 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 flex flex-col justify-center z-[100] md:w-[200px] w-[180px] text-lg "
+                        className="absolute -top-28 md:end-24 end-10 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 flex flex-col justify-center z-[100] md:w-[200px] w-[180px] text-lg "
                         onClick={(e) => e.stopPropagation()}
                     >
                       <div>

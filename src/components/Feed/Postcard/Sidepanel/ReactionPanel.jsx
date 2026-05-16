@@ -6,7 +6,7 @@ const ReactionPanel = ({ id, counts, handleReaction }) => {
   return (
     <div className="flex items-center space-x-3">
       <div className="flex items-center space-x-1 dark:text-gray-200">
-        <p>{counts[id]?.useful || 0}</p>
+        <p className='text-sm md:text-lg'>{counts[id]?.useful || 0}</p>
         <button onClick={() => handleReaction(id, "useful")}>
           <motion.div
             animate={
@@ -16,13 +16,13 @@ const ReactionPanel = ({ id, counts, handleReaction }) => {
             }
             transition={{ duration: 0.3 }}
           >
-            <AiOutlineLike />
+            <AiOutlineLike className='md:text-lg text-sm' />
           </motion.div>
         </button>
       </div>
 
       <div className="flex items-center space-x-1 dark:text-gray-200">
-        <p>{counts[id]?.not_useful || 0}</p>
+        <p className='md:text-lg text-sm'>{counts[id]?.not_useful || 0}</p>
         <button onClick={() => handleReaction(id, "not_useful")}>
           <motion.div
             animate={
@@ -32,7 +32,7 @@ const ReactionPanel = ({ id, counts, handleReaction }) => {
             }
             transition={{ duration: 0.3 }} 
           >
-            <AiOutlineDislike />
+            <AiOutlineDislike  className='text-sm md:text-lg'/>
           </motion.div>
         </button>
       </div>

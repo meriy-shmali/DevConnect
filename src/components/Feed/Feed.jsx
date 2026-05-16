@@ -76,18 +76,18 @@ const {
       <div className="  relative min-h-screen mt-16 bg-transparent">
         
         {/* زر إنشاء على الموبايل */}
-        <div className="md:hidden flex items-center justify-center">
+        <div className="md:hidden flex justify-center w-full px-4  ">
           <div
             onClick={() => navigate("/post-mobile")}
-            className="border-2 border-gray-500 mt-16 w-[400px] p-2 rounded-4xl pl-5 text-xl text-gray-500 flex align-middle dark:text-gray-300 dark:border-gray-300 mb-4"
+            className="border-2 border-gray-500 mt-16 w-full max-w-[250px]  p-1 rounded-4xl pl-5  text-[15px] text-gray-500 flex align-middle dark:text-gray-300 dark:border-gray-300 mb-4"
           >
             {t('create')}
           </div>
         </div>
 
-        <div className="flex items-center ms-20 ">
-          <div className="flex-col space-y-12 md:ms-0 md:w-[60%] ">
-       <div className={`sticky top-16 z-10 bg-main-background dark:bg-dark-main-background py-2
+        <div className="flex flex-col items-center  md:items-start md:flex-row md:ms-20 ">
+          <div className="flex flex-col w-full max-w-full px-2 md:w-[60%] space-y-6 md:space-y-12">
+       <div className={`sticky top-16 z-10 bg-main-background dark:bg-dark-main-background py-2 
   transition-transform duration-500 ease-in-out
   ${showChoices ? "translate-y-0" : "-translate-y-full"}`}>
   <Choiches setCategory={setcategory} />

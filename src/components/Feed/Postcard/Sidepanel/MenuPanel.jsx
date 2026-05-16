@@ -22,6 +22,7 @@ const isRTL = i18n.language === "ar";
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menu[id]]);
+  
   return (
     
     <div className="relative" ref={menuRef}>
@@ -40,11 +41,11 @@ exit={{ y: 2 }}
           >
        
           
-          <button onClick={onEdit} className="px-3 py-1 text-blue-500 hover:text-blue-400 flex items-center w-fit   ">
+          <button onClick={onEdit} className="px-3 py-1 text-blue-500 hover:text-blue-400 flex items-center w-fit text-sm md:text-lg  ">
            <MdEdit className='me-1'/> {t('edit')} 
           </button>
         
-          <button onClick={onDelete} className="px-3 py-1 text-red-500 hover:text-red-400 flex items-center w-fit  ">
+          <button onClick={onDelete} className="px-3 py-1 text-red-500 hover:text-red-400 flex items-center w-fit text-sm md:text-lg  ">
           <RiDeleteBin6Fill className='me-1 '/> {t('delete')}
           </button>
         </motion.div>

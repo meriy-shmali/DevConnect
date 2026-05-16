@@ -1,5 +1,6 @@
 import CreatepostLogic from '@/hook/CreatepostLogic';
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
@@ -10,11 +11,14 @@ import AIAssistant from "./AIAssistant";
 import { RiImageAddFill } from "react-icons/ri";
 import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
 import AiModal from './AiModal';
-
+import { IoArrowBack } from "react-icons/io5";
 const CreatepostMobile = () => {
     const post=CreatepostLogic();
     const {t}=useTranslation();
+    const navigate=useNavigate()
   return (
+    <div>
+      <div className='relative top-6 left-4'><button onClick={()=>navigate('/feed')}><IoArrowBack className='dark:text-gray-50 text-3xl' /></button></div>
     <div className='flex-col mt-14   space-y-18 pb-36'>
     <div> <p className='text-5xl flex justify-center items-center font-semibold dark:text-gray-50 title-font'>{t('create')}</p></div>
     <div className='flex justify-center'>
@@ -22,7 +26,7 @@ const CreatepostMobile = () => {
      placeholder={t('share')}
      value={post.text}
      onChange={(e) => post.setText(e.target.value)}
-     className='w-[500px] h-[100px] text-xl dark:placeholder:text-gray-400 dark:bg-gray-200 '/>
+     className='w-[350px] h-[100px] text-lg dark:placeholder:text-gray-400 dark:bg-gray-200 '/>
      </div>
      
       {/* PREVIEW AREA */}
@@ -87,7 +91,7 @@ const CreatepostMobile = () => {
      result={post.aiResult}
      onuse={post.handleUseAi}
      onclose={()=>post.setshowModel(false)} />
-    </div>
+    </div></div>
   )
 }
 

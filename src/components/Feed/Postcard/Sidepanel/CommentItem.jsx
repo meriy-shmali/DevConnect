@@ -147,7 +147,7 @@ const indent = Math.min(level, MAX_LEVEL) * 20;
           ))}
            {hasMore && (
         <button
-          className="text-blue-500 text-sm ms-4"
+          className="text-blue-500 text-xs md:text-sm ms-4"
           onClick={() => setVisibleReplies(prev => prev + 5)} // عرض 5 زيادة
         >
           Show more ({replies.length - visibleReplies} more)

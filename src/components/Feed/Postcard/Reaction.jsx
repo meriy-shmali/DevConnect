@@ -108,30 +108,30 @@ const handlereaction = async (type) => {
         );
     };
   return (
-    <div className='flex space-x-30  items-center '>
+    <div className='flex md:space-x-30 space-x-4  items-center '>
       <div>
-     <button className='flex space-x-2 items-center rounded-2xl px-2 py-1  shadow-md dark:bg-dark-button '>
-      <FaRegCommentDots className='md:text-xl text-lg text-gray-700 dark:text-gray-50'/>
-      <div className='md:text-lg text-md font-semibold text-gradient'onClick={(e) => {
+     <button className='flex space-x-2 items-center md:rounded-2xl rounded-xl px-2 py-1  shadow-md dark:bg-dark-button '>
+      <FaRegCommentDots className='md:text-xl text-sm text-gray-700 dark:text-gray-50'/>
+      <div className='md:text-lg text-sm font-semibold text-gradient'onClick={(e) => {
     e.stopPropagation();
     onOpenComments();  
   }}>{commentCount ?? post.total_comments ?? 0}</div>
      </button>
      </div>
-    <div className='flex space-x-4 items-center '>
+    <div className='flex md:space-x-4 space-x-2 items-center '>
       {reactionData.map((items)=>(
         <CustomTooltip  key={items.key} text={items.label}>
           <button
     onClick={(e) => e.stopPropagation()
     }
-    className={`flex items-center space-x-3 px-2 py-1 rounded-2xl  ${ active[items.key]?' border border-follow-button dark:border-follow-button':' border border-gray-200 '} shadow text-lg w-fit dark:bg-dark-button dark:border-dark-button`}
+    className={`flex items-center space-x-2 px-2 py-1 rounded-2xl  ${ active[items.key]?' border border-follow-button dark:border-follow-button':' border border-gray-200 '} shadow text-lg w-fit dark:bg-dark-button dark:border-dark-button`}
   >
  <div onClick={(e)=>{
   e.stopPropagation()
   handlereaction(items.key)
    onClose()}}
   
-    className={`md:text-xl text-lg transition-colors ${ active[items.key]?' text-follow-button':'text-gray-700'} `}>
+    className={`md:text-xl text-sm transition-colors ${ active[items.key]?' text-follow-button':'text-gray-700'} `}>
   {items.icon}</div>
   <motion.div 
       // أنميشن خفيف للرقم عند التغيير
@@ -139,7 +139,7 @@ const handlereaction = async (type) => {
       initial={{ scale: active[items.key] ? 1.5 : 0.6 }}
   animate={{ scale: 1 }}
   transition={{ type: "spring", stiffness: 200, damping: 10 }}
-      className={`font-semibold md:text-lg text-md transition-colors ${
+      className={`font-semibold md:text-lg text-sm transition-colors ${
         active[items.key] ? 'text-edit-button' : 'text-gradient'
       }`}
       onClick={(e) => {
@@ -158,15 +158,13 @@ const handlereaction = async (type) => {
 <div onClick={handleSaveToggle} className="cursor-pointer md:ms-20 ">
    {localIsSaved ? (
         <GoBookmarkFill 
-            md:size={36} 
-            size={30}
-            className="relative md:start-32 end-16 text-blue-700 transition-colors duration-300" 
+            
+            className="relative md:start-32  md:text-[36px] text-[22px]  text-blue-700 transition-colors duration-300" 
         />
     ) : (
         <GoBookmark 
-            md:size={36} 
-            size={30}
-            className="relative md:start-32 end-16 text-gray-500 dark:text-gray-300 transition-colors duration-300" 
+          
+            className="relative md:start-32  md:text-[36px] text-[22px] text-gray-500 dark:text-gray-300 transition-colors duration-300" 
         />
     )}
 </div>

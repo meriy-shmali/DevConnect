@@ -115,8 +115,8 @@ const normalizedTags = (() => {
  >
     {/*text */}
     <p className={`${isText
-  ? "md:text-3xl text-2xl font-semibold"
-  : "md:text-2xl text-xl dark:text-gray-100"
+  ? "md:text-3xl text-xl font-semibold dark:text-gray-100"
+  : "md:text-2xl text-lg dark:text-gray-100"
 } whitespace-pre-wrap`}
    style={{ 
     direction: 'rtl',      // الاتجاه الأساسي لليمين لأن المحتوى الغالب عربي
@@ -127,7 +127,7 @@ const normalizedTags = (() => {
   {shouldTruncate && !showMore && !isTranslate && (
           <button 
             onClick={() => setShowMore(true)} 
-            className="mt-1 text-sm"
+            className="mt-1 md:text-sm text-xs"
           >
            {t('showmore')}
           </button>
@@ -136,20 +136,20 @@ const normalizedTags = (() => {
 
 {post.code && (
 
-<div className="bg-gray-900 dark:bg-gray-950 text-white rounded-lg overflow-hidden md:w-full w-[500px]">
+<div className="bg-gray-900 dark:bg-gray-950 text-white rounded-lg overflow-hidden md:w-full max-w-full">
 <div className="sticky top-0 bg-gray-900 dark:bg-gray-950 border-b border-gray-700 flex justify-between items-center px-3 py-1">
-   <div className='md:text-xl text-lg'>
+   <div className='md:text-xl text-sm'>
     {post.code_language || "plaintext"}
 
   </div>
 <button
 onClick={handlecopy}
-className="text-xs  bg-gray-700 p-2 rounded-md"
+className="text-xs  bg-gray-700 md:p-2 p-1 rounded-md"
 >
-{copy?<TbCopyCheck className='md:text-[20px] text-[16px]' />:<FaRegCopy className='md:text-[20px] text-[16px]' />}
+{copy?<TbCopyCheck className='md:text-[20px] text-[12px]' />:<FaRegCopy className='md:text-[20px] text-[12px]' />}
 </button>
 </div>
-<pre className="p-4 overflow-auto max-h-60 code-scroll">
+<pre className="p-4 overflow-auto text-sm md:text-lg max-h-60 code-scroll">
 <code ref={codeRef} className={post.code_language}>
 {post.code}
 </code>
@@ -210,7 +210,7 @@ index===currentImage ? "bg-black":"bg-gray-500"
       return (
         <div
           key={index}
-          className="md:text-xl text-lg text-gray-700 dark:text-gray-300 flex-wrap"
+          className="md:text-xl text-sm text-gray-700 dark:text-gray-300 flex-wrap"
         >
           #{tag.replace(/^#/, "")}
         </div>
@@ -219,7 +219,7 @@ index===currentImage ? "bg-black":"bg-gray-500"
   </div>
 )}
 </div>)}
-<button className='text-sm text-gray-600 dark:text-gray-400'onClick={handletranslate} disabled={translate.isPending}>  {translate.isPending 
+<button className='md:text-sm text-xs text-gray-600 dark:text-gray-400'onClick={handletranslate} disabled={translate.isPending}>  {translate.isPending 
           ?   t('translating') + "..."
           : (isTranslate ? t('see_original') : t('translate'))
         }</button>
