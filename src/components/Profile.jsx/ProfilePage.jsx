@@ -7,10 +7,11 @@ import PostCard from '../Feed/Postcard/PostCard'; // ملف المنشور ال�
 import { useGetProfile} from '@/hook/useProfileData';
 
 const ProfilePage = ({ userData }) => {
-   const { username } = useParams();
    const navigate = useNavigate();
-   const { data: profile, isLoading } = useGetProfile(username || 'me');
-   const isOwner = username === 'me' || !username||String(profile?.id) === String(localStorage.getItem('userId'));
+   const { id } = useParams();
+   const profileTarget = id || 'me';
+   const { data: profile, isLoading } = useGetProfile(profileTarget);
+   const isOwner = profileTarget === 'me' || String(profile?.id) === String(localStorage.getItem('userId'));
    const postsArray = profile?.results || profile?.posts || [];
 
   if (isLoading) {

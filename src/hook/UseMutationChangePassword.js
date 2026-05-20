@@ -1,16 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
 import { changePasswordApi ,sendOtpApi, resetPasswordApi} from '@/api/ChangeApi';
-
+import { toast } from 'react-toastify';
+import { useTranslation } from "react-i18next";
+ 
 export const useChangePasswordMutation = (form) => {
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: changePasswordApi,
-    onSuccess: () => {
-      alert('تمت العملية بنجاح');
-      form.reset(); // مسح الحقول بعد النجاح
+     onSuccess: (data) => {
+      // استخدام الطريقة الصحيحة لـ react-toastify
+      toast.success(data?.message || t('password_change_success'));
+      form.reset(); 
     },
-     onError: (error) => {
+    onError: (error) => {
       const backendErrors = error?.response?.data;
-
       if (backendErrors && typeof backendErrors === 'object') {
         Object.keys(backendErrors).forEach((field) => {
           let formFieldName = field;
@@ -26,23 +29,35 @@ export const useChangePasswordMutation = (form) => {
               ? backendErrors[field][0] 
               : backendErrors[field],
         });
-      });
+        });
+        
+          toast.error(t('please_fix_errors'));
+      } else {
+        toast.error(t('unexpected_error'));
+      }
     }
-  }})};
+  });
+};
 export const useSendOtp = () => {
+  const { t } = useTranslation();
   return useMutation({
-    mutationFn: (email) => {
-      return sendOtpApi(email); // ✅ تأكد أن الاسم هنا يطابق الـ import أعلاه
+    mutationFn: (email) => sendOtpApi(email),
+   onSuccess: (data) => {
+      toast.success(data?.message || t('otp_sent_success'));
     },
     onError: (error) => {
-       console.error("Mutation Error:", error); // نصيحة: أضف هذا السطر لرؤية الخطأ الحقيقي
+      const backendError = error?.response?.data?.error;
+      toast.error(backendError || t('otp_send_failed'));
     }
   });
 };
 export const useResetPassword = () => {
-  return useMutation({
-    mutationFn: (data)=> resetPasswordApi(data),
-    //onSuccess: () => toast.success("Password reset successfully!"),
-   // onError: () => toast.error("Invalid OTP or error occurred"),
+  const { t } = useTranslation();
+ return useMutation({
+    mutationFn: (data) => resetPasswordApi(data),
+    onSuccess: (data) => {
+      toast.success(data?.message ||  t('password_change_success'));
+    },
+    onError: () => {}
   });
 };

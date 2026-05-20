@@ -60,7 +60,7 @@ self.addEventListener('notificationclick', (event) => {
   
   let url = '/';
   if (targetType === 'follow') url =`/profile/${targetId}`;
-  else if (targetId) url = `/post/${targetId}`;
+  else if (targetId) url = `/posts/${targetId}`;
 
   event.waitUntil(clients.openWindow(url));
 });

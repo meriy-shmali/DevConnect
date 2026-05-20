@@ -1,10 +1,16 @@
-import{z}from 'zod';
-const changepasswordschema=z.object({
-username:z.string().min(2,{message:"username must be at least 2 characters."}),
-email:z.email({message:"the email address is invalid"}),
-password:z.string().min(8,{message:"password must be at least 8 characters."}),
-confirmpassword:z.string().min(8,{message:'please confirm your new password.'}),
-newpassword:z.string().min(8,{message:"new password must be at least 8 characters."}),
-otp:z.string().length(6,{message:"OTP must be 6 digits."}),
-}).refine((data)=>data.newpassword===data.confirmpassword,{message:"the password does not match",path:["confirmpassword"]})
-export default changepasswordschema;
+import { z } from 'zod';
+
+export const changepasswordschema = (t) => 
+  z.object({
+    username: z.string().min(2, { message: t('validation.username_min') }),
+    email: z.string().email({ message: t('validation.email_invalid') }),
+    password: z.string().min(8, { message: t('validation.password_min') }),
+    confirmpassword: z.string().min(8, { message: t('validation.confirm_password_min') }),
+    newpassword: z.string().min(8, { message: t('validation.new_password_min') }),
+    otp: z.string().length(6, { message: t('validation.otp_length') }),
+  })
+  .refine((data) => data.newpassword === data.confirmpassword, {
+    message: t('validation.passwords_dont_match'),
+    path: ["confirmpassword"],
+  });
+  export default changepasswordschema

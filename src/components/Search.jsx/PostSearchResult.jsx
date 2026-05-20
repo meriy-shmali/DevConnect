@@ -1,5 +1,9 @@
 // هذا المكون تستخدمينه في التاغات وفي المنشورات
-const PostSearchResult = ({ item }) => (
+const PostSearchResult = ({ item }) => {
+     const postImage = item.media && item.media.length > 0 
+    ? (item.media[0].image_url || item.media[0].media_url || (typeof item.media[0] === 'string' ? item.media[0] : null))
+    : null;
+return (
   <div className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-2xl border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
     <div className="flex items-center gap-2 mb-2">
       <img 
@@ -14,23 +18,32 @@ const PostSearchResult = ({ item }) => (
     
     <p className="text-sm line-clamp-3 mb-2 dark:text-gray-300">{item.content}</p>
 
-    {/* إظهار التاغات كما في البوستمان */}
+   {/* عرض الكود البرمجي إذا وجد */}
+    {item.code && (
+      <div className="mb-3 p-3 w-full h-40  bg-zinc-900 rounded-lg overflow-hidden">
+        <pre className="text-[10px] text-blue-400 font-mono ">
+          <code>{item.code}</code>
+        </pre>
+      </div>
+    )}
+
+    {/* عرض الصور إذا وجدت */}
+    { postImage && (
+      <div className="mb-3 rounded-xl overflow-hidden border dark:border-zinc-700">
+        <img src={ postImage} alt="post content" className="w-full h-40 object-cover" />
+      </div>
+    )}
+
+    {/* التاغات */}
     {item.tags && item.tags.length > 0 && (
-      <div className="flex flex-wrap gap-1 mb-2">
+      <div className="flex flex-wrap gap-2">
         {item.tags.map((tag, i) => (
-          <span key={i} className="text-xs text-blue-500 font-medium">
+          <span key={i} className="text-xs text-blue-500 font-semibold hover:underline">
             #{typeof tag === 'string' ? tag : tag.name}
           </span>
         ))}
       </div>
     )}
-
-    {/* إظهار لغة البرمجة إذا وجدت */}
-    {item.code_language && (
-      <span className="text-[10px] bg-gray-200 dark:bg-zinc-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-400">
-        {item.code_language}
-      </span>
-    )}
   </div>
-);
+)};
 export default  PostSearchResult;

@@ -10,10 +10,10 @@ export const useUpdateProfileMutation = () => {
     onSuccess: (updatedData) => {
       // 1. تحديث بيانات البروفايل في الكاش فوراً
       // تأكدي أن 'profile' هو نفس المفتاح (Query Key) المستخدم في صفحة ProfilePage
-      queryClient.setQueryData(['profile'], updatedData);
-
-      // 2. إجبار React Query على إعادة جلب البيانات للتأكد من المزامنة
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
+     queryClient.setQueryData(['profile', 'me'], updatedData);
+  
+  // إجبار النظام على إعادة جلب البيانات لهذا المفتاح
+  queryClient.invalidateQueries({ queryKey: ['profile', 'me'] });
 
       toast.success("تم تحديث البيانات بنجاح");
     },

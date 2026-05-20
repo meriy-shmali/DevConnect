@@ -11,34 +11,26 @@ import { Bell } from 'lucide-react';
 import { getUnreadCountReq } from '@/api/NotificationApi';
 import { requestForToken } from '@/firebase/firebaseConfig';
 import { useNavigate } from 'react-router';
-import { useAuth } from '@/context/AuthContext';
+import { useGetProfile } from '@/hook/UseProfileData';
 
 const Header = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
+  const [isNotifOpen,setIsNotifOpen]=useState(false);
+  const { data: myProfile } = useGetProfile('me'); 
+  const userPhoto = myProfile?.personal_photo_url || "/src/images/default-avatar.png";
   const {updateToken} =useNotificationMutation();
- const { data: unreadData } = useQuery({
+  const searchRef = useRef();
+  const { data: unreadData } = useQuery({
   queryKey: ['unread-count'],
   queryFn: getUnreadCountReq,
-  refetchInterval: 5000, // تقليل الوقت لـ 5 ثواني للتجربة فقط
-  staleTime: 0, // لضمان عدم استخدام بيانات قديمة
 });
 
-   const [isNotifOpen,setIsNotifOpen]=useState(false);
-  
-  useEffect(() => {
-  // جلب وإرسال توكن المتصفح للباك إند عند فتح الموقع
-  requestForToken(updateToken.mutate);
-}, []);
-  const NO_AVATAR = 'NO_AVATAR'; 
-const userAvatar='./public/images/login.jpg';
-//const userHasAvatar=userAvatar !== NO_AVATAR;
-const renderAvatar=(avatarUrl,sizeClass)=>{
-  if (avatarUrl===NO_AVATAR){return(<IoPersonAddSharp className={`${sizeClass} text-gray-400`}/>);
+   useEffect(() => {
+     if (updateToken && updateToken.mutate) {
+    requestForToken(updateToken); 
   }
-return(<img className={`${sizeClass} rounded-full object-cover`} src={avatarUrl}/>)}
-  // const { t } = useTranslation();
-  const searchRef = useRef();
+}, [updateToken.mutate]);
+ 
   return (
     <header className="bg-black dark:bg-gray-50 shadow-lg border-b border-gray-200 sticky top-0 z-30 w-full ">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" style={{ direction: 'ltr' }}>
@@ -56,7 +48,6 @@ return(<img className={`${sizeClass} rounded-full object-cover`} src={avatarUrl}
        </div>
 
         {/* 3. أيقونات الإشعارات والملف الشخصي */}
-        {/* تم عكس الترتيب (Reverse) لـ space-x لضمان أن العناصر تظهر بالترتيب الصحيح (من اليسار لليمين: الإشعارات، الأفاتار) */}
         <div className="flex items-center md:gap-x-4">
           
          {/* أيقونة الإشعارات */}
@@ -79,9 +70,13 @@ return(<img className={`${sizeClass} rounded-full object-cover`} src={avatarUrl}
         
            {/* أيقونة الملف الشخصي - تستخدم الصورة الافتراضية */}
           <button
-            onClick={()=>navigate(`/profile/${user?.username}`)}
+            onClick={()=>navigate(`/profile/me`)}
             className="flex items-center p-0.5 rounded-full">
-            {renderAvatar(user?.personal_photo_url || 'default-avatar.png','md:h-9 md:w-9 w-7 h-7')}
+               <img 
+         src={userPhoto } 
+         className="md:h-9 md:w-9 w-7 h-7 rounded-full object-cover" 
+         alt="Profile"
+       />
           </button>
           <button 
             onClick={()=>navigate('/account')}

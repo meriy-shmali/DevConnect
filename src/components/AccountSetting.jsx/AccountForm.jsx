@@ -6,6 +6,7 @@ import accountschema from '../Schema/AccountSchema';
 import { useNavigate } from 'react-router-dom';
 import { LogOut,Sun,Moon,Monitor } from 'lucide-react';
 import { UseTheme } from './UseTheme';
+import { Bookmark } from 'lucide-react'; 
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
@@ -44,7 +45,7 @@ const AccountForm=()=>{
     const updateMutation=useUpdateAccount();
    const Values = form.watch();
    const hasData = 
-    Values.username !==accountData?.data?.username ;
+    Values.username !==accountData?.username ;
    // const { mutate,isPending}=useChangePasswordMutation(form);
     const onSubmit = (Values) => {
     console.log("OnSubmit Triggered!", Values); // أضيفي هذا السطر
@@ -56,10 +57,10 @@ const AccountForm=()=>{
    const themePlaceholder = theme === 'system' ? t('system') : theme === 'dark' ? t('dark') : t('light');
     useEffect(()=>{
       console.log("Account Data Received:", accountData);
-      if(accountData && accountData.data){
+      if(accountData ){
         form.reset({
-          username:accountData?.data?.username||"",
-          email:accountData?.data?.email||"",
+          username:accountData?.username||"",
+          email:accountData?.email||"",
           language:accountData.language || "en"
         })
       }
@@ -225,6 +226,7 @@ console.log("Is Submitting:", form.formState.isSubmitting);
            <div className='w-full transition-all ease-in-out duration-300 overflow-visible '
            style={{marginTop : isOpens?'120px' : '40px',marginBottom : isOpens?'20px' : '0',
             textAlign:'left',display:'block'}}>  
+             
             
            <div className='w-full flex justify-start items-start '>
             <Button variant='link' type='button'
@@ -238,6 +240,7 @@ console.log("Is Submitting:", form.formState.isSubmitting);
              </Button>
             </div>
             </div>
+            
         <div className="flex justify-center pt-8 ">
         <button 
           type="button"

@@ -17,7 +17,8 @@ import Header from "./components/Notification.jsx/Header.jsx";
 import ChangePassword from "./components/ChangePassword.jsx/ChangePassword.jsx";
 import ProfilePage from "./components/Profile.jsx/ProfilePage.jsx";
 import EditPostModal from "./components/Profile.jsx/EditPostModal.jsx";
-import PostPage from "./components/Search.jsx/PostPage.jsx";
+import MainPostPage from "./components/Search.jsx/MainPostPage";
+import SavedPage from "./components/AccountSetting.jsx/SavedPage";
 
 const router = createBrowserRouter([
   {
@@ -62,12 +63,16 @@ const router = createBrowserRouter([
         Component: ProfilePage,
       },
       {
-        path: "/profile/:username",
+        path: "/profile/:id",
         Component: ProfilePage,
       },
       {
         path: "/posts/:id",
-        Component: PostPage,
+        Component: MainPostPage,
+      },
+      {
+        path: "/saved-posts",
+        Component: SavedPage,
       },
     ]
   }

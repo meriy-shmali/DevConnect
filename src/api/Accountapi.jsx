@@ -1,49 +1,39 @@
-import axios from "axios";
-
-// الرابط الأساسي بناءً على إعدادات السيرفر لديك
-const BASE_URL = "https://devconnect-vbiy.onrender.com/profile/me/settings";
+import api from "./Api";
 
 /**
  * دالة جلب بيانات الحساب
  * تم تغيير اسمها ليتوافق مع استدعاء useGetAccountData في الميوتيشن
  */
-export const getaccountdatareq = () => {
-  const token = localStorage.getItem('token')
-    return axios.get(`${BASE_URL}/`, {
-        headers: {
-            // هذا السطر هو الذي سيجعل الداتا تظهر تلقائياً
-            'Authorization': `Bearer ${token} `
-         }
-    });
+export const getaccountdatareq =async () => {
+   const response = await api.get('/profile/me/settings/');
+  return response.data;
 };
 
 /**
  * دالة تحديث اسم المستخدم
  * تم تغيير اسمها إلى updateusernamereq لتطابق الميوتيشن والبوستمان
  */
-export const updateusernamereq = (data) => {
-  const token = localStorage.getItem('token');
-  
-  // إنشاء FormData لإرسال البيانات بالشكل الذي يتوقعه الباك-أند
+export const updateusernamereq = async (data) => {
   const formData = new FormData();
   formData.append('username', data.username);
 
-  return axios.put(`https://devconnect-vbiy.onrender.com/profile/me/settings/change-username/`, formData, {
-    headers: {
-      'Authorization':` Bearer ${token}`,
-      // عند استخدام FormData، المتصفح سيقوم بتحديد Content-Type تلقائياً مع الـ boundary
-    }
-  });
+  const response = await api.put('/profile/me/settings/change-username/', formData);
+  return response.data;
 };
 
 /**
  * دالة تغيير كلمة المرور
  */
-export const updatepasswordreq = (data) => {
-  return axios.put(`${BASE_URL}/change-password/`, data);
+export const updatepasswordreq = async (data) => {
+  const response = await api.put('/profile/me/settings/change-password/', data);
+   return response.data;
 };
 
-
 /**
- * دالة إرسال كود التحقق (OTP)
+ * دالة جلب المنشورات المحفوظة للمستخدم
+ * تعتمد على الرابط الظاهر في البوستمان: /posts/saved/
  */
+export const getSavedPostsApi = async (page = 1) => {
+  const response = await api.get(`/posts/saved/?page=${page}`);
+  return response.data;
+};

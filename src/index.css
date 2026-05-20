@@ -5,30 +5,65 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+.text-title {
+  font-size: 70px !important;
+}
 @font-face {
-  font-family: 'Cairo';
-  src: url('src/assets/Fonts/Cairo/static/Cairo-Regular.ttf') format('truetype');
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/Fonts/lora/Lora-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 700;
+}
+@font-face {
+  font-family: 'Alexandria';
+  src: url('./assets/Fonts/Alexandria/Alexandria-VariableFont_wght.ttf') format('truetype');
+  font-weight:100 700;
+}
+
+/* العناوين الفرعية */
+@font-face {
+  font-family: 'Ysabeau';
+  src: url('./assets/Fonts/ysabeau/YsabeauInfant-VariableFont_wght.ttf') format('truetype');
+  font-weight:100 400;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  src: url('./assets/Fonts/ibm/IBMPlexSansArabic-Light.ttf') format('truetype');
+  font-weight:100 300;
+}
+
+/* النصوص العادية */
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/Fonts/inter/Inter_VariableFont.ttf') format('truetype');
   font-weight: 400;
 }
 @font-face {
-  font-family: 'Cairo';
-  src: url('src/assets/Fonts/Cairo/static/Cairo-Bold.ttf') format('truetype');
-  font-weight: 700;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('src/assets/Fonts/Roboto/static/Roboto_Condensed-Regular.ttf') format('truetype');
+  font-family: 'Tajawal';
+  src: url('./assets/Fonts/tajwal/Tajawal-Regular.ttf') format('truetype');
   font-weight: 400;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('src/assets/Fonts/Roboto/static/Roboto_Condensed-Bold.ttf') format('truetype');
-  font-weight: 700;
 }
 
 @layer utilities {
   .bg-gradient-background {
     background: linear-gradient(140deg, #416080 0%, #675593 17%, #791A78 44%, #943B53 64%, #897C71 100%);
+  }
+   .bg-gradient-background-hover {
+    background: linear-gradient(140deg, #4c6d8d 0%, #715f9f 17%, #90268e 44%, #a3455e 64%, #897C71 100%);
+  }
+bg-navbar-gradient {
+    background: linear-gradient(145deg, #ffffff 0%, #e0e0e0 50%, #cfd8dc 100%) !important;
+  }
+
+  /* هاد الكلاس عشان نضمن يشتغل بالدارك مود بدون تضارب */
+  .dark\:bg-navbar-silver:is(.dark *) {
+    background: linear-gradient(145deg, #ffffff 0%, #e0e0e0 50%, #cfd8dc 100%) !important;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
   }
 }
 @layer utilities {
@@ -40,20 +75,37 @@
   }
 }
 
-html{
-  font-family:'Roboto',sans-serif;
+.hljs {
+  background: transparent !important;
 }
-html[lang='ar']{
-  font-family: 'Cairo',sans-serif;
+:root {
+  --font-main-title: 'Plus Jakarta Sans', sans-serif;
+  --font-sub-title: 'Ysabeau', serif;
+  --font-body-text: 'Inter', sans-serif;
 }
-@theme inline {
-  /*-project color-*/
 
+html[lang='ar'] {
+  --font-main-title: 'Alexandria', sans-serif;
+  --font-sub-title: 'IBM Plex Sans Arabic', sans-serif;
+  --font-body-text: 'Tajawal', sans-serif;
+}
+
+/* تطبيق الخط الافتراضي على الموقع */
+
+@theme inline {
+  --font-title: var(--font-main-title);
+  --font-subtitle: var(--font-sub-title);
+  --font-body: var(--font-body-text);
+  /*-project color-*/
+  --color-navbar:#E5E4E2;
   --color-blue-button:#0733AD;
   --color-post-button:#B468B4;
   --color-cancel:rgba(180, 104, 180, 0.35);
   --color-main-cancel-button:#c5295A;
-  
+  --color-hover-question:#791A78;
+  --color-hover-information:#416080;
+  --color-hover-project:#675593;
+  --color-hover-articles:#943B53;
   --color-cancel-button:#AF2F51;
   --color-follow-button:#82266A;
   --color-edit-button:#82266A;
@@ -63,10 +115,13 @@ html[lang='ar']{
   --color-hover-filter:#8A8686;
   --color-text-button:#FFFFFF;
   --color-ai-assistant:#2B3EAC;
-  --color-light-placeholder:#D9D9D9;
+  --color-dark-placeholder:#2f2f2f9b;
+--color-dark-button:#282828e6;
+--color-light-placeholder:#f1eeee;
+ --color-hover-placeholder:#f6f4f4;
   --color-text-placeholder:#959595;
-  --color-hover-startnow:#547DF1;
-  --color-hover-purple:#C361C2;
+  --color-hover-blue:#1647cf;
+  --color-hover-purple:#b75aab;
   --color-dark-main-background:#1E1E1E;
   --color-dark-text:#ffffff;
   --color-dark-placeholder-background:#ffffff;
@@ -111,16 +166,81 @@ html[lang='ar']{
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
-html, body, #root {
-  margin: 0 !important;
-  padding: 0 !important;
-  height: 100%;
+html {
+  font-family: var(--font-body-text) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+h1, h2, h3, h4, .title-font { 
+  font-family: var(--font-main-title) !important; 
+}
 
+.font-subtitle { 
+  font-family: var(--font-sub-title) !important; 
+}
+html, body, #root {
+  margin: 0  !important;
+  padding: 0  !important;
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #FFFBFB; /* اللون الأساسي تحت الصورة */
+  position: relative;
+}
+.dark body{
+    margin: 0;
+  padding: 0;
+  background-color: #1E1E1E; /* اللون الأساسي تحت الصورة */
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* لتبقى خلف المحتوى */
+  
+  /* إعدادات الصورة */
+  background-image: url('/src/images/feed.jpg'); 
+/*background-image: url('/src/images/codebg.jpg');*/
+  background-repeat: repeat; 
+  background-size: 800px;
+  background-position:right;
+  /*background-size: 1000px;
+  background-position: right;*/
+  background-attachment: fixed;
+  /*opacity: 0.7;*/
+  /* التحكم بالوضوح هنا */
+  opacity: 0.4; /* 👈 غيري الرقم بين 0.1 و 1 حسب رغبتك (0.4 يعني شفافية 40%) */
+}
+.dark body::before{
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* لتبقى خلف المحتوى */
+  
+  /* إعدادات الصورة */
+  background-image: url('/src/images/darkmode.png'); 
+background-repeat: repeat; 
+  background-size: 800px;
+  background-position:right;
+  opacity: 0.1;
+  
+  /* التحكم بالوضوح هنا */
+  
+}
 :root {
+  
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #FFFBFB;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -154,8 +274,11 @@ html, body, #root {
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  
+  --background:#1E1E1E ;
+ /* --background:#d64ac3 ;
+
+  /*--foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
@@ -184,7 +307,7 @@ html, body, #root {
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.556 0 0);*/
 }
 
 @layer base {
@@ -195,4 +318,65 @@ html, body, #root {
     @apply bg-background text-foreground;
   }
 }
+.code-scroll::-webkit-scrollbar {
+  width: 6px;
+}
 
+.code-scroll::-webkit-scrollbar-track {
+  background: #1f2937; /* نفس لون الديف */
+}
+
+.code-scroll::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 10px;
+}
+
+.code-scroll::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+.comment-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comment-scroll::-webkit-scrollbar-track {
+  background: #ffffff; /* نفس لون الديف */
+}
+
+.comment-scroll::-webkit-scrollbar-thumb {
+  background: #d6d6d6;
+  border-radius: 20px;
+}
+
+.comment-scroll::-webkit-scrollbar-thumb:hover {
+  background: #c2c5cc;
+}
+.ai-scroll::-webkit-scrollbar {
+  width: 1px;
+}
+
+.ai-scroll::-webkit-scrollbar-track {
+  background:transparent; /* نفس لون الديف */
+}
+
+.ai-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+ 
+}
+/* أضيفي هذا الكود في ملف الـ CSS */
+@keyframes reveal-text {
+  0% {
+    letter-spacing: -0.5em;
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    letter-spacing: -0.02em;
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.animate-reveal {
+  animation: reveal-text 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+  color: #ffffff;
+}

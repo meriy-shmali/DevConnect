@@ -160,7 +160,7 @@ const SearchDropdown = () => {
     {isOpen && (
         <div className="absolute top-full mt-1 bg-white dark:bg-dark-post-background left-1/2 -translate-x-1/2 w-[90vw] md:w-[600px] shadow-2xl rounded-2xl border border-gray-100 dark:border-gray-700 z-50 overflow-hidden">
           {/* Tabs */}
-          <div className="flex justify-around py-1 border-b dark:border-gray-700">
+          <div className="flex justify-around py-1  dark:border-gray-700">
             {['people', 'tags', 'posts'].map(tab => (
               <button
                 key={tab}
@@ -195,23 +195,32 @@ const SearchDropdown = () => {
                </div>
             </div>
           {recents.map((item, index) => (
-  <div 
-    key={`recent-${item.id || index}`} 
-    onClick={() => handleItemClick(item)} 
-    className="flex items-center justify-between py-3 px-8 hover:bg-gray-100 dark:hover:bg-dark-second-background cursor-pointer"
-  >
-    <div className="flex items-center gap-4">
-      {/* 1. حالة الأشخاص: نعرض الصورة والاسم من داخل كائن user */}
-      {activeTab === 'people' ? (
-        <>
+             <div 
+               key={`recent-${item.id || index}`} 
+               onClick={() => handleItemClick(item)} 
+                className="flex items-center justify-between py-3 px-8 hover:bg-gray-100 dark:hover:bg-dark-second-background cursor-pointer"
+              >
+              <div className="flex items-center gap-4">
+           {/* 1. حالة الأشخاص: نعرض الصورة والاسم من داخل كائن user */}
+             {activeTab === 'people' ? (
+           <>
           <img 
             src={item.user?.personal_photo_url || item.user?.image || '/default-avatar.png'} 
-            className="w-9 h-9 rounded-full object-cover" 
-            alt="avatar" 
+            className="w-14 h-14 rounded-full object-cover" alt=""
           />
-          <span className="text-sm font-bold dark:text-white">
+           <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+          <span className="text-xl font-semibold dark:text-white">
             {item.user?.username || item.query || item.username}
           </span>
+          {(item.user?.is_following || item.is_following) && (
+                <span className="text-sm  text-blue-600 px-1.5 py-0.5 rounded font-bold ">
+                 {t('followinggg')}
+                </span>
+              )}
+            </div>
+              <span className="text-sm text-gray-500">{item.user?.specialization}</span>
+            </div>
         </>
       ) : (
         /* 2. حالة التاغات والمنشورات: أيقونة الساعة + النص فقط (بدون صورة) */
@@ -274,10 +283,17 @@ const SearchDropdown = () => {
       <>
         {activeTab === 'people' ? (
           <>
-            <img src={item.personal_photo_url || '/default-avatar.png'} className="w-10 h-10 rounded-full object-cover" alt="" />
+            <img src={item.personal_photo_url || '/default-avatar.png'} className="w-14 h-14 rounded-full object-cover" alt="" />
             <div className="flex flex-col">
-              <span className="text-sm font-bold dark:text-white">{item.username}</span>
-              <span className="text-xs text-gray-500">{item.specialization}</span>
+              <div className="flex items-center gap-2">
+              <span className="text-xl font-semibold dark:text-white">{item.username}</span>
+              {(item.user?.is_following || item.is_following) && (
+                <span className="text-sm bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-bold ">
+                 {t('followinggg')}
+                </span>
+              )}
+            </div>
+              <span className="text-sm text-gray-500">{item.specialization}</span>
             </div>
           </>
         ) : (
@@ -297,7 +313,7 @@ const SearchDropdown = () => {
 ))}
                 {/* زر عرض المزيد */}
                 {!isExpanded && currentList.length > 10 && (
-                  <button className="w-full py-3 text-blue-600 font-bold hover:underline" onClick={() => setIsExpanded(true)}>
+                  <button className="w-full py-3 text-blue-600 font-bold " onClick={() => setIsExpanded(true)}>
                     {t('show_more')}
                   </button>
                 )}

@@ -1,6 +1,6 @@
 // src/hook/UseMutationAccount.js
 import {useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateusernamereq,  getaccountdatareq } from "../api/Accountapi";
+import { updateusernamereq,  getaccountdatareq ,getSavedPostsApi} from "../api/Accountapi";
 import { email } from "zod";
 import { languages } from "prismjs";
 import { toast } from 'react-hot-toast'
@@ -12,7 +12,7 @@ export const useUpdateAccount = () => {
         mutationFn: updateusernamereq,
          onMutate:()=>{},
          onSuccess: (response) => {
-         const successMsg = response?.data?.message ;
+         const successMsg = response?.message ;
          toast.success(successMsg);
 
          queryClient.invalidateQueries(['accountData']);toast.success("تم تحديث اسم المستخدم بنجاح!");},
@@ -31,3 +31,9 @@ export const useGetAccountData = () => {
     });
 };
 
+export const useGetSavedPosts = (page = 1) => {
+    return useQuery({
+        queryKey: ['savedPosts', page],
+        queryFn: () => getSavedPostsApi(page),
+    });
+};

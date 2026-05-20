@@ -97,7 +97,7 @@ const handleDeletePhoto = async () => {
                  src={
                  userData?.data?.personal_photo_url || 
                  userData?.personal_photo_url || 
-                 "/src/images/default-avatar.png"
+                 "/images/default-avatar.png"
                } 
             key={userData?.data?.personal_photo_url || userData?.personal_photo_url } 
              className={`w-28 h-28 md:w-32 md:h-32
