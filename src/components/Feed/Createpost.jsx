@@ -143,6 +143,10 @@ const Createpost = () => {
      result={post.aiResult}
      onuse={post.handleUseAi}
      onclose={()=>post.setshowModel(false)}
+     hideActionButtons={false} 
+     showTranslate={post.aiType === "summarize"} 
+  // 🌟 تمرير دالة الترجمة المستخرجة من الهوك
+  onTranslate={post.aiaction.toggleTranslation}
      onRegenerate={() => post.aiaction.regenerate(post.aiType)}
   // نمرر حالة التحميل بناءً على النوع الحالي ليظهر الانيميشن على الزر
   isPending={

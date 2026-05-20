@@ -45,7 +45,8 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
       < IoSend  onClick={handleSend}className='md:text-[30px] text-[20px] text-blue-700 rtl:scale-x-[-1]'/>
     </div>
 <div className='flex flex-row justify-center md:gap-2 items-center border border-follow-button md:w-fit w-fit md:py-0.5 md:px-2.5 py-1 px-2  rounded-4xl   md:rounded-3xl cursor-pointer bg-white dark:bg-dark-button'>
-  <PostAi id={post.id}/>
+  <PostAi id={post.id} content={post.content} code={post.code} 
+         codeLanguage={post.code_language}/>
 </div>
       
 

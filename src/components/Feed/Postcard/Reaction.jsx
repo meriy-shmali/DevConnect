@@ -155,7 +155,7 @@ const handlereaction = async (type) => {
       ))}
      
       </div>
-<div onClick={handleSaveToggle} className="cursor-pointer md:ms-20 ">
+<div onClick={handleSaveToggle} className="cursor-pointer md:ms-24  ">
    {localIsSaved ? (
         <GoBookmarkFill 
             

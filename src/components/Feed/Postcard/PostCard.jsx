@@ -163,6 +163,7 @@ const handleAddComment = ({ postId, text }) => {
     </AnimatePresence>
     <Comment post={post}
     onAddComment={handleAddComment } />
+    
     </div>
   )
 }

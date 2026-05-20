@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-
+import { useState } from "react";
 export const useAiAction = ({
   improveMutation,
   generateMutation,
@@ -17,7 +17,8 @@ export const useAiAction = ({
   setTag
 }) => {
   const { t, i18n } = useTranslation();
-
+  //عملنا state بحتى نتبع اللغة
+const [summaryLang, setSummaryLang] = useState(i18n.language === 'ar' ? 'ar' : 'en');
   // دالة المساعدة لتحديث المودال
   const handleModalresult = (type, result) => {
     setshowModel(false);
@@ -28,8 +29,6 @@ export const useAiAction = ({
       setshowModel(true);
     }, 10);
   };
-
-  // --- 1. تعريف الدوال كمتغيرات مستقلة أولاً ---
 
   const improve = () => {
     if (!parsedcontent.text) return;
@@ -61,19 +60,21 @@ export const useAiAction = ({
     });
   };
 
-  const summarize = () => {
+  const summarize = (forcedLang) => {
     if (!parsedcontent.code) return;
     const toastId = toast.loading(t('summarize_loading'));
-    const currentAppLang = i18n.language === 'ar' ? 'ar' : 'en';
+    //هون اذا نحنا ما مررنا اللغة بياخد اللغة الحالية تبع التطبيق
+   const targetLang = forcedLang || (i18n.language === 'ar' ? 'ar' : 'en');
     summarizeMutation.mutate({
       code: parsedcontent.code,
-      appLanguage: currentAppLang
+      appLanguage: targetLang
     }, {
       onSuccess: (res) => {
         const result = res.data.explanation;
         if (result) {
           toast.success(t('summarize_success'), { id: toastId });
           handleModalresult("summarize", result);
+          setSummaryLang(targetLang);//منحفظ اللغة يلي جاوبنا فيها
         }
       },
       onError: () => toast.error(t('summarize_error'), { id: toastId })
@@ -119,14 +120,18 @@ export const useAiAction = ({
       onError: () => toast.error(t('classify_error'), { id: toastId })
     });
   };
-
+const toggleTranslation = () => {
+    const nextLang = summaryLang === 'ar' ? 'en' : 'ar';
+    summarize(nextLang); // إعادة إرسال الطلب باللغة المعكوسة
+  };
   // --- 2. إرجاع الدوال في كائن الـ return ---
   return {
     improve,
     generate,
-    summarize,
+    summarize: () => summarize(i18n.language === 'ar' ? 'ar' : 'en'),//الاستدعاء الاولي بنفس اغة التطبيق
     addTags,
     categorize,
+    toggleTranslation,
     regenerate: (type) => {
       // هنا نستدعي الدوال مباشرة بدون كلمة "actions"
       if (type === "improve") improve();

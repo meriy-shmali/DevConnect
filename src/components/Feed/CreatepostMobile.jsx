@@ -17,16 +17,16 @@ const CreatepostMobile = () => {
     const {t}=useTranslation();
     const navigate=useNavigate()
   return (
-    <div>
-      <div className='relative top-6 left-4'><button onClick={()=>navigate('/feed')}><IoArrowBack className='dark:text-gray-50 text-3xl' /></button></div>
+    <div className='bg-gradient-background min-h-screen'>
+      <div className='relative top-6 left-4'><button onClick={()=>navigate('/feed')}><IoArrowBack className='text-gray-50 text-3xl' /></button></div>
     <div className='flex-col mt-14   space-y-18 pb-36'>
-    <div> <p className='text-5xl flex justify-center items-center font-semibold dark:text-gray-50 title-font'>{t('create')}</p></div>
+    <div> <p className='text-5xl flex justify-center items-center font-semibold text-gray-50 title-font'>{t('create')}</p></div>
     <div className='flex justify-center'>
      <Textarea
      placeholder={t('share')}
      value={post.text}
      onChange={(e) => post.setText(e.target.value)}
-     className='w-[350px] h-[100px] text-lg dark:placeholder:text-gray-400 dark:bg-gray-200 '/>
+     className='w-[350px] h-[100px] text-lg placeholder:text-gray-400 bg-gray-50 dark:bg-gray-50 '/>
      </div>
      
       {/* PREVIEW AREA */}
@@ -55,7 +55,7 @@ const CreatepostMobile = () => {
           />
      <div className="flex justify-center gap-x-6 mt-4">
   <Button onClick={() => post.uploadRef.current.click()}>
-    <RiImageAddFill className="text-gray-600 dark:text-gray-200 size-[40px]" />
+    <RiImageAddFill className="text-gray-200 dark:text-gray-200 size-[40px]" />
   </Button>
   <Buttons type='post' onClick={() => post.handlePost({ redirectAfterPost: true })}/>
   <Buttons type='cancel' onClick={() => {
@@ -67,8 +67,11 @@ const CreatepostMobile = () => {
      
      <div className='flex justify-center items-center'>
       <div className=' flex-col space-y-9'>
-     <div className='text-xl dark:text-gray-200'>{t('help')} </div>
-     <div className='flex justify-center items-center'> <Button className="text-[22px] border-2 rounded-[50px]  pt-1 pb-1 text-black border-black dark:text-gray-200 dark:border-gray-200  " onClick={()=>post.setshow(!post.show)}>{t('ai')}<BsStars className='size-[22px] text-amber-300'/></Button></div>
+     <div className='flex-row  justify-center items-center text-2xl p-2 text-gray-200 text-center leading-12 ' >
+      {t('help')}
+      <Button className="text-[22px] border-2 rounded-[50px] ms-3 pt-1 pb-1  border-white text-gray-200  " onClick={()=>post.setshow(!post.show)}>{t('ai')}<BsStars className='size-[22px] text-amber-300'/></Button>
+      </div>
+      
      <AnimatePresence> 
             {
            post. show&&(
@@ -90,6 +93,10 @@ const CreatepostMobile = () => {
      <AiModal open={post.showModel}
      result={post.aiResult}
      onuse={post.handleUseAi}
+     showTranslate={post.aiType === "summarize"} 
+     hideActionButtons={false} 
+  // 🌟 تمرير دالة الترجمة المستخرجة من الهوك
+  onTranslate={post.aiaction.toggleTranslation}
      onclose={()=>post.setshowModel(false)} />
     </div></div>
   )
