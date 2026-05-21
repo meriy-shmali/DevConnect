@@ -318,21 +318,55 @@ background-repeat: repeat;
     @apply bg-background text-foreground;
   }
 }
-.code-scroll::-webkit-scrollbar {
-  width: 6px;
+/* 🌟 1. تطبيق السكرول المخصص على العنصر نفسه وعلى أي عنصر داخلي يمتلك سكرول */
+.code-scroll::-webkit-scrollbar,
+.code-scroll *::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important; /* الارتفاع للأفقي مع إجبار المتصفح */
 }
 
-.code-scroll::-webkit-scrollbar-track {
-  background: #1f2937; /* نفس لون الديف */
+/* 🌟 2. مسار السكرول لكل الطبقات */
+.code-scroll::-webkit-scrollbar-track,
+.code-scroll *::-webkit-scrollbar-track {
+  background: #1f2937 !important;
+  border-radius: 10px !important;
 }
 
-.code-scroll::-webkit-scrollbar-thumb {
-  background: #4b5563;
+/* 🌟 3. مقبض السكرول لكل الطبقات */
+.code-scroll::-webkit-scrollbar-thumb,
+.code-scroll *::-webkit-scrollbar-thumb {
+  background: #4b5563 !important;
+  border-radius: 10px !important;
+}
+
+/* 🌟 4. تأثير الـ Hover */
+.code-scroll::-webkit-scrollbar-thumb:hover,
+.code-scroll *::-webkit-scrollbar-thumb:hover {
+  background: #6b7280 !important;
+}
+
+/* 🌟 5. ضبط طريقة العرض لمنع تضارب الـ Overflow */
+.code-scroll pre, 
+.code-scroll code {
+  white-space: pre !important; /* إجبار الكود على البقاء في سطر واحد ممتد أفقياً */
+  overflow-x: auto !important; /* السماح بالسكرول الأفقي فقط عند الحاجة */
+}
+.modal-scroll::-webkit-scrollbar {
+  width: 6px;  /* عرض السكرول العمودي */
+  height: 6px; /* ارتفاع السكرول الأفقي */
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent; /* نجعله شفافاً ليتناسب مع أي وضع (فاتح/داكن) */
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700; /* استخدام كلاسات Tailwind ليتغير اللون حسب الثيم */
   border-radius: 10px;
 }
 
-.code-scroll::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-600;
 }
 .comment-scroll::-webkit-scrollbar {
   width: 6px;

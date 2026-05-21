@@ -23,14 +23,17 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <DirectionWrapper>
-        <Toaster position='top-center' toastOptions={{
+        <Toaster position='top-center'
+        containerStyle={{
+          zIndex:999999,
+        }} toastOptions={{
           duration: 3000,
           className: "shadow-lg",
           style: {
             fontSize: "20px",
             borderRadius: "10px",
             padding: "14px 20px",
-            zIndex: 9999, 
+           
           }
         }} />
      <RouterProvider router={router} />

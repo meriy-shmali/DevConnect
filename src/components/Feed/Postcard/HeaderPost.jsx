@@ -119,7 +119,7 @@ const HeaderPost = ({ post }) => {
           post.post_type === 'article' ? 'text-hover-articles border-hover-articles' : 'text-black border-black'
         } w-fit md:w-[120px] text-center`}>
           {post?.post_type ? (
-            <p className='text-[11px] md:text-lg py-0.5 px-2 md:px-0 font-medium'>
+            <p className='text-[11px] md:text-xl py-0.5 px-2 md:px-0 font-medium'>
               {t(`post_types.${post.post_type}`, post.post_type)}
             </p>
           ) : null}

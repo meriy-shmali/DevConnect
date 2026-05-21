@@ -26,6 +26,7 @@ const PostCard = ({post}) => {
   const [sort,setsort]=useState('latest');//المستخدم يغير الفلترة
   const[paneltype,setpaneltype]=useState(null)
   const [commentCount, setCommentCount] = useState(post.total_comments)
+  const [highlightedCommentId, setHighlightedCommentId] = useState(null);
  // const [comments, setComments] = useState(staticComment[post.id] || []); 
   useEffect(() => {
   setCommentCount(post.total_comments);
@@ -57,7 +58,12 @@ const handleToggleComments = () => {
 };
 const handleClose = () => {
  setpaneltype(null)
+ setHighlightedCommentId(null);
 };
+const handleBestAnswerFound = (commentId) => {
+    setHighlightedCommentId(commentId); // حفظ الآيدي
+    setpaneltype('comments'); // 🌟 فتح قائمة التعليقات تلقائياً فوراً
+  };
 const commentsData = usecomment(post.id, sort);
 const data = usequeryreaction(
   post.id,
@@ -158,11 +164,13 @@ const handleAddComment = ({ postId, text }) => {
     onClose={handleClose}
     postId={post.id}
     setCommentCount={setCommentCount}
+    highlightedCommentId={highlightedCommentId}
   />
 )}
     </AnimatePresence>
     <Comment post={post}
-    onAddComment={handleAddComment } />
+    onAddComment={handleAddComment }
+    onBestAnswerFound={handleBestAnswerFound} />
     
     </div>
   )

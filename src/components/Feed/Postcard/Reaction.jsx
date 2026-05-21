@@ -108,9 +108,9 @@ const handlereaction = async (type) => {
         );
     };
   return (
-    <div className='flex md:space-x-30 space-x-4  items-center '>
+    <div className='flex md:space-x-30 space-x-4  items-center  '>
       <div>
-     <button className='flex space-x-2 items-center md:rounded-2xl rounded-xl px-2 py-1  shadow-md dark:bg-dark-button '>
+     <button className='flex space-x-2 items-center md:rounded-2xl rounded-xl px-2 py-1  shadow-md dark:bg-dark-button border border-gray-200'>
       <FaRegCommentDots className='md:text-xl text-sm text-gray-700 dark:text-gray-50'/>
       <div className='md:text-lg text-sm font-semibold text-gradient'onClick={(e) => {
     e.stopPropagation();
@@ -155,7 +155,7 @@ const handlereaction = async (type) => {
       ))}
      
       </div>
-<div onClick={handleSaveToggle} className="cursor-pointer md:ms-24  ">
+<div onClick={handleSaveToggle} className="cursor-pointer md:ms-25  ">
    {localIsSaved ? (
         <GoBookmarkFill 
             

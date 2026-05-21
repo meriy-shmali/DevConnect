@@ -12,7 +12,7 @@ const AiModal = ({ open, result, onuse, onclose, onRegenerate, isPending, onTran
     <AnimatePresence>
       {
         open && (
-          <div className="fixed inset-0 flex items-center justify-center z-[9999] h-full bg-black/50 backdrop-blur-sm">
+          <div className="fixed inset-0 flex items-center justify-center z-[9999] h-full bg-black/50 ">
             <motion.div
               className="relative bg-white w-[600px] max-w-[90%] rounded-xl p-8 shadow-xl"
               initial={{ scale: 0.8, opacity: 0 }}
@@ -28,7 +28,7 @@ const AiModal = ({ open, result, onuse, onclose, onRegenerate, isPending, onTran
               </button>
               
               {/* 🌟 تعديل العرض النظيف ليدعم المارك داون من غير تكرار حاويات العرض */}
-              <div className="whitespace-pre-wrap text-gray-700 max-h-[500px] overflow-y-auto text-[18px] text-right p-4 markdown-content"
+              <div className="whitespace-pre-wrap overflow-auto  modal-scroll text-gray-700 max-h-[500px] overflow-y-auto text-[18px] text-right p-4 markdown-content"
                 style={{ direction: 'rtl', unicodeBidi: 'plaintext', textAlign: 'start' }}>
                 <ReactMarkdown>{result}</ReactMarkdown>
               </div>

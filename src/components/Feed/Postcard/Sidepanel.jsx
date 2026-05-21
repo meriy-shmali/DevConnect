@@ -8,7 +8,7 @@ import CommentItem from "./Sidepanel/CommentItem";
 import HeaderPanel from "./Sidepanel/HeaderPanel";
 import { FaRegCommentDots } from "react-icons/fa";
 import { useEffect,useRef } from "react";
-const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,postId,setCommentCount}) => {
+const SidebarPanel = ({title,icon,items,showFilter,onClose,type,sort,setSort,postId,setCommentCount,highlightedCommentId}) => {
   const isComments = type === "comments";
 
 const logic = useCommentLogic(
@@ -39,7 +39,7 @@ const isRTL = i18n.language === "ar";
     replyInput,
     editing,
     handleDeleteComment,
-    handleEditClick,resetCommentState
+    handleEditClick,resetCommentState,pendingTranslateId
   } = logic;
 
   const { t } = useTranslation();
@@ -83,7 +83,7 @@ animate={{ x: 0 }}
 exit={{ x: isRTL ? -400 : 400 }}
         transition={{ type: "tween", duration: 0.2 }}
          className={`sidebar fixed end-0 top-0 
-    w-[300px] sm:w-[400px] md:w-[500px] 
+    w-[300px] sm:w-[400px] md:w-[500px] z-[10000]
     h-full md:h-screen 
     bg-white shadow-xl p-6 flex flex-col z-50 
     overflow-auto comment-scroll dark:bg-dark-post-background dark:border border-gray-700 
@@ -167,6 +167,7 @@ exit={{ x: isRTL ? -400 : 400 }}
                 handleTranslate={handleTranslate}
                 handleReplyClick={handleReplyClick}
                 handleViewreply={handleViewreply}
+                pendingTranslateId={pendingTranslateId}
                 replydata={replydata}
                 replyInput={replyInput}
                 replyText={replyText}
@@ -174,6 +175,7 @@ exit={{ x: isRTL ? -400 : 400 }}
                 handlesendreply={handlesendreply}
                 viewreply={viewreply}
                 t={t}
+                highlightedCommentId={highlightedCommentId}
               />):
               <HeaderPanel user={item} type={type} />
             ))

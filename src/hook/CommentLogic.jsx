@@ -384,42 +384,49 @@ editComment.mutate({ commentId: parentId, content: newText }, {
   );
   };
   
-  const handleTranslate = (comment) => {
+const handleTranslate = (comment) => {
   const id = comment.id;
-console.log("before set pending:", pendingTranslateId);
-  setPendingTranslateId(id);
-  console.log("after set pending:", id);
+
+  // 1. إذا كان النص مترجماً وضغط المستخدم للعودة للأصل (لا يوجد طلب سيرفر)
   if (istranslate[id]) {
-    return setistranslate(prev => ({
-      ...prev,
-      [id]: false
-    }));
+    setistranslate(prev => ({ ...prev, [id]: false }));
+    setPendingTranslateId(null); // 🌟 تصفير فوري هنا لأننا خرجنا
+    return;
   }
-  // إذا موجود ترجمة مسبقاً بس رجّعها
+
+  // 2. إذا كانت الترجمة محفوظة مسبقاً في الـ State (لا يوجد طلب سيرفر)
   if (translate[id]) {
-    return setistranslate(prev => ({
-      ...prev,
-      [id]: true
-    }));
+    setistranslate(prev => ({ ...prev, [id]: true }));
+    setPendingTranslateId(null); // 🌟 تصفير فوري هنا لأننا خرجنا
+    return;
   } 
+
+  // 3. هنا تبدأ الترجمة الفعلية عبر السيرفر: نفعل الـ Loading للتعليق المحدد
+  setPendingTranslateId(id);
+
   TranslatecommentMutaion.mutate(
     { commentId: id },
     {
       onSuccess: (res) => {
         settranslate(prev => ({
           ...prev,
-          [id]: res.data.comment // 👈 هذا المهم
+          [id]: res.data.comment
         }));
         setistranslate(prev => ({
           ...prev,
           [id]: true
         }));
-         setPendingTranslateId(null);
+        // 🌟 تصفير الـ Loading بعد النجاح
+        setPendingTranslateId(null);
+      },
+      onError: (err) => {
+        console.error("Translation error:", err);
+        // 🌟 تصفير الـ Loading حتى لو فشل الطلب ليعود الزر قابلاً للضغط
+        setPendingTranslateId(null); 
       }
     }
   );
-
-  };
+};
 const handleDeleteComment = (commentId, parentId = null) => {
   // 1. تحديث الواجهة فوراً (Optimistic UI)
   setreplydata(prev => {

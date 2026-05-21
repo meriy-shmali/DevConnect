@@ -115,7 +115,7 @@ const normalizedTags = (() => {
  >
     {/*text */}
     <p className={`${isText
-  ? "md:text-3xl text-xl font-semibold dark:text-gray-100"
+  ? "md:text-3xl text-xl  font-semibold dark:text-gray-100 "
   : "md:text-2xl text-lg dark:text-gray-100"
 } whitespace-pre-wrap`}
    style={{ 
@@ -124,39 +124,38 @@ const normalizedTags = (() => {
     textAlign: 'start'     // يضمن بقاء النص على اليمين في العربي واليسار في الإنجليزي الصرف
   }}>
   {isTranslate ? Translate : displayContent}
-  {shouldTruncate && !showMore && !isTranslate && (
+  {shouldTruncate  && !isTranslate && (
           <button 
-            onClick={() => setShowMore(true)} 
-            className="mt-1 md:text-sm text-xs"
+            onClick={() => setShowMore(!showMore)} 
+            className="mt-1 md:text-sm text-xs text-gray-600"
           >
-           {t('showmore')}
+           {showMore ? t('showless') || "Show less" : t('showmore') || "Show more"}
           </button>
         )}
 </p>
 
 {post.code && (
+  // 1. جعلنا الديف الخارجي هو المسؤول عن السكرول بالكامل وعطيناه الكلاس المخصص
+  <div className="bg-gray-900 dark:bg-gray-950 text-white rounded-lg md:w-full max-w-full overflow-auto code-scroll">
+    
+    {/* شريط العنوان وزر النسخ يبقى ثابت في الأعلى أو يتحرك حسب رغبتك */}
+    <div className="sticky top-0 bg-gray-900 dark:bg-gray-950 border-b border-gray-700 flex justify-between items-center px-3 py-1 z-10">
+      <div className='md:text-xl text-sm'>
+        {post.code_language || "plaintext"}
+      </div>
+      <button onClick={handlecopy} className="text-xs bg-gray-700 md:p-2 p-1 rounded-md">
+        {copy ? <TbCopyCheck className='md:text-[20px] text-[12px]' /> : <FaRegCopy className='md:text-[20px] text-[12px]' />}
+      </button>
+    </div>
 
-<div className="bg-gray-900 dark:bg-gray-950 text-white rounded-lg overflow-hidden md:w-full max-w-full">
-<div className="sticky top-0 bg-gray-900 dark:bg-gray-950 border-b border-gray-700 flex justify-between items-center px-3 py-1">
-   <div className='md:text-xl text-sm'>
-    {post.code_language || "plaintext"}
+    {/* 2. وسم الـ <pre> ننزع منه الـ max-h والـ سكرول ونتركه فقط لعرض النص */}
+    <pre className="p-4 text-sm md:text-lg max-h-60">
+      <code ref={codeRef} className={post.code_language}>
+        {post.code}
+      </code>
+    </pre>
 
   </div>
-<button
-onClick={handlecopy}
-className="text-xs  bg-gray-700 md:p-2 p-1 rounded-md"
->
-{copy?<TbCopyCheck className='md:text-[20px] text-[12px]' />:<FaRegCopy className='md:text-[20px] text-[12px]' />}
-</button>
-</div>
-<pre className="p-4 overflow-auto text-sm md:text-lg max-h-60 code-scroll">
-<code ref={codeRef} className={post.code_language}>
-{post.code}
-</code>
-</pre>
-
-</div>
-
 )}
 {/* IMAGES */}
 {/* حطينا اشارة الاستفهام لان بدونها رح يكون الشرط عطول صح */}

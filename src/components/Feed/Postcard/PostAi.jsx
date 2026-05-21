@@ -10,8 +10,9 @@ import { FaCheck } from "react-icons/fa";
 import { useExplainecode } from '@/hook/UseMutaionexplainecode';
 import AiModal from '../AiModal';
 import toast from 'react-hot-toast';
+import { usebestanswer } from '@/hook/UseMutationbestanswer';
 
-const PostAi = ({ id, content, code, codeLanguage }) => {
+const PostAi = ({ id, content, code, codeLanguage,postType, onBestAnswerFound }) => {
     // 🌟 إصلاح: تفكيك i18n هنا لقراءة اللغة الحالية للموقع بدون أخطاء
     const { t, i18n } = useTranslation();
     const [show, setShow] = useState(false);
@@ -20,10 +21,12 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
     const [modalResult, setModalResult] = useState("");
     const [activeAction, setActiveAction] = useState(null);
     const [codeLangState, setCodeLangState] = useState("");
-
+const [translatedResult, setTranslatedResult] = useState(""); // لتخزين النص المترجم
+const [isTranslatedState, setIsTranslatedState] = useState(false);
     const summaryMutation = usesmartsummary();
     const translateMutation = useTranslatepost();
     const explainCodeMutation = useExplainecode();
+    const bestAnswerMutation = usebestanswer();
 
     const toggleMenu = (e) => {
         e.stopPropagation();
@@ -48,7 +51,7 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
 
     const handleSummarizePost = () => {
         if (!content) return;
-        const toastId = toast.loading(t('summarize_loading') || "Summarizing...");
+        const toastId = toast.loading(t('smart_summary') || "Summarizing...");
         
         // 🌟 إصلاح: تعيين نوع الأكشن الحالي ليعرفه مودال الترجمة لاحقاً
         setActiveAction('summary_content');
@@ -59,18 +62,46 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
             onSuccess: (res) => {
                 const summaryText = res.data.summary; 
                 if (summaryText) {
-                    toast.success(t('summarize_success') || "Done!", { id: toastId });
+                   
                     setModalResult(summaryText); 
+                    setTranslatedResult("");    // تصفير الترجمة السابقة
+                    setIsTranslatedState(false)
                     setOpenModal(true); 
                 }
             },
             onError: () => toast.error(t('summarize_error') || "Error occurred", { id: toastId })
         });
     };
+    const handleBestAnswer = () => {
+        const toastId = toast.loading(t('best_answer') || "Finding best answer...");
+        setActiveAction('summary_content'); // لجعل الترجمة تستخدم الـ endpoint العادي المتوقع
+        
+        // 🌟 إرسال المعرف للباك إند
+        bestAnswerMutation.mutate({ post_id: id }, {
+            onSuccess: (res) => {
+                const commentId = res.data.id; // استخراج معرف التعليق الفائز
+                const reasonText = res.data.reason; // استخراج سبب الاختيار لتعليقه في المودال
+                
+                if (reasonText) {
+                    
+                    setModalResult(reasonText); 
+                    setTranslatedResult("");    // تصفير الترجمة السابقة
+                    setIsTranslatedState(false)// عرض الـ reason داخل المودال
+                    setOpenModal(true);
+                    
+                    // تمرير المعرف للأب ليفتح السايد بانل ويعمل الهايلايت
+                    if (onBestAnswerFound && commentId) {
+                        onBestAnswerFound(commentId);
+                    }
+                }
+            },
+            onError: () => toast.error(t('best_answer_error') || "Failed to fetch best answer", { id: toastId })
+        });
+    };
 
     const handleExplainCode = (targetLang) => {
         if (!code) return;
-        const toastId = toast.loading(t('explain_loading') || "Analyzing Code...");
+        const toastId = toast.loading(t('explaine_code') || "Analyzing Code...");
         setActiveAction('explain_code');
         
         // 🌟 الآن i18n أصبحت معرفة وجاهزة للقراءة ديناميكياً
@@ -84,7 +115,7 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
             onSuccess: (res) => {
                 const explanationText = res.data.explanation; 
                 if (explanationText) {
-                    toast.success(t('explain_success') || "Code Analyzed!", { id: toastId });
+                    
                     setModalResult(explanationText);
                     setOpenModal(true);
                 }
@@ -92,42 +123,56 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
             onError: () => toast.error(t('explain_error') || "Failed to explain code", { id: toastId })
         });
     };
+const handleToggleTranslation = () => {
+    if (!modalResult) return;
 
-    const handleToggleTranslation = () => {
-        if (!modalResult) return;
+    // إذا كان الأكشن لشرح الكود (هو يعمل تبادلياً عبر الباك إند عندكِ وهو صحيح)
+    if (activeAction === 'explain_code') {
+        const nextLang = codeLangState === 'ar' ? 'en' : 'ar';
+        handleExplainCode(nextLang); 
+        return;
+    }
 
-        // الحالة أ: تلخيص بوست عادي
-        if (activeAction === 'summary_content') {
-            const toastId = toast.loading(t('translating') || "Translating...");
-            translateMutation.mutate({ content: modalResult }, {
-                onSuccess: (res) => {
-                    const translatedText = res.data.translated;
-                    if (translatedText) {
-                        toast.success(t('translate_success') || "Translated!", { id: toastId });
-                        setModalResult(translatedText);
-                    }
-                },
-                onError: () => toast.error(t('translate_error') || "Translation failed", { id: toastId })
-            });
-        } 
-        // الحالة ب: ترجمة تبادلية لشرح الكود
-        else if (activeAction === 'explain_code') {
-            const nextLang = codeLangState === 'ar' ? 'en' : 'ar';
-            handleExplainCode(nextLang); 
+    // لملخص المنشور وأفضل إجابة (نص عادي):
+    if (isTranslatedState) {
+        // إذا كان مترجماً وضغط مجدداً، نعيد العرض للنص الأصلي دون طلب الباك إند
+        setIsTranslatedState(false);
+    } else {
+        // إذا كان هناك ترجمة محفوظة مسبقاً، نعرضها فوراً
+        if (translatedResult) {
+            setIsTranslatedState(true);
+            return;
         }
-    };
 
-    const handleAction = (actionType) => {
-        if (actionType === 'summarize_post') {
-            handleSummarizePost(); 
-        } else if (actionType === 'explain_code') {
-            handleExplainCode(); 
-        }
-        setShow(false);
-    };
+        // إذا كانت أول مرة يضغط ترجمة، نطلب الباك إند
+        const toastId = toast.loading(t('translating') || "Translating...");
+        translateMutation.mutate({ content: modalResult }, {
+            onSuccess: (res) => {
+                const translatedText = res.data.translated;
+                if (translatedText) {
+                    toast.success(t('translate_success') || "Translated!", { id: toastId });
+                    setTranslatedResult(translatedText);
+                    setIsTranslatedState(true);
+                }
+            },
+            onError: () => toast.error(t('translate_error') || "Translation failed", { id: toastId })
+        });
+    }
+};
+
+   const handleAction = (actionType) => {
+    if (actionType === 'summarize_post') {
+        handleSummarizePost(); 
+    } else if (actionType === 'explain_code') {
+        handleExplainCode(); 
+    } else if (actionType === 'best_answer') { // 👈 هذا هو الشرط المفقود الذي تسبب بالمشكلة
+        handleBestAnswer(); 
+    }
+    setShow(false);
+};
 
     const hasCode = code && code.trim() !== "";
-
+    const isQuestion = postType === "question";
     return (
         <div className='relative' ref={menuRef}> 
             <motion.div
@@ -155,9 +200,10 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
                         animate={{ opacity: 1, y: 10 }} 
                         exit={{ opacity: 0, y: 0 }}
                         transition={{ type: "tween", duration: 0.2 }}
-                        className="absolute -top-44 md:end-24 end-10 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 flex flex-col justify-center z-[100] md:w-[200px] w-[180px] text-lg "
+                        className="absolute -top-20 md:end-24 end-10 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 flex flex-col justify-center z-[100] md:w-[200px] w-[180px] text-lg "
                         onClick={(e) => e.stopPropagation()}
                     >
+                        {isQuestion && (
                         <div>
                             <button onClick={() => handleAction('best_answer')}
                                 className="px-4 py-2 flex items-center justify-start w-full hover:font-semibold dark:hover:text-gray-700 transition-colors" >
@@ -166,7 +212,7 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
                                     <p className='text-sm md:text-base'>{t('bestanswer')}</p>
                                 </div> 
                             </button>
-                        </div>
+                        </div>)}
                         <div>
                             <button 
                                 onClick={() => handleAction('summarize_post')}
@@ -196,8 +242,9 @@ const PostAi = ({ id, content, code, codeLanguage }) => {
             </AnimatePresence>
             
             <AiModal 
+          
                 open={openModal}
-                result={modalResult}
+                result={isTranslatedState ? translatedResult : modalResult}
                 onclose={() => setOpenModal(false)}
                 showTranslate={true} 
                 onTranslate={handleToggleTranslation} 
