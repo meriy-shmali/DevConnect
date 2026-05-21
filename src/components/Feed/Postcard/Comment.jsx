@@ -13,18 +13,28 @@ const Comment = ({post,onAddComment,editingComment,setEditingComment}) => {
     //منع التعليقات الفارغة
     if (!text.trim())return;
     //لتمرير التعليق للاب
-    onAddComment(text, editingComment?.id);
+    onAddComment({
+      postId: post.id,   // ✅ أهم تعديل
+      text: text,
+      // للتعديل لاحقًا
+    });
     setText("");
-    setEditingComment(null);
+    if (setEditingComment) setEditingComment(null);
   }
   return (
     <div className='flex space-x-4 items-center'>
-      <img src={post.user?. personal_photo_url}
+      <img src={post.user?. personal_photo_url||"/images/default avatar1.jpg"}
     className='w-10 h-10 rounded-full'/>
       <input placeholder='Add Comment'
       value={text}
       onChange={(e)=>setText(e.target.value)}
-      className=" md:text-lg text-sm w-[400px] border border-gray-300 rounded-md  p-2 "/>
+      onKeyDown={(e) => {
+    if (e.key === "Enter" && !e.shiftKey) { // Enter بدون Shift
+      e.preventDefault(); // يمنع السطر الجديد
+      handleSend();
+    }
+  }}
+      className=" md:text-lg text-sm w-[400px] border border-gray-300 rounded-md  p-2  dark:bg-gray-100"/>
       < IoSend  onClick={handleSend}className='md:text-[30px] text-[25px] text-blue-700 '/>
     </div>
   )

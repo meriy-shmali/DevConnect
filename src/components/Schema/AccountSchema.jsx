@@ -1,5 +1,7 @@
-import{z}from 'zod';
-const accountschema=z.object({
-username:z.string().min(2,{message:"username must be at least 2 characters."})
+import { z } from 'zod';
+
+export const accountschema = (t) => 
+  z.object({
+    username: z.string().min(2,  { message: t('username_min' )}),
 })
 export default accountschema;

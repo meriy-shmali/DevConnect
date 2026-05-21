@@ -6,43 +6,50 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { BsStars } from "react-icons/bs";
 import AIAssistant from "./AIAssistant";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, spring } from "framer-motion";
 import CreatepostLogic from "@/hook/CreatepostLogic";
 import { useNavigate } from "react-router-dom";
 import CreatepostMobile from "./CreatepostMobile";
 import { MdPostAdd } from "react-icons/md";
+import { useRef, useEffect } from "react";
+import AISidePanel from "./AISidepanel";
 import AiModal from './AiModal';
 const Createpost = () => {
- 
+   const containerRef = useRef(null);
   const post=CreatepostLogic();
   const { t } = useTranslation();
+  useEffect(() => {
+  const handleClickOutside = (e) => {
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(e.target)
+    ) {
+      post.setshow(false); // يسكر AI Assistant
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
   return (
     <div>
-    <div className="hidden md:block"  onClick={()=>post.setshow(!post.show)}>
-      <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45 ">
-        <div className="flex-col justify-center items-center mt-8 p-8 space-y-14 pb-36">
-          <p className="text-white text-[48px] text-center">{t("create")}</p>
+    <div ref={containerRef} className="hidden md:block"  onClick={()=>post.setshow(false)}>
+      <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45">
+        <div className="flex-col justify-center items-center mt-2 p-8 space-y-12 pb-40">
+          <p className="text-white text-[45px] text-center">{t("create")}</p>
 
           {/* TEXT */}
           <Textarea
             placeholder={t('share')}
-            value={post.text}
+            value={`${post.text}${post.displayCategory ? `\n\ncategory: ${post.displayCategory}` : ""}`}
             onChange={(e) => post.setText(e.target.value)}
-            className="bg-white"
+            className="bg-white dark:bg-gray-100 h-20 overflow-y-auto "
           />
-        
-         {/*showmodel */}
-         {
-          post.showModel&&(
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div className="bg-white p-6 rounded-xl w-[500px]">
-      <Textarea value={post.aiResult} />
-    <Button className='bg-blue-button text-text-button md:text-[25px]' onClick={post.handleUseAi}>{post.t('use')}</Button>
-    <Button className='bg-cancel-button text-text-button text-[24px]'onClick={()=>post.setshowModel(false)}>{t('cancel')}</Button>
-    </div>
-  </div>
-          )
-         }
+      
+      
           {/* PREVIEW AREA */}
           {post.previewUrl.length>0 && (
             <div className="flex items-center gap-4 p-3 rounded-lg shadow">
@@ -74,12 +81,12 @@ const Createpost = () => {
           <div className="flex space-x-6">
             {/* UPLOAD FILE BUTTON */}
             <Button onClick={() => post.uploadRef.current.click()}>
-              <RiImageAddFill className="text-white size-[40px]" />
+              <RiImageAddFill className="text-white size-[36px]" />
             </Button>
 
             {/* POST */}
             <Button
-              className="text-white bg-post-button w-[100px] h-[41px] text-[24px]"
+              className="text-white bg-post-button hover:bg-hover-purple w-[80px] h-[40px] text-[22px]"
               onClick={post.handlePost}
             >
               {t("post")}
@@ -90,8 +97,7 @@ const Createpost = () => {
               <Button
                 className="text-white bg-cancel w-[100px] h-[41px] text-[24px]"
                 onClick={() => {
-                  post.setText("");
-                  post.removeImage();
+                  post.resetForm();
                 }}
               >
                 {t("cancel")}
@@ -101,23 +107,31 @@ const Createpost = () => {
 
           <div className="text-white text-[24px] text-center leading-11 ">
             {t("help")}
-            <Button className="text-[22px] border-2 rounded-[50px] ml-4 pt-1 pb-1" onClick={()=>post.setshow(!post.show)}>
+            <Button className="text-[22px] border-2 rounded-[50px] ml-4 pt-1 pb-1" onClick={(e) => {
+              e.stopPropagation();
+    post.setshow(prev => !prev);
+  }}>
               {t("ai")} <BsStars className="size-[22px] text-amber-300" />
             </Button>
-            <AnimatePresence> 
-            {
-           post. show&&(
-             <motion.div    initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                           exit={{ opacity: 0, y: -20 }}
-                           transition={{ duration: 0.2 }}>
-              <AIAssistant improve={post.aiaction.improve} generate={post.aiaction.generate}
-              summarize={post.aiaction.summarize} addtags={()=>post.aiaction.addTags(post.text)} category={()=>post.aiaction.categorize(post.text)}
-              improveM={post.improveMutation} generateM={post.generateMutation} summarizeM={post.summarizeMutation}
-              addM={post.addtagMutation} categoryM={post.categoryMutation}/>
-              </motion.div>
-            )
-            }</AnimatePresence>
+         <AISidePanel
+  open={post.show}
+  onClose={() => post.setshow(false)}
+>
+  <AIAssistant
+  type="sidepanel"
+  onClose={()=>post.setshow(false)}
+    improve={post.aiaction.improve}
+    generate={post.aiaction.generate}
+    summarize={post.aiaction.summarize}
+    addtags={() => post.aiaction.addTags(post.text)}
+    category={() => post.aiaction.categorize(post.text)}
+    improveM={post.improveMutation}
+    generateM={post.generateMutation}
+    summarizeM={post.summarizeMutation}
+    addM={post.addtagMutation}
+    categoryM={post.categoryMutation}
+  />
+</AISidePanel>
           </div>
         </div>
       </div>
@@ -126,7 +140,14 @@ const Createpost = () => {
     <AiModal open={post.showModel}
      result={post.aiResult}
      onuse={post.handleUseAi}
-     onclose={()=>post.setshowModel(false)} />
+     onclose={()=>post.setshowModel(false)}
+     onRegenerate={() => post.aiaction.regenerate(post.aiType)}
+  // نمرر حالة التحميل بناءً على النوع الحالي ليظهر الانيميشن على الزر
+  isPending={
+    post.improveMutation.isPending || 
+    post.generateMutation.isPending || 
+    post.summarizeMutation.isPending
+  } />
     </div>
   );
 }

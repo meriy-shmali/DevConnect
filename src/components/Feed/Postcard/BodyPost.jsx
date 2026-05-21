@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next';
 import { useTranslate } from '@/hook/UseMutationTrans';
 import { motion } from 'framer-motion';
-const BodyPost = ({post}) => {
+const BodyPost =  ({ post, customClass = '' }) => {
   const[showMore,setShowMore]=useState(false)
   const[copy,setcopy]=useState(false)
   const [currentImage,setCurrentImage] = useState(0)
@@ -111,7 +111,7 @@ const normalizedTags = (() => {
   return [];
 })();
   return (
-    <div className='mt-7 w-full h-fit rounded-md p-3 flex-col space-y-6 items-start '
+    <div className={`mt-7 w-full h-fit rounded-md p-3 flex-col space-y-6 items-start ${customClass}`}
  >
     {/*text */}
     <p className={`${isText

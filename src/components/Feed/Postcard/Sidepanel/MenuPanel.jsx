@@ -3,29 +3,50 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useTranslation } from 'react-i18next';
-const MenuPanel = ({ id, menu, toggleMenu, onEdit, onDelete }) => {
-    const {t}=useTranslation();
-    const handleMenuClick = (e) => {
-    e.stopPropagation(); // هذا السطر يمنع الانتقال لصفحة المنشور عند الضغط على القائمة
-    toggleMenu(post.id);
-};
+import { useEffect,useRef } from 'react';
+import { motion } from 'framer-motion';
+const MenuPanel = ({ id, menu, toggleMenu, onEdit, onDelete,size=20 }) => {
+    const {t}=useTranslation()
+    const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menu[id]&& menuRef.current && !menuRef.current.contains(event.target)) {
+       !toggleMenu(id);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menu[id]]);
   return (
-    <div className="relative">
-      <button onClick={(e) =>{ e.stopPropagation(); toggleMenu(id)}}>
-        <BsThreeDotsVertical className='text-gray-600' />
+    
+    <div className="relative" ref={menuRef}>
+      <button onClick={() => toggleMenu(id)}>
+        <BsThreeDotsVertical className='text-gray-600 dark:text-gray-400' size={size} />
       </button>
 
       {menu[id] && (
-        <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow py-2 flex flex-col z-50 w-[100px] text-lg">
+         <motion.div
+           initial={{ y: 0,x:0 }}
+        animate={{ y: 2 ,x:-2 }}
+        exit={{ y: 2 }}
+        transition={{ type:"tween" ,duration: 0.1 }}
+        className="absolute right-4 top-5  bg-white dark:bg-dark-main-background border-white border rounded-lg shadow py-2 flex flex-col z-50 w-[100px] text-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+       
           
-          <button  onClick={(e) => { e.stopPropagation(); onEdit(); }} className="px-3 py-1  flex items-center w-fit text-blue-500 hover:text-blue-400 ">
-           <MdEdit className='mr-1 '/> {t('edit')} 
+          <button onClick={onEdit} className="px-3 py-1 text-blue-500 hover:text-blue-400 flex items-center w-fit   ">
+           <MdEdit className='mr-1'/> {t('edit')} 
           </button>
         
-          <button onClick={(e) => { e.stopPropagation(); onDelete(); }} className="px-3 py-1  flex items-center w-fit text-red-500 hover:text-red-400">
-          <RiDeleteBin6Fill className='mr-1  '/> {t('delete')}
+          <button onClick={onDelete} className="px-3 py-1 text-red-500 hover:text-red-400 flex items-center w-fit  ">
+          <RiDeleteBin6Fill className='mr-1 '/> {t('delete')}
           </button>
-        </div>
+        </motion.div>
       )}
     </div>
   );

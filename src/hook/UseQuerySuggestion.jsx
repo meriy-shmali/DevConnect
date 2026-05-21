@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getsuggestion } from "@/api/Sugesstion";
-export const Sugesstion=()=>{
+export const UseSugesstion=()=>{
 return useQuery({
     queryKey:["suggestion"],
-    queryFn:getsuggestion
-})
+    queryFn: async () => {
+      const res = await getsuggestion();
+      return res.data;
+}})
 }

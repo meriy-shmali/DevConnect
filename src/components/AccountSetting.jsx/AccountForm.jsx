@@ -23,50 +23,62 @@ import Buttons from '../ui/ButtonGroup';
 //import { useChangePasswordMutation } from '@/hook/UseMutationChangePassword';
 import { useUpdateAccount,useGetAccountData } from '@/hook/UseMutationAccount';
 import i18next from 'i18next';
-import { email } from 'zod';
-import { languages } from 'prismjs';
+
 const AccountForm=()=>{
+    const { i18n,t } = useTranslation();
     const { theme , setTheme} = UseTheme();
     const {data : accountData}=useGetAccountData();
     const navigate = useNavigate();
     const [isOpen,setIsOpen]=useState (false);
     const [isOpens,setIsOpens]=useState (false);
     const form = useForm({
-    resolver: zodResolver(accountschema),
+    resolver: zodResolver(accountschema(t)),
     defaultValues: {
      username:"",
      email:"",
-     language:"en",
+     language: i18n.language, 
     },
     
   });
    
    
     const updateMutation=useUpdateAccount();
-   const Values = form.watch();
-   const hasData = 
-    Values.username !==accountData?.username ;
+    const Values = form.watch();
+    const hasData = Values.username !==accountData?.username ;
    // const { mutate,isPending}=useChangePasswordMutation(form);
     const onSubmit = (Values) => {
-    console.log("OnSubmit Triggered!", Values); // أضيفي هذا السطر
     updateMutation.mutate({username: Values.username});
-};
-   const { i18n,t } = useTranslation();
-   const currentLang=i18n.language;
-   const languagePlaceholder=currentLang==='ar'?t('arabic') : t('english');
-   const themePlaceholder = theme === 'system' ? t('system') : theme === 'dark' ? t('dark') : t('light');
-    useEffect(()=>{
-      console.log("Account Data Received:", accountData);
-      if(accountData ){
+     };
+    
+    const currentLang = i18n.language;
+    const languagePlaceholder = currentLang === 'ar' ? t('arabic') : t('english');
+    const themePlaceholder = theme === 'system' ? t('system') : theme === 'dark' ? t('dark') : t('light');
+    useEffect(() => {
+    // 1. تحديد اللغة المفضلة حسب الترتيب العالمي: (بيانات الحساب -> التخزين المحلي -> لغة الجهاز)
+    const browserDefaultLang = navigator.language?.startsWith('ar') ? 'ar' : 'en';
+    const savedLang = localStorage.getItem('i18nextLng');
+    const userPreferredLang = accountData?.language || savedLang || browserDefaultLang;
+
+    if (accountData) {
         form.reset({
-          username:accountData?.username||"",
-          email:accountData?.email||"",
-          language:accountData.language || "en"
-        })
-      }
-    },[accountData,form.reset])
-    console.log("Form Errors:", form.formState.errors);
+            username: accountData?.username || "",
+            email: accountData?.email || "",
+            language: userPreferredLang
+        });
+    }
+
+    // 2. تطبيق اللغة على كامل التطبيق والـ DOM
+    if (userPreferredLang && i18n.language !== userPreferredLang) {
+        i18n.changeLanguage(userPreferredLang);
+        localStorage.setItem('i18nextLng', userPreferredLang);
+        document.documentElement.dir = userPreferredLang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = userPreferredLang;
+    }
+}, [accountData, form.reset, i18n]);
+
+console.log("Form Errors:", form.formState.errors);
 console.log("Is Submitting:", form.formState.isSubmitting);
+//console.log("المتصفح يرسل حالياً لغة الكود التالية:", browserLang);
  return (
    <Form {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)} className="w-full h-full min-h-screen pb-20 space-y-6 text-black dark:text-white">
@@ -76,19 +88,20 @@ console.log("Is Submitting:", form.formState.isSubmitting);
       name="username"
       render={({ field }) => (
         <FormItem className='flex flex-col md:flex-row md:items-center md:gap-1 gap-2 w-full max-w-full overflow-hidden'>
-          <FormLabel className=" text-main-text md:min-w-[250px] lg:min-w-[400px] flex-shrink-0 text-[30px] md:text-[40px] 
-           lg:text-[40px] ">{t('username')}
+          <FormLabel className=" text-main-text dark:text-gray-50 md:min-w-[250px] lg:min-w-[400px] flex-shrink-0 text-[30px] md:text-[40px] 
+           lg:text-[40px] ">{t('username')}:
           </FormLabel>
           <div className='flex flex-col lg:items-center md:items-center md:flex-row sm:item-start w-full lg:max-w-[600px] md:max-w-[500px] gap-2 '>
             <div className='flex flex-col flex-1 min-w-0 relative'>
           <FormControl className='flex-1'>
-            <InputGroup className="  flex-shrink-0 py-1.25
-             group bg-white border-black border w-full px-3  h-[46px] lg:max-w-[500px] md:max-w-[400px] 
-             focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all 
-             focus-within: outline-none dark:bg-dark-post-background dark:border-white/20 ">
+            <InputGroup className="  flex-shrink-0 py-1.25 hover:bg-hover-placeholder bg-light-placeholder shadow rounded-2xl 
+                                     group bg-white border-black border w-full px-3  h-[46px] lg:max-w-[500px] md:max-w-[400px] 
+                                     focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all 
+                                     focus-within: outline-none dark:bg-dark-post-background dark:border-white/20 ">
               <InputGroupInput
                 {...field}
                 type='text'
+                autoComplete='off'
                 placeholder=""
                 className=" flex-shrink-0  md:text-[22px] text-[22px] dark:text-dark-text whitespace-nowrap overflow-x-auto
                 overflow-y-hidden scrollbar-hide" 
@@ -97,7 +110,9 @@ console.log("Is Submitting:", form.formState.isSubmitting);
             </InputGroup>
           </FormControl>
           <div className='  w-full mt-1 '>
-           <FormMessage className="  md:text-[20px] text-[20px] " />
+           <FormMessage className="  md:text-[20px] text-[20px] ">
+             {form.formState.errors.username?.message ? t(form.formState.errors.username.message) : ""}
+           </FormMessage>
           </div></div>
            {hasData && (
             <div className=' flex-shrink-0'>          
@@ -118,13 +133,15 @@ console.log("Is Submitting:", form.formState.isSubmitting);
       name="email"
       render={({ field }) => (
         <FormItem className='flex flex-col md:flex-row md:item-center gap-2  md:gap-1 w-full max-w-full overflow-hidden'>
-          <FormLabel className="text-main-text md:min-w-[250px] lg:min-w-[400px] flex-shrink-0 text-[30px] md:text-[40px]  lg:text-[40px]">{t('email')}
+          <FormLabel className="text-main-text dark:text-gray-50 md:min-w-[250px] lg:min-w-[400px] flex-shrink-0 text-[30px] md:text-[40px]  lg:text-[40px]">{t('email')}
           </FormLabel>
           <div className='flex flex-col flex-1 min-w-0 relative'>
           <FormControl>
-           <InputGroup className="bg-gray-100 text-gray-500  group   px-3 lg:max-w-[500px] md:max-w-[400px] h-[46px] mb-4
-            focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all 
-            focus-within: outline-none dark:bg-dark-post-background dark:border-white/20  translate-y-1 md:translate-y-2">
+           <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow rounded-2xl transition-all 
+                                       group bg-white border-black border w-full px-3 lg:max-w-[500px] md:max-w-[400px] h-[46px] mb-4
+                                       focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all
+                                       focus-within: outline-none dark:bg-dark-post-background dark:border-white/20  translate-y-1
+                                        md:translate-y-2">
               <InputGroupInput
                 {...field}
                 type='email'
@@ -146,28 +163,37 @@ console.log("Is Submitting:", form.formState.isSubmitting);
       name="language"
       render={({ field }) => (
         <FormItem className='flex flex-col md:flex-row md:items-start gap-2 md:gap-1'>
-          <FormLabel className="text-main-text md:min-w-[250px] lg:min-w-[400px] flex-shrink-0
+          <FormLabel className="text-main-text dark:text-gray-50 md:min-w-[250px] lg:min-w-[400px] flex-shrink-0
            text-[30px] md:text-[40px]  lg:text-[40px]">{t('language')}: </FormLabel>
           <div className='flex flex-col w-full max-w-[500px] transition-all ease-in-out duration-300 overflow-visible '
            style={{marginBottom : isOpen?'90px' : '0px',
             textAlign:'left',display:'block'}}>  
           <FormControl>
-            <Select onOpenChange={
-              (open)=>setIsOpen(open)} defaultValues={currentLang} onValueChange={(value)=>{field.onChange(value);
-              i18next.changeLanguage(value); document.documentElement.dir=value==='ar'? 'rtl' :'ltr';
-              document.documentElement.lang=value }} value={field.value} className='text-start'>
-            <SelectTrigger className=" group bg-white border-black border w-full px-3 lg:max-w-[500px] md:max-w-[400px] h-[46px] mb-4
-            focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all
-             focus-within: outline-none dark:bg-dark-post-background dark:border-white/20  translate-y-1 md:translate-y-2">
-             <div className='md:text-[22px] text-[22px] dark:text-dark-text pl-3'> 
-              <SelectValue placeholder={languagePlaceholder} />
+            <Select 
+              value={field.value} 
+              onOpenChange={(open) => setIsOpen(open)}  
+              onValueChange={(value) => {
+              field.onChange(value); 
+              i18next.changeLanguage(value);  
+              localStorage.setItem('i18nextLng', value);  
+              document.documentElement.dir = value === 'ar' ? 'rtl' : 'ltr';
+              document.documentElement.lang = value;
+               form.reset({ ...form.getValues(), language: value  });
+               }}  className='text-start'>
+            <SelectTrigger className={` hover:bg-hover-placeholder bg-light-placeholder shadow rounded-2xl transition-all 
+                                       group bg-white border-black border w-full px-3 lg:max-w-[500px] md:max-w-[400px] h-[46px] mb-4
+                                       focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all
+                                       focus-within: outline-none dark:bg-dark-post-background dark:border-white/20  translate-y-1
+                                        md:translate-y-2 ${field.value === 'ar' ? 'text-right justify-between flex-row-reverse' : 'text-start'}`}>
+             <div className={`md:text-[22px] text-[22px] dark:text-dark-text ${field.value === 'ar' ? 'pr-3 pl-0' : 'pl-3 pr-0'}`}> 
+              <SelectValue placeholder={field.value === 'ar' ? t('arabic') : t('english')} />
              </div>
             </SelectTrigger>
           
-          <SelectContent className='bg-white border-black border-[1px] max-h-[200px] overflow-y-auto w-[var(--radix-select-trigger-width)] '
-          side='bottom' align='start' sideOffset={5} position='popper' avoidCollisions={false}>
-           <SelectItem value='en' className='md:text-[18px] text-[18px] dark:text-dark-text'>{t('english')} </SelectItem>
-           <SelectItem value='ar' className='md:text-[18px] text-[18px] dark:text-dark-text'>{t('arabic')}</SelectItem>
+          <SelectContent className={`bg-white dark:bg-dark-post-background border-black border-[1px] max-h-[200px] overflow-y-auto w-[var(--radix-select-trigger-width)]  ${field.value === 'ar' ? 'text-right' : 'text-start'}}`}
+          side='bottom'  align={field.value === 'ar' ? 'end' : 'start'} sideOffset={5} position='popper' avoidCollisions={false}>
+           <SelectItem value='en' className={`dark:border-white/20 dark:focus:bg-zinc-800 text-black md:text-[18px] text-[18px] dark:text-dark-text cursor-pointer ${field.value === 'ar' ? 'flex-row-reverse text-right' : ''}}`}>{t('english')} </SelectItem>
+           <SelectItem value='ar' className={` dark:border-white/20 dark:focus:bg-zinc-800 text-black md:text-[18px] text-[18px] dark:text-dark-text cursor-pointer ${field.value === 'ar' ? 'flex-row-reverse text-right' : ''}}`}>{t('arabic')}</SelectItem>
            </SelectContent>
            </Select>
           </FormControl>
@@ -180,38 +206,40 @@ console.log("Is Submitting:", form.formState.isSubmitting);
       name="mode"
       render={({ field }) => (
         <FormItem className='flex flex-col md:flex-row md:item-center gap-2 md:gap-1'>
-          <FormLabel className="text-main-text md:min-w-[250px] lg:min-w-[400px] flex-shrink-0
+          <FormLabel className="text-main-text dark:text-gray-50 md:min-w-[250px] lg:min-w-[400px] flex-shrink-0
            text-[30px] md:text-[40px]  lg:text-[40px]">{t('mode')}: </FormLabel>
           <div className='flex flex-col w-full max-w-[500px]'>
           <FormControl>
             <Select onValueChange={(value)=>{field.onChange(value); setTheme(value)}} onOpenChange={
               (opens)=>setIsOpens(opens)} defaultValues={theme}
               >
-            <SelectTrigger className=" group bg-white border-black border w-full px-3 lg:max-w-[500px] md:max-w-[400px] h-[46px] mb-4
-            focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all
-             focus-within: outline-none dark:bg-dark-post-background dark:border-white/20  translate-y-1 md:translate-y-2">
-             <div className='md:text-[22px] text-[22px] dark:text-dark-text pl-3'> 
+            <SelectTrigger className={`hover:bg-hover-placeholder bg-light-placeholder shadow rounded-2xl transition-all 
+                                       group bg-white border-black border w-full px-3 lg:max-w-[500px] md:max-w-[400px] h-[46px] mb-4
+                                       focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all
+                                       focus-within: outline-none dark:bg-dark-post-background dark:border-white/20  translate-y-1
+                                        md:translate-y-2  ${i18n.language === 'ar' ? 'text-right justify-between flex-row-reverse' : 'text-start'}`}>
+             <div className={`md:text-[22px] text-[22px] dark:text-dark-text ${i18n.language === 'ar' ? 'pr-3 pl-0' : 'pl-3 pr-0'}`}>  
               <SelectValue placeholder={themePlaceholder} />
              </div>
             </SelectTrigger>
           
-          <SelectContent className='bg-white border-black border-[1px] max-h-[200px] overflow-y-auto w-[var(--radix-select-trigger-width)] '
-          side='bottom' align='start' sideOffset={5} position='popper' avoidCollisions={false}>
-           <SelectItem value='light' className='md:text-[18px] text-[18px] dark:text-dark-text'>
-             <div className="flex items-center gap-2">
-             <span className="md:text-[18px] text-[18px]">{t('light')}</span>
+          <SelectContent className={`bg-white dark:bg-dark-post-background border-black border-[1px] max-h-[200px] overflow-y-auto w-[var(--radix-select-trigger-width)]  ${i18n.language === 'ar' ? 'text-right' : 'text-start'}}`}
+          side='bottom' align={i18n.language === 'ar' ? 'end' : 'start'} sideOffset={5} position='popper' avoidCollisions={false}>
+           <SelectItem value='light' className={`dark:border-white/20 dark:focus:bg-zinc-800 text-black md:text-[18px] text-[18px] dark:text-dark-text cursor-pointer ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}}`}>
+              <div className={`flex items-center gap-2 ${i18n.language === 'ar' ? 'flex-row-reverse justify-between w-full' : ''}`}>
+              <span className="md:text-[18px] text-[18px]">{t('light')}</span>
               <Sun className="w-4 h-4" /> 
              </div>
            </SelectItem>
-            <SelectItem value='dark' className='md:text-[18px] text-[18px] dark:text-dark-text'>
-              <div className="flex items-center gap-2">
-             <span className="md:text-[18px] text-[18px]">{t('dark')}</span>
+            <SelectItem value='dark' className={`dark:border-white/20 dark:focus:bg-zinc-800 text-black md:text-[18px] text-[18px] dark:text-dark-text cursor-pointer ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}}`}>
+              <div className={`flex items-center gap-2 ${i18n.language === 'ar' ? 'flex-row-reverse justify-between w-full' : ''}`}>
+              <span className="md:text-[18px] text-[18px]">{t('dark')}</span>
               <Moon className="w-4 h-4" /> 
              </div>
             </SelectItem>
-           <SelectItem value='system' className='md:text-[18px] text-[18px] dark:text-dark-text'>
-           <div className="flex items-center gap-2">
-             <span className="md:text-[18px] text-[18px]">{t('system')}</span>
+           <SelectItem value='system' className={`dark:border-white/20 dark:focus:bg-zinc-800 text-black md:text-[18px] text-[18px] dark:text-dark-text cursor-pointer ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}}`}>
+              <div className={`flex items-center gap-2 ${i18n.language === 'ar' ? 'flex-row-reverse justify-between w-full' : ''}`}>
+              <span className="md:text-[18px] text-[18px]">{t('system')}</span>
               <Monitor className="w-4 h-4" /> 
              </div>
            </SelectItem>
