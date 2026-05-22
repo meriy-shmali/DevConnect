@@ -18,9 +18,7 @@ const SavedPage = () => {
   return (
     <div className="min-h-screen bg-main-background dark:bg-dark-background dark:text-gray-50 dark:bg-[#1E1E1E]   transition-colors duration-300">
       <Header />
-      
-      {/* تعديل الـ padding الجانبي هنا ليناسب الشاشات الصغيرة جداً */}
-      <main className="max-w-[1400px] mx-auto px-2 sm:px-4 md:px-8 py-4 md:py-6 flex flex-col items-center justify-center">
+       <main className="max-w-[1400px] mx-auto px-2 sm:px-4 md:px-8 py-4 md:py-6 flex flex-col items-center justify-center">
         
         <div className="w-full max-w-[420px] md:max-w-[900px] flex flex-col items-center space-y-4 md:space-y-6">
           
@@ -38,7 +36,6 @@ const SavedPage = () => {
                 )}
               </button>
       
-              {/* تصغير حجم خط العنوان على الهواتف الصغيرة */}
               <h1 className="title-font text-[40px] md:text-[70px] font-bold self-start mt-8 mb-10 dark:text-gray-50">
                 {t('saved_posts')}
               </h1>

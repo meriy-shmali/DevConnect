@@ -1,23 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updatePost, deletePost } from '@/api/PostApi'; // تأكد من المسار الصحيح لملف الـ API
-import { toast } from 'react-hot-toast'; // اختياري للتنبيهات
+import { updatePost, deletePost } from '@/api/PostApi'; 
+import { toast } from 'react-hot-toast'; 
+import i18next from 'i18next';
 
 export const usePostActions = () => {
-  const queryClient = useQueryClient();
 
-  // --- ميوتشن التعديل ---
+  const queryClient = useQueryClient();
   const updateMutation = useMutation({
-    // نمرر كائن يحتوي على postId والبيانات الجديدة
-    mutationFn: ({ postId, data }) => updatePost(postId, data),
-    
+    mutationFn: ({ postId, data }) => updatePost(postId, data), 
     onSuccess: () => {
       queryClient.invalidateQueries(['posts']);
       
-      toast.success("تم تحديث المنشور بنجاح");
+      toast.success(i18next.t('post_updated_success'));
     },
     onError: (error) => {
       console.error("Update Error:", error);
-      toast.error("فشل في تعديل المنشور");
+      toast.error(i18next.t('post_updated_failed'));
     },
   });
 
@@ -25,19 +23,18 @@ export const usePostActions = () => {
   const deleteMutation = useMutation({
     mutationFn: (postId) => deletePost(postId),
     onSuccess: () => {
-      // تحديث القائمة بعد الحذف لإخفاء المنشور المحذوف
+     
       queryClient.invalidateQueries(['posts']);
-      toast.success("تم حذف المنشور");
+      toast.success(i18next.t('post_deleted_success'));
     },
     onError: (error) => {
-      toast.error("حدث خطأ أثناء الحذف");
+  //    toast.error("حدث خطأ أثناء الحذف");
     },
   });
 
   return {
     updateMutation,
     deleteMutation,
-    // اختصار للحالة لسهولة الاستخدام في الـ UI
     isUpdating: updateMutation.isLoading,
     isDeleting: deleteMutation.isLoading
   };

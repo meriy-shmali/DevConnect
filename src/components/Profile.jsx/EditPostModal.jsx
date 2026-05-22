@@ -14,8 +14,9 @@ import { usePostActions } from '@/hook/UsePostMutation';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useGetProfile } from '@/hook/UseProfileData';
+import Header from './Header';
 
-const CreatepostMobile = ({postData}) => {
+const CreatepostMobile = () => {
   const { id } = useParams();
   const [content, setContent] = useState('');
   const { t } = useTranslation();
@@ -25,9 +26,9 @@ const CreatepostMobile = ({postData}) => {
   const { data: profileData, isLoading } = useGetProfile('me');
   const post = CreatepostLogic();
   const { updateMutation } = usePostActions();
-  const [postImages, setPostImages] = useState([]); // لتخزين مصفوفة الصور
+  const [postImages, setPostImages] = useState([]); 
    const [codeSnippet, setCodeSnippet] = useState('');
-  // جلب المنشور المطلوب من مصفوفة النتائج
+  
   useEffect(() => {
     const posts = profileData?.results||  profileData?.posts || [];
     const foundPost = posts.find(p => p.id.toString() === id);
@@ -36,17 +37,13 @@ const CreatepostMobile = ({postData}) => {
         setContent(foundPost.content);
         setCodeSnippet(foundPost.code || "");
         
-        // التأكد من أن المصفوفة تحتوي على الصور بالروابط الكاملة
           if (foundPost.media && postImages.length === 0) {
             setPostImages(foundPost.media);
         }
     }
-    // 3. إضافة الاعتماديات الصحيحة
 }, [profileData, id]); 
 
- // أضفنا post للمراقبة
-
-  if (isLoading) return <div className="text-center mt-20 text-2xl">Loading...</div>;
+  if (isLoading) return <div className="text-center mt-20 text-2xl">{t('is_loading')}</div>;
 
 const handleSaveUpdate = () => {
     if (!id) return;
@@ -59,27 +56,26 @@ const handleSaveUpdate = () => {
         formData.append('delete_images', imageId);
     });
      try {
-        // نستخدم mutateAsync لضمان انتظار انتهاء العملية بنجاح
         updateMutation.mutateAsync({ 
             postId: id, 
             data: formData 
         });
         
-        // الانتقال بعد نجاح العملية تماماً
         navigate('/profile/me');
     } catch (error) {
         console.error("Error updating post:", error);
     }
 };
-const handleDeleteClick = (imgId, index) => {
-    setImagesToDelete(prev => [...prev, imgId]); // إضافة المعرف لقائمة الحذف
-    setPostImages(prev => prev.filter((_, i) => i !== index)); // إخفاؤها من الواجهة
-};
+//const handleDeleteClick = (imgId, index) => {
+ //   setImagesToDelete(prev => [...prev, imgId]); 
+ //   setPostImages(prev => prev.filter((_, i) => i !== index));
+//};
   return (
-    
+     <div className="w-full min-h-screen bg-gray-50 dark:bg-dark-bg dark:bg-[#1E1E1E] ">
+        <Header/>
     <div className='flex-col mt-14   space-y-16'>
-    <div> <p className='text-5xl flex justify-center items-center font-semibold'>{t('edit_post')}</p></div>
-    <div className='flex flex-col w-full max-w-[700px] mx-auto bg-white dark:bg-dark-bg p-2 rounded-lg'>
+    <div> <p className='text-5xl flex justify-center items-center font-semibold dark:text-gray-50'>{t('edit_post')}</p></div>
+    <div className='flex flex-col w-full max-w-[700px] mx-auto bg-white dark:bg-[#1E1E1E]   p-2 rounded-lg'>
     
     {/* حقل النص: شفاف، خط كبير، بدون حدود تركيز */}
     <div className='w-full'>
@@ -87,20 +83,20 @@ const handleDeleteClick = (imgId, index) => {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder=''
-            className='w-full h-auto text-[20px] border-none focus-visible:ring-0 resize-none bg-transparent dark:text-white placeholder:text-gray-500'
+            className='w-full h-auto text-[20px] border-none focus-visible:ring-0 resize-none bg-transparent  placeholder:text-gray-500 dark:text-gray-50 dark:bg-dark-post-background'
         />
     </div>
 
     {/* عرض الكود إن وجد (بتصميم أنيق) */}
     {codeSnippet && (
         <div className='my-3 rounded-md overflow-hidden border border-gray-700'>
-            <div className='bg-gray-800 px-4 py-1 text-xs text-gray-400 flex justify-between'>
-                <span>Code snippet</span>
-            </div>
+             {/* <div className='bg-gray-800 px-4 py-1 text-xs text-gray-400 flex justify-between'>
+              <span>Code snippet</span>
+            </div>*/}
             <Textarea
                 value={codeSnippet}
                 onChange={(e) => setCodeSnippet(e.target.value)}
-                className='w-full h-[250px] font-mono bg-[#1c1e21] text-pink-400 border-none focus-visible:ring-0 text-sm'
+                className='w-full h-[250px] font-mono bg-[#1c1e21] text-pink-400 border-none focus-visible:ring-0 text-sm dark:text-gray-50 dark:bg-dark-post-background'
             />
         </div>
     )}
@@ -152,15 +148,15 @@ const handleDeleteClick = (imgId, index) => {
     
  <div className="pt-0 mb-10 pb-32 flex  items-center justify-center gap-4">
   <button  onClick={handleSaveUpdate} disabled={updateMutation.isPending}
-   className="rounded-md  px-6 py-2 text-[20px] text-white bg-blue-button text-text-button">
+   className="rounded-md  px-6 py-2 text-[16px] text-white bg-blue-button text-text-button">
     {t('post')}
   </button>
   <button  onClick={() => navigate(-1)}
-   className="rounded-md  px-6 py-2 text-[20px] bg-cancel-button text-text-button">
+   className="rounded-md  px-6 py-2 text-[16px] bg-cancel-button text-text-button">
     {t('cancel')}
   </button>
   <div className="relative inline-block">
-    <Button className="text-[22px] border-2 rounded-[50px]  pt-1 pb-1 text-black border-black  " 
+    <Button className="text-[18px] border-2 rounded-[50px]  pt-1 pb-1 text-black border-black dark:bg-dark-post-background dark:text-gray-50" 
     onClick={()=>post.setshow(!post.show)}>{t('ai')}<BsStars className='size-[22px] text-amber-300'/>
     </Button>
    <AnimatePresence>
@@ -170,21 +166,22 @@ const handleDeleteClick = (imgId, index) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
                                 transition={{ duration: 0.2 }}
-                                className='absolute md:left-1/5 md:-translate-x-1/2 top-full mt-3 z-[999] min-w-[280px] pb-2 left-1/6 -translate-x-1/2 '
+                                className='absolute md:left-1/5 md:-translate-x-1/2 top-full mt-3 z-[999] w-[280px] xs:w-[260px] pb-2 left-1/6 -translate-x-1/2 '
                             >
                                 <div className="rounded-xl overflow-hidden bg-white dark:bg-gray-800">
                                     <AIAssistant
                                         type='mobile'
-                                        improve={post.aiaction.improve}
-                                        generate={post.aiaction.generate}
-                                        summarize={post.aiaction.summarize}
-                                        addtags={() => post.aiaction.addTags(post.text)}
-                                        category={() => post.aiaction.categorize(post.text)}
-                                        improveM={post.improveMutation}
-                                        generateM={post.generateMutation}
-                                        summarizeM={post.summarizeMutation}
-                                        addM={post.addtagMutation}
-                                        categoryM={post.categoryMutation}
+                                         improve={() => post.aiaction.improve(codeSnippet)}
+                                         generate={() => post.aiaction.generate(codeSnippet)}
+                                         summarize={() => post.aiaction.summarize(codeSnippet)}
+                                         addtags={() => post.aiaction.addTags(codeSnippet)}
+                                         category={() => post.aiaction.categorize(codeSnippet)}
+    
+                                         improveM={post.improveMutation}
+                                         generateM={post.generateMutation}
+                                         summarizeM={post.summarizeMutation}
+                                         addM={post.addtagMutation}
+                                         categoryM={post.categoryMutation}
                                     />
                                 </div>
                             </motion.div>
@@ -196,10 +193,14 @@ const handleDeleteClick = (imgId, index) => {
             <AiModal 
                 open={post.showModel}
                 result={post.aiResult}
-                onuse={post.handleUseAi}
+                 // عندما يضغط المستخدم على زر الموافقة، يتم تحديث كود الـ Snippet بالنتيجة القادمة من الـ AI
+                onuse={() => {
+                  setCodeSnippet(post.aiResult); 
+                  post.setshowModel(false); // إغلاق المودال
+                             }}
                 onclose={() => post.setshowModel(false)} 
             />
-        </div>
+        </div></div>
     );
 };
 

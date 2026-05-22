@@ -6,7 +6,7 @@ import MenuPanel from './Sidepanel/MenuPanel'
 import { useEffect } from 'react'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
+import { usePostActions } from '@/hook/UsePostMutation'
 import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
 import { UseMe } from '@/hook/UseQueryMe'
@@ -44,8 +44,21 @@ const formattedDate = post.created_at
   ? dayjs(post.created_at).locale(i18n.language).fromNow() 
   : '';
 
-
-
+const handleEditPost = () => {
+  if (post?.id) {
+    navigate(`/edit-post/${post.id}`);
+  }
+};
+const { updateMutation, deleteMutation } = usePostActions();
+const handleDeletePost = async () => {
+  if ( post?.id) {
+    try {
+      await deleteMutation.mutateAsync(post.id);
+    } catch (error) {
+      console.error("Delete Error:", error);
+    }
+  }
+};
 const shouldShowFollowLogic = 
   post.user?.id &&                              // ← guard جديد
   Number(post.user?.id) !== Number(data?.id) && 
@@ -89,8 +102,8 @@ ${isfollowing
         menu={menu}
         toggleMenu={toggleMenu}
         size={28}
-       // onEdit={handleEditPost}
-       // onDelete={handleDeletePost}
+        onEdit={handleEditPost}
+        onDelete={handleDeletePost}
       />
     )}</div>
     </div>

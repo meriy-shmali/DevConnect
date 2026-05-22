@@ -1,19 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {updateProfilereq, deleteProfilePhotoReq } from '@/api/ProfilePageApi'; // تأكد من المسار الصحيح
-//import { toast } from 'react-hot-toast'; // أو أي مكتبة تنبيهات تستخدمها
+import {updateProfilereq, deleteProfilePhotoReq } from '@/api/ProfilePageApi'; 
+import { toast } from "react-toastify";
+import i18n from 'i18next'; 
 
 export const useUpdateProfilePhoto = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    // استخدمي الدالة المستوردة مباشرة لأنها تحتوي على api.put والرابط الصحيح
     mutationFn: updateProfilereq, 
-    onSuccess: () => {
-       
-        queryClient.invalidateQueries({ queryKey: ["profile"] });
-        console.log("تم تحديث الكاش بنجاح");
+      onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      toast.success(i18n.t('photo_updated_success'));
     },
-    onError: (error) => {
-      console.error("فشل التحديث:", error?.response?.data || error.message);
+    onError: () => {
+      toast.error(i18n.t('photo_updated_failed'));
     }
   });
 };
@@ -21,9 +20,12 @@ export const useDeleteProfilePhoto = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteProfilePhotoReq,
-    onSuccess: () => {
+     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      console.log("تم حذف الصورة وتحديث البيانات");
+      toast.success(i18n.t('photo_deleted_success'));
+    },
+    onError: () => {
+      toast.error(i18n.t('photo_deleted_failed'));
     }
   });
 };

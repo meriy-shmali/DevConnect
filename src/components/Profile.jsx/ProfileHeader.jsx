@@ -1,25 +1,21 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import { UserPlus, Users, Edit2,Pencil,Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { toast } from "react-toastify";
-import { useIsOwner } from '@/hook/UseIsOwner';
-import { useUpdatePersonalInfo } from '@/hook/UseProfileData';
 import { useGetFollowers } from '@/hook/UseGetFollowers';
 import { useGetFollowing } from '@/hook/UseGetFollowing';
 import { MdEdit } from 'react-icons/md';
 import FollowersModal from './FollowersModal';
 import FollowingModal from './FollowingModal';
-import { followUser } from '@/api/FollowersApi';
 import AiModal from './AiModal';
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import { useUpdateProfilePhoto,useDeleteProfilePhoto } from '@/hook/UseUpdateProfileMutation';
 import { useFollow } from '@/hook/UseFollow';
+
 const ProfileHeader = ({ userData }) => {
 
   const { t } = useTranslation();
   const { followMutation, unfollowMutation } = useFollow(); 
-  const [menu, setMenu] = useState({});
   const [showEditMenu,setShowEditMenu]=useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(null);
@@ -29,7 +25,6 @@ const ProfileHeader = ({ userData }) => {
   const fileInputRef = useRef(null);
   const { username } = useParams();
   const deleteMutation = useDeleteProfilePhoto();
-  //const isOwner = true;
   const isOwner = username === 'me' || String(userData?.id) === String(localStorage.getItem('userId'));
   const handleEditClick = () => {
     setShowEditMenu(false);
@@ -38,10 +33,9 @@ const ProfileHeader = ({ userData }) => {
 
   const [ showUnfollowModal,setShowUnfollowModal] = useState(false);
   const handleFollowClick = () => {
-  if (userData?.is_following|| userData?.data?.is_following) { // تأكدي من مسمى الحقل القادم من الباك إند
+  if (userData?.is_following|| userData?.data?.is_following) { 
     setShowUnfollowModal(true);
   } else {
-    // نستخدم followMutation المستخرج من الهوك
     followMutation.mutate(userData?.id || userData?.data?.id);
   }
 };
@@ -54,29 +48,38 @@ const ProfileHeader = ({ userData }) => {
     
     try {
       setIsUploading(true);
-      // استخدمي mutateAsync بدلاً من mutate لكي يعمل الـ await والـ try/catch
       await updateMutation.mutateAsync(formData); 
-      console.log("تم الإرسال للشبكة بنجاح");
-    } catch (error) {
-      console.error("خطأ أثناء الإرسال:", error);
     } finally {
       setIsUploading(false);
     }
   }
 };
 
+  const menuRef = useRef(null); 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowEditMenu(false);
+      }
+    };
+
+    if (showEditMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showEditMenu]);
+
 const updateMutation = useUpdateProfilePhoto();
 const handleDeletePhoto = async () => {
-  const confirmDelete = window.confirm("هل أنتِ متأكدة من حذف الصورة الشخصية؟");
-  
   if (confirmDelete) {
     try {
       setIsUploading(true);
       setShowEditMenu(false); 
-      await deleteMutation.mutateAsync(); // إرسال طلب الحذف للسيرفر
-    } catch (error) {
-      console.error("خطأ في حذف الصورة:", error);
-    } finally {
+      await deleteMutation.mutateAsync(); 
+    } 
+    finally {
       setIsUploading(false);
     }
   }
@@ -107,11 +110,13 @@ const handleDeletePhoto = async () => {
              />
             {isOwner && (
           <div>
-           <button className="absolute bottom-1 right-2 bg-white p-2 rounded-full shadow-md border border-gray-200 hover:bg-gray-50 transition-all transform hover:scale-110 "onClick={()=>setShowEditMenu(!showEditMenu)}>
-            <Edit2 className="w-3 h-3 text-gray-600" />
+           <button className="absolute bottom-1 right-2 bg-white p-2 rounded-full shadow-md border border-gray-200 hover:bg-gray-50 transition-all transform hover:scale-110 dark:bg-dark-post-background "onClick={()=>setShowEditMenu(!showEditMenu)}>
+            <Edit2 className="w-3 h-3 text-gray-600 dark:text-gray-50 " />
            </button>
             {showEditMenu && (
-               <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow py-2 flex flex-col z-50 w-[100px] text-lg">
+               <div ref={menuRef}
+                    className="absolute right-0 mt-2 bg-white border rounded-lg shadow py-2 flex flex-col
+                              border   z-50 w-[100px] text-lg">
           
                 <button onClick={handleEditClick}
                  className="px-3 py-1  flex items-center w-fit text-blue-500 hover:text-blue-400  ">
@@ -126,7 +131,7 @@ const handleDeletePhoto = async () => {
           </div>   )}
         </div>
         <div className="flex flex-col items-center md:items-start  ">
-        <h2 className="text-4xl font-medium text-gray-900 mb-3 mt-5">{userData?.username}</h2>
+        <h2 className="text-4xl font-medium text-gray-900 mb-3 mt-5 dark:text-gray-50">{userData?.username}</h2>
         {!isOwner &&(
            <button 
            variant='secondary' type='edit'  size='sm'
@@ -143,20 +148,20 @@ const handleDeletePhoto = async () => {
         <div  className="flex flex-col items-center gap-2 cursor-pointer group active:scale-95 transition-transform "
           onClick={() => setModalOpen(true)}>
           <div className="flex items-center gap-2 text-gray-500 mr-3 mt-5 ">
-            <Users className="w-7 h-7 sm:w-8 sm:h-8  text-gray-900" />
-            <span className="sm:text-3xl text-xl  font-medium text-gray-900  ">{t('following')}</span>
+            <Users className="w-7 h-7 sm:w-8 sm:h-8  text-gray-900 dark:text-gray-50" />
+            <span className="sm:text-3xl text-xl  font-medium text-gray-900  dark:text-gray-50 ">{t('following')}</span>
           </div>
-          <span className="sm:text-3xl text-xl font-medium text-gray-900">  {userData?.following_count || userData?.data?.following_count || 0}</span>
+          <span className="sm:text-3xl text-xl font-medium text-gray-900 dark:text-gray-50">  {userData?.following_count || userData?.data?.following_count || 0}</span>
         </div>
       </div>)}
       <div className="flex  gap-1">
         <div  className="flex flex-col items-center gap-2 cursor-pointer group active:scale-95 transition-transform "
           onClick={() => setIsModalOpen(true)}>
           <div className="flex items-center gap-2 text-gray-500 mr-3 mt-5 ">
-            <Users className="w-7 h-7 sm:w-8 sm:h-8  text-gray-900" />
-            <span className="sm:text-3xl text-xl  font-medium text-gray-900  ">{t('followers')}</span>
+            <Users className="w-7 h-7 sm:w-8 sm:h-8  text-gray-900 dark:text-gray-50" />
+            <span className="sm:text-3xl text-xl  font-medium text-gray-900 dark:text-gray-50 ">{t('followers')}</span>
           </div>
-          <span className="sm:text-3xl text-xl font-medium text-gray-900">  {userData?.followers_count || userData?.data?.followers_count || 0}</span>
+          <span className="sm:text-3xl text-xl font-medium text-gray-900 dark:text-gray-50">  {userData?.followers_count || userData?.data?.followers_count || 0}</span>
         </div>
       </div>
       
@@ -181,8 +186,8 @@ const handleDeletePhoto = async () => {
        unfollowMutation.mutate(userId);
        setShowUnfollowModal(false);
        }}
-       result={t('Are you sure you want to unfollow')}
-       isLoading={unfollowMutation.isPending} // تمرير حالة التحميل للمودال
+       result={t('unfollow_confirm')}
+       isLoading={unfollowMutation.isPending} 
       />
       </div>
     </div>

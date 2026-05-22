@@ -10,24 +10,24 @@ const FollowingModal = ({  isOpen, onClose, userId }) => {
    const { data: following, isLoading ,error} = useGetFollowing(userId);
    const listData = Array.isArray(following) ? following : (following?.data || following?.results || []);
   const handleUserClick = (user_id) => {
-    navigate(`/profile/${user_id}`);  // 3. المسار الخاص ببروفايل المستخدم
-    onClose(); // إغلاق المودال بعد الانتقال
+    navigate(`/profile/${user_id}`); 
+    onClose();
   };
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 transition-all duration-300 cursor-pointer" onClick={onClose}>
       
-      <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 cursor-default" onClick={(e)=>e.stopPropagation()}>
+      <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 cursor-default dark:bg-dark-post-background" onClick={(e)=>e.stopPropagation()}>
         
         {/* Header */}
         <div className=" relative flex items-center shrink-0 p-4 ml-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-4xl font-medium text-gray-900  tracking-tight p-4">{t('following')}</h2>
+          <div className="flex items-center gap-2 dark:text-gray-50 ">
+            <h2 className="text-4xl font-medium text-gray-900  tracking-tight p-4 dark:text-gray-50 ">{t('following')}</h2>
             <Users className="w-7 h-7 " />
           </div>
-          <button onClick={onClose} className=" absolute top-5 right-5 p-2 z-10 hover:bg-gray-50 rounded-full transition-colors">
-            <X className="w-6 h-6  text-red-500 text-xl font-light hover:text-red-700 " />
+          <button onClick={onClose} className=" absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 rounded-full transition-colors">
+            <X className="w-6 h-6  text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700 " />
           </button>
         </div>
 
@@ -36,11 +36,11 @@ const FollowingModal = ({  isOpen, onClose, userId }) => {
           {isLoading ? (
             <div className="flex flex-col items-center py-10 text-gray-400">
               <Loader2 className="w-8 h-8 animate-spin mb-2" />
-              <p className="text-sm">Loading following...</p>
+              <p className="text-sm">{t('loading_following')}</p>
             </div>
           ) : error ? (
             <div className="text-center py-10 text-red-500 text-sm">
-              حدث خطأ أثناء جلب البيانات.
+             {t('error_fetching_data')}
             </div>
           ) : (listData.length > 0 ? (
              listData.map((user) => (
@@ -54,12 +54,12 @@ const FollowingModal = ({  isOpen, onClose, userId }) => {
                   className="w-12 h-12 rounded-full border border-gray-100 object-cover" 
                   alt={user.username}
                 />
-                <span className="font-medium  text-xl flex-1">{user.username}</span>
+                <span className="font-medium  text-xl flex-1 dark:text-gray-50 ">{user.username}</span>
                
               </div>
             ))
           ) : (
-            <p className="text-center py-10 text-gray-400 italic">{t('no_following_yet')}</p>
+            <p className="text-center py-10 text-gray-400 italic dark:text-gray-50 ">{t('no_following_yet')}</p>
           ))}
         </div>
       </div>

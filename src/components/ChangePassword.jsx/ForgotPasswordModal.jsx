@@ -132,7 +132,7 @@ export const ForgotPasswordModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40  p-4">
       <div className="bg-white  dark:bg-dark-post-background w-full max-w-md rounded-xl p-6 shadow-2xl relative">
-        <button onClick={onClose} className="absolute end-4 top-4 text-gray-400 hover:text-black dark:hover:text-white">
+        <button onClick={onClose} className="absolute end-4 top-4 text-red-500 hover:text-black dark:hover:text-white">
           <X size={20} />
         </button>
 
