@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { changePasswordApi ,sendOtpApi, resetPasswordApi} from '@/api/ChangeApi';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
  
 export const useChangePasswordMutation = (form) => {

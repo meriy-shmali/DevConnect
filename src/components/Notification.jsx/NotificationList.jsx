@@ -24,7 +24,7 @@ const NotificationList = ({ isOpen, onClose,type }) => {
   return (
     <>
       {/* overlay */}
-      <div onClick={onClose} className="fixed inset-0 w-[800px] left-1/2" />
+      <div onClick={onClose} className="fixed inset-0 w-[800px] left-1/2 " />
 
       {/* sidebar */}
       <motion.div
@@ -34,7 +34,7 @@ const NotificationList = ({ isOpen, onClose,type }) => {
         animate={{ x: 0 }}
         exit={{ x: 400 }}
         transition={{ duration: 0.3 }}
-        className="sidebar fixed right-0 top-0 w-[450px] h-[calc(100vh-64px)] bg-white shadow-lg p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll"
+        className="sidebar fixed right-0 top-0 md:w-[450px] w-[350px] h-[calc(100vh-64px)] bg-white shadow-lg p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-scroll dark:bg-dark-post-background "
       >
 
         {/* هيدر القائمة */}

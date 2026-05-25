@@ -70,7 +70,7 @@ const PostPage = () => {
         <PostCard 
               post={post}
               customWidth={isMobile ? "max-w-[500px] w-full" : undefined} 
-              commentClass={isMobile ? ` w-full max-w-[350px] mx-auto scale-90 origin-center gap-x-0.5 flex justify-center border-t pt-1 pb-6 mb-[-10px] 
+              commentClass={isMobile ? ` w-full max-w-[350px] mx-auto scale-85 origin-center gap-x-0.5 flex justify-center border-t pt-1 pb-6 mb-[-10px] 
                                          [&~div]:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
                                          [&~div_div]:!max-w-full [&~div_div]:box-border [&_.._div]:max-w-[320px]` : undefined}
               HeaderClass={isMobile ? `

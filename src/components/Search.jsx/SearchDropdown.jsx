@@ -44,18 +44,20 @@ const SearchDropdown = () => {
   const itemsCount = currentList.length;
 
   const handleSearchConfirm = () => {
-    if (query.trim() !== '') {
-      executeSearch(true);
-      setIsSearching(true);
-      setIsExpanded(false);
-    }
-  };
+  if (query.trim() !== '') {
+    console.log("Search confirmed for query:", query); 
+    executeSearch(1);
+    setIsSearching(true);
+    saveHistory(query, activeTab); 
+    setIsExpanded(false);
+  }
+};
 
   const handleKeyDown = (e) => {
   if (e.key === 'Enter') {
     // 1. منع أي سلوك افتراضي للمتصفح (مهم جداً)
     e.preventDefault();
-
+    handleSearchConfirm();
     if (query.trim() !== '') {
       console.log("Enter key pressed for query:", query); // سطر للتأكد في Console
       
@@ -90,7 +92,7 @@ const SearchDropdown = () => {
     setIsSearching(false); // يعيد السجل أو الاقتراحات للظهور فور الكتابة
 
     if (value.startsWith('#')) {
-      setActiveTab('tags');
+      setActiveTab('tagss');
     }
     setQuery(value);
   setIsSearching(false);
@@ -125,7 +127,7 @@ const SearchDropdown = () => {
     }
   }
   // 2. إذا ضغطنا على منشور (سواء في تبويبة posts أو tags)
-  else if (isSearching && (activeTab === 'posts' || activeTab === 'tags')) {
+  else if (isSearching && (activeTab === 'posts' || activeTab === 'tagss')) {
     // ننتقل لصفحة المنشور ونمرر البيانات
     navigate(`/posts/${item.id}`, { state: { post: item } });
     setIsOpen(false);
@@ -145,23 +147,24 @@ const SearchDropdown = () => {
         <input
           type="text"
           dir='auto'
-          placeholder={t('Search')}
+          placeholder={t('search')}
           className={`w-full py-2.5 ps-12 pe-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 
               focus:ring-blue-500 bg-gray-100 text-gray-900 md:text-lg font-semibold placeholder-gray-700 
-              dark:text-dark-text dark:bg-gray-50 dark:border-gray-800 dark:placeholder-gray-400 
-               ${isRtl ? 'md:pr-16 pl-6 text-right' : 'md:pl-16 pr-6 text-left'}`}
+              dark:text-black dark:bg-gray-50 dark:border-gray-800 dark:placeholder-gray-400 
+               ${isRtl ? 'md:pe-16 ps-6 text-right' : 'md:ps-16 pe-6 text-left'}`}
           value={query}
           onFocus={() => setIsOpen(true)}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
-        <IoSearchSharp className={`absolute top-1/2 transition-colors transform -translate-y-1/2 h-6 w-6 md:w-7 md:h-7 text-gray-700 dark:text-dark-text z-10 ${isRtl ? 'right-4' : 'left-4'}`} />
+        <IoSearchSharp    onClick={handleSearchConfirm}
+        className={`absolute top-1/2 transition-colors transform -translate-y-1/2 h-6 w-6 md:w-7 md:h-7 text-gray-700 dark:text-black z-10 ${isRtl ? 'end-4' : 'start-4'}`} />
       </div>
     {isOpen && (
         <div className="absolute top-full mt-1 bg-white dark:bg-dark-post-background left-1/2 -translate-x-1/2 w-[90vw] md:w-[600px] shadow-2xl rounded-2xl border border-gray-100 dark:border-gray-700 z-50 overflow-hidden">
           {/* Tabs */}
           <div className="flex justify-around py-1  dark:border-gray-700">
-            {['people', 'tags', 'posts'].map(tab => (
+            {['people', 'tagss', 'posts'].map(tab => (
               <button
                 key={tab}
                 onClick={() => { 
@@ -206,16 +209,16 @@ const SearchDropdown = () => {
            <>
           <img 
             src={item.user?.personal_photo_url || item.user?.image || '/default-avatar.png'} 
-            className="w-14 h-14 rounded-full object-cover" alt=""
+            className="w-20 h-14 md:w-14 md:h-14 rounded-full object-cover " alt=""
           />
            <div className="flex flex-col">
               <div className="flex items-center gap-2">
-          <span className="text-xl font-semibold dark:text-white">
+          <span className="md:text-xl font-semibold dark:text-white">
             {item.user?.username || item.query || item.username}
           </span>
           {(item.user?.is_following || item.is_following) && (
                 <span className="text-sm  text-blue-600 px-1.5 py-0.5 rounded font-bold ">
-                 {t('followinggg')}
+                 {t('followingg')}
                 </span>
               )}
             </div>
@@ -227,7 +230,7 @@ const SearchDropdown = () => {
         <>
           <MdHistory className="text-gray-400 w-6 h-6" />
           <span className="text-sm font-bold dark:text-white">
-            {activeTab === 'tags' ? `#${item.query || item.name || item}` : (item.query|| item.title || item)}
+            {activeTab === 'tagss' ? `#${item.query || item.name || item}` : (item.query|| item.title || item)}
           </span>
         </>
       )}
@@ -283,13 +286,13 @@ const SearchDropdown = () => {
       <>
         {activeTab === 'people' ? (
           <>
-            <img src={item.personal_photo_url || '/default-avatar.png'} className="w-14 h-14 rounded-full object-cover" alt="" />
+            <img src={item.personal_photo_url || '/default-avatar.png'} className="w-20 h-14 md:w-14 md:h-14 rounded-full object-cover" alt="" />
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
               <span className="text-xl font-semibold dark:text-white">{item.username}</span>
               {(item.user?.is_following || item.is_following) && (
                 <span className="text-sm bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-bold ">
-                 {t('followinggg')}
+                 {t('followingg')}
                 </span>
               )}
             </div>

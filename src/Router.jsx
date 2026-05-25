@@ -1,13 +1,6 @@
 import React from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom"; // أضفنا Outlet
 import { useNotificationLogic } from "./hook/useNotificationLogic"; // استيراد اللوجيك الخاص بكِ
-
-// 1. إنشاء مكون مغلف لتفعيل الإشعارات في كل مكان
-const RootLayout = () => {
-  useNotificationLogic(); // تفعيل المستمع هنا ليعمل في كل المسارات
-  return <Outlet />;      // هذا سيقوم بعرض المكونات (Feed, Profile, etc.)
-};
-
 import Welcomepage from "./components/Welcomepage.jsx";
 import Register from "./components/Register/Register.jsx";
 import Feed from "./components/Feed/Feed.jsx";
@@ -20,16 +13,17 @@ import EditPostModal from "./components/Profile.jsx/EditPostModal.jsx";
 import MainPostPage from "./components/Search.jsx/MainPostPage";
 import SavedPage from "./components/AccountSetting.jsx/SavedPage";
 
+// 1. إنشاء مكون مغلف لتفعيل الإشعارات في كل مكان
+const RootLayout = () => {
+  useNotificationLogic(); // تفعيل المستمع هنا ليعمل في كل المسارات
+  return <Outlet />;      // هذا سيقوم بعرض المكونات (Feed, Profile, etc.)
+};
+
 const router = createBrowserRouter([
   {
-    // 2. نجعل جميع المسارات تتبع للـ RootLayout
     path: "/",
-    element: <RootLayout />, 
-    children: [
-      {
-        path: "/",
-        Component: Welcomepage,
-      },
+    Component: Welcomepage,
+  },
       {
         path: '/register',
         Component: Register,
@@ -75,7 +69,6 @@ const router = createBrowserRouter([
         Component: SavedPage,
       },
     ]
-  }
-]);
+)
 
 export default router;

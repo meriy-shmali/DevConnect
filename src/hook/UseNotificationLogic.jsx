@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { onMessageListener } from "../firebase/firebaseConfig";
 import { useNotificationMutation } from "./UseNotificationMutation";
-import { toast } from "react-toastify";
+import { toast } from 'react-hot-toast';
 import { useQueryClient } from "@tanstack/react-query";
 export const useNotificationLogic = () => {
      const navigate = useNavigate();
@@ -12,7 +12,7 @@ export const useNotificationLogic = () => {
     onMessageListener()
       .then((payload) => {
         const title = payload.notification?.title || "DevConnect";
-        const body = payload.notification?.body || "لديك تنبيه جديد";
+        const body = payload.notification?.body 
 
         toast.info(`${title}: ${body}`, {
           position: "top-right",

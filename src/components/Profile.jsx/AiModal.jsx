@@ -7,9 +7,9 @@ const AiModal = ({isOpen,result,onuse,onClose}) => {
     <AnimatePresence>
         {
         isOpen&&(
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 ">
             <motion.div
-            className="relative bg-white w-[500px] max-w-[90%] rounded-xl p-6 shadow-xl"
+            className="relative bg-white w-[500px] max-w-[90%] rounded-xl p-6 shadow-xl dark:bg-dark-post-background"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
@@ -17,11 +17,11 @@ const AiModal = ({isOpen,result,onuse,onClose}) => {
           >
             <button
               onClick={onClose}
-              className="absolute top-3 right-3"
+              className="absolute top-3 end-3"
             >
               <IoClose className='text-[20px] text-red-600'/>
             </button>
-            <div className="whitespace-pre-wrap text-gray-700 max-h-[300px] overflow-y-auto">
+            <div className="whitespace-pre-wrap text-gray-700 max-h-[500px] text-xl overflow-y-auto dark:text-gray-50 mt-2">
               {result}
             </div>
              <div className="flex justify-end gap-3 mt-6">

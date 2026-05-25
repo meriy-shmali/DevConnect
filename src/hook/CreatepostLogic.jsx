@@ -9,7 +9,7 @@ import { usecreatepost } from "./UseMutationCreatepost";
 import{parsecontent} from '@/Utils/ParsedContent';
 import { useQueryClient } from "@tanstack/react-query";
 import { AiAction } from "@/hook/AiAction";
-import toast from "react-hot-toast";
+import { toast } from 'react-hot-toast';
 import { languages } from "prismjs";
 
 const CreatepostLogic = () => {

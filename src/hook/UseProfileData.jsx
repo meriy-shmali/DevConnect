@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getuserprofilereq,  updateProfileInfo,getMyProfileReq } from '@/api/ProfilePageApi';
-import { toast } from "react-toastify";
+import { toast } from 'react-hot-toast';
 import i18n from 'i18next';
 
 export const useGetProfile = (username) => {

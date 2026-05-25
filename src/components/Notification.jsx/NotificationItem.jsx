@@ -28,7 +28,7 @@ const NotificationItem = ({ item , onClick }) => {
   return (
     <div 
      onClick={onClick}
-     className={`flex items-center justify-between p-4  transition-colors border-b border-gray-50
+     className={`flex items-center justify-between p-4  transition-colors border-b border-gray-50 dark:bg-dark-post-background
      last:border-0 cursor-pointer group ml-4 ${item.is_read ? 'bg-white hover:bg-gray-50':'bg-gray-200/80'}`}>
       <div className="flex items-center gap-3">
         {/* الصورة الشخصية (Avatar) */}
@@ -44,11 +44,11 @@ const NotificationItem = ({ item , onClick }) => {
         {/* نصوص الإشعار */}
         <div className="flex flex-col gap-0.5">
           <p className='text-[18px] leading-snug text-black mb-2  '>
-            <span className={` mr-1 ${item.is_read ?' text-2xl':'!font-bold'}` }>{item?.from_user?.username}</span> 
+            <span className={` mr-1 ${item.is_read ?' !text-black dark:!text-gray-400 text-2xl':'!font-bold text-gray-600 dark:text-gray-200'}` }>{item?.from_user?.username}</span> 
             {" "}
-            <span className={` ${item.is_read ?'':'!font-bold'}`}> {t(`notifications_msg.${item?.notification_type}`)}</span>
+            <span className={` ${item.is_read ?'!text-black dark:!text-gray-400':'!font-bold text-gray-600 dark:text-gray-200'}`}> {t(`notifications_msg.${item?.notification_type}`)}</span>
           </p>
-          <span className={`text-[16px] text-gray-600 font-medium ${item.is_read ? '!text-black':'text-gray-600'}`}>
+          <span className={`text-[16px] text-gray-600 font-medium ${item.is_read ? '!text-black dark:!text-gray-400':'text-gray-600 dark:text-gray-200'}`}>
               {getRelativeTime(item?.created_at)} 
           </span>
         </div>

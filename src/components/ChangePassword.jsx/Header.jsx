@@ -37,11 +37,11 @@ const Header = () => {
         
          {/* 1. شعار التطبيق - DevConnect */}
         <div className="flex items-center ">
-         <p className='md:text-[48px] text-[30px] font-bold text-gradient'>DevConnect</p>
+         <p className='md:text-[48px] text-[20px] font-bold text-gradient'>DevConnect</p>
         </div>
       
       {/* منطقة البحث المحدثة */}
-     <div ref={searchRef} className="flex-grow flex justify-center mx-4 md:max-4 relative">
+     <div ref={searchRef} className="flex-grow flex justify-center mx-2 md:max-4 relative">
           <div className=" w-full md:max-w-sm  ">
             <SearchDropdown/> 
       </div>

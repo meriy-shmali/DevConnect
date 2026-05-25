@@ -6,10 +6,10 @@ import { useEffect } from 'react';
 import { requestForToken } from './firebase/firebaseConfig';
 import { useNotificationMutation } from './hook/UseNotificationMutation';
 import { useNotificationLogic } from './hook/useNotificationLogic';
-import { RouterProvider } from 'react-router';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import router from './Router';
+//import { RouterProvider } from 'react-router';
+//import { ToastContainer } from 'react-toastify';
+//import 'react-toastify/dist/ReactToastify.css';
+//import router from './Router';
 
  
 function NotificationWrapper({ children }) {
@@ -27,12 +27,12 @@ function App() {
     }
   }, [i18n.language, updateToken?.mutate]); 
   return ( 
-    <>
-      <div>
-        <ToastContainer/>
-        <RouterProvider router={router}/>
-      </div>
-    </>
+   
+      <> 
+      <Welcomepage />    
+      <div className="fixed top-5 right-5 z-50 flex gap-2"></div>
+      </>
+      
     
   )
 }

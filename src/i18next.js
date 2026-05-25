@@ -41,7 +41,6 @@ i18n.use(initReactI18next).init({
         male:"Male",
         phone_number:"Phone Number:",
         phone:"Phone",
-        search:"Search",
         create:"Create Post",
         post:"Post",
         cancel:"Cancel",
@@ -147,6 +146,15 @@ i18n.use(initReactI18next).init({
         post_updated_success: "Post updated successfully",
         post_updated_failed:  "Failed to update post",
         post_deleted_success : "Post deleted successfully",
+        search: "Search...",
+        people: "People",
+        tagss: "Tags",
+        posts: "Posts",
+        recents: "Recents",
+        no_recent_searches: "No recent searches found",
+        results: "Results",
+        show_more: "Show more",
+        no_results: "No results found"
       }
     },
     ar: {
@@ -188,7 +196,6 @@ i18n.use(initReactI18next).init({
         male:"الذكر",
         phone_number:"رقم الهاتف",
         phone:"الهاتف",
-        search:"بحث",
         create:"انشاء منشور",
         post:"نشر",
         cancel:"الغاء",
@@ -294,6 +301,17 @@ i18n.use(initReactI18next).init({
         post_updated_success: "تم تحديث المنشور بنجاح",
         post_updated_failed: "فشل في تحديث المنشور",
         post_deleted_success: "تم حذف المنشور بنجاح",
+        search: "بحث...",
+        people: "الأشخاص",
+        tagss: "الوسوم",
+        posts: "المنشورات",
+        recents: "الأخيرة",
+        followingg: "متابع",
+        no_recent_searches: "لا توجد عمليات بحث أخيرة",
+        results: "النتائج",
+        show_more: "عرض المزيد",
+        no_results: "لم يتم العثور على نتائج"
+        
       }
     }
   },
