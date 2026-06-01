@@ -150,7 +150,7 @@ const handleToggleTranslation = () => {
             onSuccess: (res) => {
                 const translatedText = res.data.translated;
                 if (translatedText) {
-                    toast.success(t('translate_success') || "Translated!", { id: toastId });
+                 
                     setTranslatedResult(translatedText);
                     setIsTranslatedState(true);
                 }
@@ -186,7 +186,7 @@ const handleToggleTranslation = () => {
             >
                 <button 
                     onClick={toggleMenu}
-                    className='text-xs md:text-lg text-gradient font-semibold cursor-pointer flex flex-row justify-center items-center space-x-1 outline-none'
+                    className='text-xs md:text-md text-gradient font-semibold cursor-pointer flex flex-row justify-center items-center space-x-1 outline-none'
                 >
                     <div>{t('askai')} </div> 
                     <div><BsStars md:size={18} size={14} className='text-yellow-400'/></div>
@@ -200,27 +200,27 @@ const handleToggleTranslation = () => {
                         animate={{ opacity: 1, y: 10 }} 
                         exit={{ opacity: 0, y: 0 }}
                         transition={{ type: "tween", duration: 0.2 }}
-                        className="absolute -top-20 md:end-24 end-10 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 flex flex-col justify-center z-[100] md:w-[200px] w-[180px] text-lg "
+                        className="absolute -top-20 md:end-20 end-10 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 flex flex-col justify-center z-[100] md:min-w-full w-[180px] text-sm "
                         onClick={(e) => e.stopPropagation()}
                     >
                         {isQuestion && (
                         <div>
                             <button onClick={() => handleAction('best_answer')}
-                                className="px-4 py-2 flex items-center justify-start w-full hover:font-semibold dark:hover:text-gray-700 transition-colors" >
+                                className="px-4 py-1.5 flex items-center justify-start w-full hover:font-semibold dark:hover:text-gray-700 transition-colors" >
                                 <div className='flex flex-row justify-center items-center space-x-3'>
                                     <FaCheck className='text-yellow-400'/> 
-                                    <p className='text-sm md:text-base'>{t('bestanswer')}</p>
+                                    <p className='text-xs md:text-sm'>{t('bestanswer')}</p>
                                 </div> 
                             </button>
                         </div>)}
                         <div>
                             <button 
                                 onClick={() => handleAction('summarize_post')}
-                                className="px-4 py-2 flex items-center justify-start dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
+                                className="px-4 py-1.5 flex items-center justify-start dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
                             >
-                                <div className='flex flex-row justify-center items-center space-x-3'>
+                                <div className='flex flex-row justify-center items-center space-x-2'>
                                     <RiFlashlightFill className='text-yellow-400 size-5'/>
-                                    <p className='text-sm md:text-base'>{t('summary')}</p>
+                                    <p className='text-xs md:text-sm'>{t('summary')}</p>
                                 </div>
                             </button>
                         </div>
@@ -228,11 +228,11 @@ const handleToggleTranslation = () => {
                             <div>
                                 <button 
                                     onClick={() => handleAction('explain_code')}
-                                    className="px-4 py-2 flex items-center justify-start dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
+                                    className="px-4 py-1.5 flex items-center justify-start dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
                                 >
                                     <div className='flex flex-row justify-center items-center space-x-3'>
                                         <FaCode className='text-yellow-400 size-5'/>
-                                        <p className='text-sm md:text-base'>{t('explaine')}</p> 
+                                        <p className='text-xs md:text-sm'>{t('explaine')}</p> 
                                     </div>
                                 </button>
                             </div>

@@ -14,7 +14,7 @@ const Buttons = ({ type ,onClick,...props }) => {
     
     return (
       <Button {...props}
-        className='bg-blue-button text-text-button md:text-[25px] text-[18px] hover:bg-hover-blue md:p-6 md:h-10 md:px-6 p-3 '
+        className='bg-blue-button text-text-button md:text-lg text-sm hover:bg-hover-blue md:p-2 md:h-10 md:px-4 p-2 '
         variant='secondary'
         onClick={()=>navigate('/login') }
         /*size='lg'*/
@@ -25,15 +25,16 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
 
   if (type === "translate") {
+    const isArabic = i18n.language === "ar";
     return (
       <Button
         variant='link'
-        className='text-text-button md:text-2xl text-lg '
-        onClick={() => i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")}
+        className='text-text-button md:text-xl text-lg '
+        onClick={() => i18n.changeLanguage(isArabic ? "en" : "ar")}
         
       >
         <MdOutlineGTranslate className='text-text-button  md:size-8 size-6' />
-        {t("Arabic")}
+       {isArabic ? "English" : "Arabic"}
       </Button>
     );
   }
@@ -68,12 +69,12 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
   if(type=='login'){
     return(
-  <Button type='submit' className='bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' md:size='lg' >
+  <Button type='submit' className='bg-gradient-background text-text-button text-sm md:text-md lg:text-lg ' variant='default' md:size='lg' >
     {t('login')}
   </Button>)}
   if(type=='register'){
     return(
-  <Button type='submit' className=' bg-gradient-background text-text-button text-[20px] md:text-[25px] ' variant='default' md:size='lg' >
+  <Button type='submit' className=' bg-gradient-background text-text-button text-sm md:text-md lg:text-lg  ' variant='default' md:size='lg' >
     {t('register')}
   </Button>)}
   if(type=='send'){
@@ -93,7 +94,7 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
    if(type=='save'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default'>{t('save')}</Button>
+      <Button className='bg-blue-button text-text-button md:text-md' variant='default' size='default'>{t('save')}</Button>
     )
   }
   if(type=='ai'){

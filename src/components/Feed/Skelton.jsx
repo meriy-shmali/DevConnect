@@ -1,37 +1,38 @@
 const InstagramSkeleton = () => {
   return (
-    <div className="bg-gray-300 border border-gray-300 rounded-xl p-4 mb-6 w-full animate-pulse">
-      {/* الرأس: الصورة الشخصية والاسم */}
-      <div className="flex items-center mb-4">
-        <div className="w-12 h-12 bg-gray-200 rounded-full"></div> {/* دائرة الصورة */}
-        <div className="ml-3 flex-1">
-          <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div> {/* اسم المستخدم */}
-          <div className="h-3 bg-gray-200 rounded w-1/4"></div> {/* الوقت */}
+    <div className="bg-gray-300 dark:bg-dark-post-background border border-gray-200 dark:border-0 mt-8 rounded-2xl p-4 md:p-5 w-full animate-pulse shadow-sm">
+
+      {/* الهيدر */}
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="w-9 h-9 bg-gray-200 dark:bg-gray-700 rounded-full flex-shrink-0" />
+        <div className="flex-1">
+          <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-1.5" />
+          <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded w-1/6" />
         </div>
+        <div className="w-16 h-5 bg-gray-200 dark:bg-gray-700 rounded-full" />
       </div>
 
-      {/* محتوى النص (المنشور) */}
-      <div className="space-y-2 mb-4">
-        <div className="h-3 bg-gray-200 rounded w-full"></div>
-        <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+      {/* النص */}
+      <div className="space-y-2 mb-3">
+        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
       </div>
 
-      {/* منطقة الصورة الكبيرة (مثل إنستغرام) */}
-      <div className="w-full h-64 bg-gray-200 rounded-lg mb-4"></div>
+      {/* الصورة */}
+      <div className="w-full h-44 bg-gray-200 dark:bg-gray-700 rounded-xl mb-3" />
 
-      {/* التفاعلات (أزرار Like, Comment) */}
-      <div className="flex space-x-14">
-        
-<div className="w-8 h-8 bg-gray-200 rounded-xl"></div>
-        
-      <div className=" flex flex-row space-x-3">  
-        <div className="w-8 h-8 bg-gray-200 rounded-xl"></div>
-        <div className="w-8 h-8 bg-gray-200 rounded-xl"></div>
-        <div className="w-8 h-8 bg-gray-200 rounded-xl"></div>
-         <div className="w-8 h-8 bg-gray-200 rounded-xl"></div>
-         </div>
+      {/* التفاعلات */}
+      <div className="flex items-center gap-2">
+        <div className="w-14 h-7 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+        <div className="flex gap-1.5 ml-auto">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="w-11 h-7 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+          ))}
+        </div>
+        <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded" />
       </div>
     </div>
   );
 };
+
 export default InstagramSkeleton

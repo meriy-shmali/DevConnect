@@ -30,9 +30,10 @@ createRoot(document.getElementById('root')).render(
           duration: 3000,
           className: "shadow-lg",
           style: {
-            fontSize: "20px",
-            borderRadius: "10px",
+            fontSize: "1rem",
+            borderRadius: "0.5rem",
             padding: "14px 20px",
+            fontWeight: "500"
            
           }
         }} />

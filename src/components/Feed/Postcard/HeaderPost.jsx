@@ -5,103 +5,99 @@ import { useFollow } from '@/hook/UseFollow'
 import MenuPanel from './Sidepanel/MenuPanel'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
+import { usePostActions } from '@/hook/UsePostMutation'
 import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
 import { UseMe } from '@/hook/UseQueryMe'
 
 dayjs.extend(relativeTime);
 
-const HeaderPost = ({ post }) => {
+const HeaderPost = ({ post, customClass = '' }) => {
   const { data } = UseMe()
   const { followMutation, unfollowMutation } = useFollow();
   const navigate = useNavigate()
   const [menu, setMenu] = useState({});
-   const [iconSize, setIconSize] = useState(window.innerWidth >= 768 ? 28 : 18);
+  const [iconSize, setIconSize] = useState(window.innerWidth >= 768 ? 20 : 16);
 
-  
   useEffect(() => {
-    const handleResize = () => {
-      setIconSize(window.innerWidth >= 768 ? 28 : 18);
-    };
+    const handleResize = () => setIconSize(window.innerWidth >= 768 ? 20 : 16);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleMenu = (id) => {
-    setMenu(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
-  
+  const toggleMenu = (id) => setMenu(prev => ({ ...prev, [id]: !prev[id] }));
+
   const { i18n, t } = useTranslation();
+  const [isfollowing, setisfollowing]         = useState(post.is_following);
+  const [isInitiallyFollowing]                = useState(post.is_following);
 
-  const [isfollowing, setisfollowing] = useState(post.is_following);
-  const [isInitiallyFollowing] = useState(post.is_following);
-
-  useEffect(() => {
-    setisfollowing(post.is_following);
-  }, [post.is_following]);
+  useEffect(() => { setisfollowing(post.is_following); }, [post.is_following]);
 
   const handleFollow = (e) => {
     e.stopPropagation();
     if (isfollowing) {
-      setisfollowing(false);            // ✅ يتغير فوراً
-      unfollowMutation.mutate(post.user.id, {
-        onError: () => setisfollowing(true)   // يرجع لو صار خطأ
-      });
+      setisfollowing(false);
+      unfollowMutation.mutate(post.user.id, { onError: () => setisfollowing(true) });
     } else {
-      setisfollowing(true);             // ✅ يتغير فوراً
-      followMutation.mutate(post.user.id, {
-        onError: () => setisfollowing(false)  // يرجع لو صار خطأ
-      });
+      setisfollowing(true);
+      followMutation.mutate(post.user.id,   { onError: () => setisfollowing(false) });
     }
   }
 
-  const formattedDate = post.created_at 
-    ? dayjs(post.created_at).locale(i18n.language).fromNow() 
+  const formattedDate = post.created_at
+    ? dayjs(post.created_at).locale(i18n.language).fromNow()
     : '';
 
-  const shouldShowFollowLogic = 
-    post.user?.id && 
-    Number(post.user?.id) !== Number(data?.id) && 
+  const handleEditPost   = () => { if (post?.id) navigate(`/edit-post/${post.id}`); };
+  const { updateMutation, deleteMutation } = usePostActions();
+  const handleDeletePost = async () => {
+    if (post?.id) {
+      try { await deleteMutation.mutateAsync(post.id); }
+      catch (err) { console.error("Delete Error:", err); }
+    }
+  };
+
+  const shouldShowFollowLogic =
+    post.user?.id &&
+    Number(post.user?.id) !== Number(data?.id) &&
     isInitiallyFollowing === false;
 
+  const getProfilePath = (targetId) =>
+    Number(targetId) === Number(data?.id) ? '/profile/me' : `/profile/${targetId}`;
+
   return (
-    <div className='flex justify-between items-start md:items-center w-full gap-2'>
-      {/* القسم الأيسر: الصورة + معلومات المستخدم والزر */}
-      <div className='flex items-start md:items-center space-x-3 md:space-x-5 min-w-0'>
-        {/* الصورة الشخصية */}
-        <img 
+    <div className={`flex justify-between items-center w-full gap-2 ${customClass}`}>
+
+      {/* ── الجانب الأيسر: صورة + اسم + تاريخ + متابعة ── */}
+      <div className="flex items-center gap-2 md:gap-3 min-w-0">
+        <img
           src={post.user?.personal_photo_url || "/images/default avatar1.jpg"}
-          className='w-11 h-11 md:w-15 md:h-15 rounded-full cursor-pointer object-cover flex-shrink-0' 
-          onClick={() => navigate(`/profile/${post.user?.id}`)}
+          className="w-9 h-9 md:w-10 md:h-10 rounded-full cursor-pointer object-cover flex-shrink-0"
+          onClick={() => navigate(getProfilePath(post.user?.id))}
           onError={(e) => { e.target.src = "/images/default avatar1.jpg" }}
           alt="avatar"
         />
-        
-        {/* حاوية تجمع الاسم، التاريخ، وزر المتابعة */}
-        <div className='flex flex-col md:flex-row md:items-center md:space-x-4 min-w-0'>
-          <div className='min-w-0'>
-            <div className='font-semibold text-[14px] md:text-xl dark:text-white break-all max-w-[150px] md:max-w-none'>
+
+        <div className="flex flex-col md:flex-row md:items-center md:gap-3 min-w-0">
+          <div className="min-w-0">
+            <p
+              className="font-semibold text-sm md:text-md dark:text-white truncate cursor-pointer"
+              onClick={() => navigate(getProfilePath(post.user?.id))}
+            >
               {post.user?.username}
-            </div>
-            <div className='text-gray-600 dark:text-gray-400 text-[11px] md:text-sm'>
-              {formattedDate}
-            </div>
+            </p>
+            <p className="text-gray-500 dark:text-gray-400 text-[10px]">{formattedDate}</p>
           </div>
 
-          {/* زر المتابعة: يظهر تحت التاريخ في الموبايل، وبجانب البيانات في الديسكتوب */}
           {shouldShowFollowLogic && (
-            <div className='mt-1.5 md:mt-0 flex-shrink-0'>
+            <div className="mt-1 md:mt-0 flex-shrink-0">
               <button
                 onClick={handleFollow}
-                className={`px-3 py-1 text-[10px] md:text-[15px] md:py-2 rounded-md font-semibold transition w-fit whitespace-nowrap
-                  ${isfollowing
+                className={`px-2.5 py-0.5 text-[10px] md:text-xs rounded-md font-semibold transition whitespace-nowrap ${
+                  isfollowing
                     ? "border border-follow-button text-follow-button"
                     : "bg-follow-button text-white"
-                  }`}
+                }`}
               >
                 {isfollowing ? t('following') : t('follow')}
               </button>
@@ -110,19 +106,20 @@ const HeaderPost = ({ post }) => {
         </div>
       </div>
 
-      {/* القسم الأيمن: التاج (نوع المنشور) + القائمة الثلاثية */}
-      <div className='flex items-center space-x-2 md:space-x-3 flex-shrink-0'>
-        <div className={`md:rounded-3xl rounded-full border md:p-1 flex-shrink-0 whitespace-nowrap ${
-          post.post_type === 'question' ? 'text-hover-question border-hover-question' :
-          post.post_type === 'project' ? 'text-hover-project border-hover-project' :
+      {/* ── الجانب الأيمن: نوع المنشور + قائمة ── */}
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <div className={`rounded-full border px-2.5 py-1 flex-shrink-0 whitespace-nowrap ${
+          post.post_type === 'question'    ? 'text-hover-question border-hover-question'       :
+          post.post_type === 'project'     ? 'text-hover-project border-hover-project'         :
           post.post_type === 'information' ? 'text-hover-information border-hover-information' :
-          post.post_type === 'article' ? 'text-hover-articles border-hover-articles' : 'text-black border-black'
-        } w-fit md:w-[120px] text-center`}>
-          {post?.post_type ? (
-            <p className='text-[11px] md:text-xl py-0.5 px-2 md:px-0 font-medium'>
+          post.post_type === 'article'     ? 'text-hover-articles border-hover-articles'       :
+          'text-black border-black'
+        }`}>
+          {post?.post_type && (
+            <p className="text-xs md:text-sm font-medium">
               {t(`post_types.${post.post_type}`, post.post_type)}
             </p>
-          ) : null}
+          )}
         </div>
 
         {Number(post.user?.id) === Number(data?.id) && (
@@ -131,6 +128,8 @@ const HeaderPost = ({ post }) => {
             menu={menu}
             toggleMenu={toggleMenu}
             size={iconSize}
+            onEdit={handleEditPost}
+            onDelete={handleDeletePost}
           />
         )}
       </div>

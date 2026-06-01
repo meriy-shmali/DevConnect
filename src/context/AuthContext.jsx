@@ -1,39 +1,43 @@
-import React, { createContext, useContext, useState,useEffect } from "react";
-//import jwtDecode from 'jwt-decode';
-// 1. إنشاء الـ Context
+import React, { createContext, useContext, useState, useEffect } from "react";
+
 const AuthContext = createContext();
 
-// 2. Provider لتغليف التطبيق
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null); // رح يحتوي بيانات المستخدم بعد تسجيل الدخول
-  //مشان ما يختفي المستخدم لما اعمل refresh
- /* useEffect(() => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // 🌟 أضفنا حالة تحميل لانتظار الفحص
+
+  useEffect(() => {
     const token = localStorage.getItem("access");
     if (token) {
       try {
-        const decoded = jwtDecode(token);
-        // التحقق من صلاحية التوكن (اختياري)
-        const currentTime = Date.now() / 1000;
-        if (decoded.exp < currentTime) {
-          localStorage.clear();
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const isExpired = payload.exp * 1000 < Date.now();
+
+        if (isExpired) {
+          // التوكن منتهي الصلاحية → نظّف localStorage وعامل المستخدم كزائر
+          localStorage.removeItem("access");
+          localStorage.removeItem("refresh");
           setCurrentUser(null);
         } else {
-          setCurrentUser(decoded);
+          setCurrentUser({ loggedIn: true });
         }
       } catch {
-    
-        localStorage.clear();
+        // التوكن تالف أو غير صالح
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+        setCurrentUser(null);
       }
+    } else {
+      setCurrentUser(null);
     }
-  }, []);*/
-  
+    setIsLoading(false);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// 3. Hook لاستخدام الـ Context بسهولة
 export const useAuth = () => useContext(AuthContext);

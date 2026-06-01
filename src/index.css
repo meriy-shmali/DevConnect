@@ -183,59 +183,45 @@ html, body, #root {
   padding: 0  !important;
   height: 100%;
 }
+/* 🌟 إلغاء الخلفية الثابتة من البودي العام لحماية باقي الواجهات */
 body {
   margin: 0;
   padding: 0;
-  background-color: #FFFBFB; /* اللون الأساسي تحت الصورة */
+  background-color: #FFFBFB; 
   position: relative;
 }
-.dark body{
-    margin: 0;
-  padding: 0;
-  background-color: #1E1E1E; /* اللون الأساسي تحت الصورة */
-  position: relative;
+.dark body {
+  background-color: #1E1E1E;
 }
 
-body::before {
+/* 🌟 كلاس مخصص وذكي يتم وضعه فقط في حاوية صفحة الـ Feed */
+.feed-page-bg::before {
   content: "";
   position: fixed;
   top: 0;
-  left: 0;
+  left: 15;
   width: 100%;
   height: 100%;
-  z-index: -1; /* لتبقى خلف المحتوى */
-  
-  /* إعدادات الصورة */
+  z-index: -1; 
   background-image: url('/src/images/feed.jpg'); 
-/*background-image: url('/src/images/codebg.jpg');*/
+  background-repeat: repeat; 
+  background-size: 500px;
+  background-position: right;
+  background-attachment: fixed;
+  opacity: 0.5;
+}
+body[data-sidebar-blur="true"], 
+body {
+  pointer-events: auto !important;
+  overflow-y: auto !important;
+}
+/* في الدارك مود لصفحة الـ Feed */
+.dark .feed-page-bg::before {
+  background-image: url('/src/images/darkmode.png'); 
   background-repeat: repeat; 
   background-size: 800px;
-  background-position:right;
-  /*background-size: 1000px;
-  background-position: right;*/
-  background-attachment: fixed;
-  /*opacity: 0.7;*/
-  /* التحكم بالوضوح هنا */
-  opacity: 0.4; /* 👈 غيري الرقم بين 0.1 و 1 حسب رغبتك (0.4 يعني شفافية 40%) */
-}
-.dark body::before{
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* لتبقى خلف المحتوى */
-  
-  /* إعدادات الصورة */
-  background-image: url('/src/images/darkmode.png'); 
-background-repeat: repeat; 
-  background-size: 800px;
-  background-position:right;
+  background-position: right;
   opacity: 0.1;
-  
-  /* التحكم بالوضوح هنا */
-  
 }
 :root {
   

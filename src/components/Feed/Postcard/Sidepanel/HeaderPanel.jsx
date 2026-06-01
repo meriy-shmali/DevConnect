@@ -1,8 +1,20 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
-const HeaderPanel = ({ user, createdAt, type,level }) => {
+import { useNavigate } from 'react-router-dom';
+
+// currentUserId: id المستخدم الحالي المسجّل دخوله، يُمرَّر من CommentItem
+const HeaderPanel = ({ user, createdAt, type, level, currentUserId }) => {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const userId = user?.user_id || user?.id;
+
+  // إذا كان صاحب التعليق هو المستخدم الحالي → /profile/me ، وإلا → /profile/:id
+  const profilePath = userId
+    ? Number(userId) === Number(currentUserId)
+      ? '/profile/me'
+      : `/profile/${userId}`
+    : null;
 const displayName = user?.user_username || user?.username; 
   // اختيار الصورة الصحيحة بناءً على ما هو متوفر
   const displayPhoto = user?.user_photo_url || user?.personal_photo_url;
@@ -35,8 +47,15 @@ const getCommentDate = (date) => {
   return (
     
     <div className="flex items-center space-x-3 relative">
-      <img src={displayPhoto} className="md:w-10 md:h-10 h-8 w-8 rounded-full" />
-      <div className="md:text-md text-[14px] capitalize font-semibold dark:text-gray-50">
+      <img
+        src={displayPhoto}
+        className="md:w-10 md:h-10 h-8 w-8 rounded-full cursor-pointer"
+        onClick={() => profilePath && navigate(profilePath)}
+      />
+      <div
+        className="md:text-md text-[14px] capitalize font-semibold dark:text-gray-50 cursor-pointer "
+        onClick={() => profilePath && navigate(profilePath)}
+      >
         {displayName}
       </div>
       {/* يظهر فقط بالتعليقات */}

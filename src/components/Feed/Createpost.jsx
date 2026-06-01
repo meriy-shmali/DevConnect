@@ -39,30 +39,30 @@ const Createpost = () => {
     <div>
      
     <div ref={containerRef} className="hidden md:block"  onClick={()=>post.setshow(false)}>
-      <div className="w-[428px] bg-gradient-background rounded-[55px] shadow-xl/45">
-        <div className="flex-col justify-center items-center mt-2 p-8 space-y-12 pb-40">
-          <p className="text-white text-[45px] text-center title-font">{t("create")}</p>
+      <div className="w-[310px]  pb-10 bg-gradient-background rounded-[50px] shadow-xl/45">
+        <div className="flex-col justify-center items-center mt-2 p-8 space-y-8 pb-10">
+          <p className="text-white text-3xl text-center title-font">{t("create")}</p>
 
           {/* TEXT */}
           <Textarea
             placeholder={t('share')}
             value={`${post.text}${post.displayCategory ? `\n\ncategory: ${post.displayCategory}` : ""}`}
             onChange={(e) => post.setText(e.target.value)}
-            className="bg-white dark:bg-gray-100 h-20 overflow-y-auto placeholder:text-[18px] placeholder:text-gray-400 "
+            className="bg-white  dark:bg-gray-100 h-fit overflow-y-auto placeholder:text-xs placeholder:text-gray-400 "
           />
       
       
           {/* PREVIEW AREA */}
           {post.previewUrl.length>0 && (
-            <div className="flex items-center gap-4 p-3 rounded-lg shadow">
+            <div className="flex items-center gap-4 h-fit   -mt-2 mb-1">
               {post.previewUrl.map ((src,index)=>(
               <div key={index}>
                 <img
                   src={src}
-                  className="w-20 h-20 object-cover rounded"
+                  className="w-10 h-10 object-cover rounded"
                 />
 <button onClick={()=>post.removeImage(index)}>
-                <FaRegTrashAlt className="text-red-500 hover:text-red-700 text-[25px] mt-2 text-center" />
+                <FaRegTrashAlt className="text-red-500 hover:text-red-700 text-md mt-2 text-center" />
               </button>
               </div>
               ) )
@@ -83,12 +83,12 @@ const Createpost = () => {
           <div className="flex gap-6">
             {/* UPLOAD FILE BUTTON */}
             <Button onClick={() => post.uploadRef.current.click()}>
-              <RiImageAddFill className="text-white size-[36px]" />
+              <RiImageAddFill className="text-white size-[28px]" />
             </Button>
 
             {/* POST */}
             <Button
-              className="text-white bg-post-button hover:bg-hover-purple w-[80px] h-[40px] text-[22px]"
+              className="text-white bg-post-button hover:bg-hover-purple w-fit h-fit py-1 text-md"
               onClick={post.handlePost}
             >
               {t("post")}
@@ -97,7 +97,7 @@ const Createpost = () => {
             {/* CANCEL */}
             {post.text.trim() !== "" && (
               <Button
-                className="text-white bg-cancel w-[100px] h-[41px] text-[24px]"
+                className="text-white bg-cancel w-fit h-fit py-1 text-md"
                 onClick={() => {
                   post.resetForm();
                 }}
@@ -107,14 +107,15 @@ const Createpost = () => {
             )}
           </div>
 
-          <div className="text-white text-[24px] text-center leading-11 ">
+          <div className="flex items-start justify-center gap-3 flex-wrap">
+             <div className='  text-[17px]  text-gray-200 text-center leading-7 ' >
             {t("help")}
-            <Button className="text-[22px] border-2 rounded-[50px] ms-4 pt-1 pb-1" onClick={(e) => {
+            <Button className="text-[16px] hover:bg-white/15 ms-2 border-2 rounded-full mt-2" onClick={(e) => {
               e.stopPropagation();
     post.setshow(prev => !prev);
   }}>
-              {t("ai")} <BsStars className="size-[22px] text-amber-300" />
-            </Button>
+              {t("ai")} <BsStars className="size-sm text-amber-300" />
+            </Button></div>
          <AISidePanel
   open={post.show}
   onClose={() => post.setshow(false)}

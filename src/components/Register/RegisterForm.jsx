@@ -102,15 +102,15 @@ const isRTL = i18n.language === "ar";
       name="first_name"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[26px] md:text-[38px]">{t('firstname')}:</FormLabel>
+          <FormLabel className="text-xl md:text-2xl">{t('firstname')}:</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[300px] md:w-[500px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="text"
                 placeholder={t('firstname')}
-                className="placeholder:md:text-[18px] text-[16px] text-start "
+                className="placeholder:md:text-md text-sm text-start "
               />
               <InputGroupAddon>
                 <User className='md:size-5 size-4 ms-1' />
@@ -126,15 +126,15 @@ const isRTL = i18n.language === "ar";
       name="last_name"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[26px] md:text-[38px]">{t('lastname')}:</FormLabel>
+          <FormLabel className="text-xl md:text-2xl">{t('lastname')}:</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow md:w-[500px] w-[300px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="text"
                 placeholder={t('lastname')}
-                className="placeholder:md:text-[18px] "
+                className="placeholder:md:text-md text-sm "
               />
               <InputGroupAddon>
                 <User className='md:size-5 size-4 ms-1' />
@@ -150,15 +150,15 @@ const isRTL = i18n.language === "ar";
       name="username"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[26px] md:text-[38px]">{t('username')}:</FormLabel>
+          <FormLabel className="text-xl md:text-2xl">{t('username')}:</FormLabel>
           <FormControl>
             
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow md:w-[500px] w-[300px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="text"
                 placeholder={t('username')}
-                className="placeholder:md:text-[18px] text-[16px] "
+                className="placeholder:md:text-md text-sm "
               />
               <InputGroupAddon>
                 <User className='md:size-5 size-4 ms-1' />
@@ -175,14 +175,14 @@ const isRTL = i18n.language === "ar";
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[26px] md:text-[38px]">{t('email')}:</FormLabel>
+          <FormLabel className="text-xl md:text-2xl">{t('email')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[300px] md:w-[500px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="email"
                 placeholder="Example@mail.com"
-                className="placeholder:text-[16px] md:text-[18px] "
+                className="placeholder:text-sm md:text-md "
               />
               <InputGroupAddon>
                 <MailIcon className='md:size-5 size-4 ms-1'/>
@@ -199,14 +199,14 @@ const isRTL = i18n.language === "ar";
       name="password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[26px] md:text-[38px]">{t('password')}:</FormLabel>
+          <FormLabel className=" text-xl md:text-2xl">{t('password')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[300px] md:w-[500px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="password"
                 placeholder={t('enterpass')}
-                className="placeholder:md:text-[18px] text-[16px] "
+                className="placeholder:md:text-md text-sm "
               />
               <InputGroupAddon>
                 <LockIcon className='md:size-5 size-4 ms-1'/>
@@ -222,14 +222,14 @@ const isRTL = i18n.language === "ar";
       name="confirm_password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[26px] md:text-[38px]">{t('confirm_password')}:</FormLabel>
+          <FormLabel className=" text-xl md:text-2xl">{t('confirm_password')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[300px] md:w-[500px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="password"
                 placeholder={t('confirm_password')}
-                className=" placeholder:md:text-[18px] text-[16px] "
+                className=" placeholder:md:text-md text-sm "
               />
               <InputGroupAddon>
                 <LockIcon className='md:size-5 size-4 ms-1'/>
@@ -245,14 +245,14 @@ const isRTL = i18n.language === "ar";
       name="age"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[26px] md:text-[38px]">{t('age')}:</FormLabel>
+          <FormLabel className=" text-xl md:text-2xl">{t('age')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[300px] md:w-[500px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="number"
                 placeholder=""
-                className="placeholder:md:text-[18px] text-[16px] "
+                className="placeholder:md:text-md text-sm "
               />
               <InputGroupAddon>
               </InputGroupAddon>
@@ -267,7 +267,7 @@ const isRTL = i18n.language === "ar";
       name="gender"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[26px] md:text-[38px]">{t('gender')}:</FormLabel>
+          <FormLabel className=" text-xl md:text-2xl">{t('gender')}:</FormLabel>
           <FormControl>
             <div className='w-full flex flex-col items-start ms-2'>
            <RadioGroup onValueChange={field.onChange}
@@ -275,11 +275,11 @@ const isRTL = i18n.language === "ar";
   dir={isRTL ? "rtl" : "ltr"}>
   <div className="flex items-center gap-2 ">
     <RadioGroupItem value="male" id="male" />
-    <Label htmlFor="male" className='text-gray-500 md:text-[20px] text-[18px]'>{t('male')}</Label>
+    <Label htmlFor="male" className='text-gray-500 md:text-md text-sm'>{t('male')}</Label>
   </div>
   <div className="flex items-center gap-2 ">
     <RadioGroupItem value="female" id="female" />
-    <Label htmlFor="female" className='text-gray-500 md:text-[20px] text-[18px]'>{t('female')}</Label>
+    <Label htmlFor="female" className='text-gray-500 md:text-md text-sm'>{t('female')}</Label>
   </div>
 </RadioGroup> </div>
           </FormControl>
@@ -292,14 +292,14 @@ const isRTL = i18n.language === "ar";
       name="phone_number"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className=" text-[26px] md:text-[38px]">{t('phone')}:</FormLabel>
+          <FormLabel className=" text-xl md:text-2xl">{t('phone')}:</FormLabel>
           <FormControl>
-            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[500px] h-[46px] rounded-2xl flex items-center px-2">
+            <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-[300px] md:w-[500px] h-fit rounded-2xl flex items-center px-2">
               <InputGroupInput
                 {...field}
                 type="tel"
                 
-                className=" placeholder:md:text-[18px] text-[16px]  "
+                className=" placeholder:md:text-md text-sm  "
               />
               <InputGroupAddon>
                 <Phone className='md:size-5 size-4 ms-1  '/>

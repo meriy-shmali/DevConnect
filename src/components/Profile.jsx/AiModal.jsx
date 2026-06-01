@@ -1,0 +1,40 @@
+import React from 'react'
+import { AnimatePresence,motion } from 'framer-motion'
+import { IoClose } from "react-icons/io5"
+import Buttons from '../ui/ButtonGroup'
+const AiModal = ({isOpen,result,onuse,onClose}) => {
+  return (
+    <AnimatePresence>
+        {
+        isOpen&&(
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 ">
+            <motion.div
+            className="relative bg-white w-[500px] max-w-[90%] rounded-xl p-6 shadow-xl dark:bg-dark-post-background"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <button
+              onClick={onClose}
+              className="absolute top-3 end-3"
+            >
+              <IoClose className='text-[20px] text-red-600'/>
+            </button>
+            <div className="whitespace-pre-wrap text-gray-700 max-h-[500px] text-xl overflow-y-auto dark:text-gray-50 mt-2">
+              {result}
+            </div>
+             <div className="flex justify-end gap-3 mt-6">
+           <Buttons type="cancel" onClick={onClose}/>
+           <Buttons type="ok" onClick={onuse}/>
+              
+         </div>
+          </motion.div>
+        </div>
+        )
+        }
+    </AnimatePresence>
+  )
+}
+
+export default AiModal

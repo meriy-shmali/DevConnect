@@ -18,7 +18,7 @@ const CreatepostMobile = () => {
     const navigate=useNavigate()
   return (
     <div className='bg-gradient-background min-h-screen'>
-      <div className='relative top-6 left-4'><button onClick={()=>navigate('/feed')}><IoArrowBack className='text-gray-50 text-3xl' /></button></div>
+      <div className='relative  top-6 left-4'><button onClick={()=>navigate('/feed')}><IoArrowBack className='text-gray-50 text-3xl' /></button></div>
     <div className='flex-col mt-14   space-y-18 pb-36'>
     <div> <p className='text-5xl flex justify-center items-center font-semibold text-gray-50 title-font'>{t('create')}</p></div>
     <div className='flex justify-center'>
