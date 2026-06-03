@@ -29,7 +29,7 @@ const NotificationItem = ({ item, onClick }) => {
       className={`flex items-center justify-between p-4 transition-colors border-b border-gray-50 dark:bg-dark-post-background
       last:border-0 rounded-lg cursor-pointer group ml-4 ${item.is_read ? 'bg-white hover:bg-gray-50' : 'bg-gray-200/50'}`}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex  gap-3">
         {/* الصورة الشخصية */}
         <div className="relative flex-shrink-0 mr-2">
           <img
@@ -41,7 +41,7 @@ const NotificationItem = ({ item, onClick }) => {
 
         {/* نصوص الإشعار */}
         <div className="flex flex-col gap-1">
-          <p className="text-[14px] md:text-sm leading-snug text-black mb-2">
+          <p className="text-[14px] flex flex-col items-start justify-start space-y-2 md:text-sm leading-snug text-black mb-2">
             <span className={`mr-1 ${item.is_read ? '!text-black dark:!text-gray-400 md:text-md' : '!font-bold text-gray-600 dark:text-gray-200'}`}>
               {item?.from_user?.username}
             </span>

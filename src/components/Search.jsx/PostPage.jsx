@@ -49,7 +49,7 @@ const commentIdToScroll = location.state?.scrollToComment || new URLSearchParams
   if (isLoading && !statePost) {
     return (
       <div className="flex justify-center items-center h-screen dark:text-white">
-        <p className="animate-pulse text-lg">{t('loading_post')} {id}...</p>
+        <p className="animate-pulse text-lg">{t('loading_post')}...</p>
       </div>
     );
   }
