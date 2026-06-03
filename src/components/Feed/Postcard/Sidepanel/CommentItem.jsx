@@ -94,7 +94,7 @@ const CommentItem = ({
       } : { backgroundColor: "rgba(0, 0, 0, 0)" }}
       transition={isHighlighted ? { duration: 2, ease: "easeInOut" } : { duration: 0.2 }}
       style={{ paddingLeft: indent + (isHighlighted ? 8 : 0) }}
-      className="flex flex-col space-y-2 mt-5 dark:bg-transparent"
+      className="flex flex-col space-y-4 mt-5 dark:bg-transparent"
     >
 
       {/* header + menu */}
@@ -120,10 +120,10 @@ const CommentItem = ({
         )}
       </div>
 
-      <div className="flex justify-between ms-12 items-start space-x-2">
+      <div className="flex justify-between  items-start space-x-2">
         {/* text */}
-        <div className="flex flex-col items-start flex-1">
-          <p className="text-md dark:text-gray-100 whitespace-pre-wrap break-words w-full">
+        <div className="flex flex-col items-start  flex-1">
+          <p className="text-sm dark:text-gray-100 whitespace-pre-wrap break-words w-full" dir="rtl">
             {displayCommentContent}
             {shouldTruncateComment && (
               <button

@@ -201,12 +201,12 @@ const ChangeForm = () => {
 
         {/* زر الإرسال */}
         {hasData && (
-          <div className='flex w-full  md:ps-[325px] lg:ps-[420px] transition-all duration-300 px-2 p-0 h-auto -ms-1 text-left items-start justify-start'>          
-            <Buttons  
-              className={`w-full md:h-[80px] bg-blue-button hover:bg-blue-700 text-text-button font-black h-[70px] text-3xl md:text-4xl !cursor-pointer ${isPending ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+          <div className='flex w-full  md:ps-[325px] lg:ps-[420px] transition-all duration-300 px-2 p-0 h-auto -ms-1 text-left items-start justify-center md:justify-start'>          
+            <button className={`w-fit md:h-fit bg-blue-button hover:bg-blue-700 text-text-button  h-fit text-xl md:text-2 rounded-md px-3 py-1.5  md:px-4 md:py-1.5  !cursor-pointer ${isPending ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               type="submit"
-              disabled={isPending}
-            />   
+              disabled={isPending}>  
+              {t('save')}
+             </button>
           </div>
         )} 
 

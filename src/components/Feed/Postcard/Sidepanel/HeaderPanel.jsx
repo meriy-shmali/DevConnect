@@ -49,7 +49,7 @@ const getCommentDate = (date) => {
     <div className="flex items-center space-x-3 relative">
       <img
         src={displayPhoto}
-        className="md:w-10 md:h-10 h-8 w-8 rounded-full cursor-pointer"
+        className="md:w-9 md:h-9 h-8 w-8 rounded-full cursor-pointer"
         onClick={() => profilePath && navigate(profilePath)}
       />
       <div

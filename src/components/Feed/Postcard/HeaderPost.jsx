@@ -12,7 +12,7 @@ import { UseMe } from '@/hook/UseQueryMe'
 
 dayjs.extend(relativeTime);
 
-const HeaderPost = ({ post, customClass = '' }) => {
+const HeaderPost = ({ post, customClass = '',isInProfilePage = false }) => {
   const { data } = UseMe()
   const { followMutation, unfollowMutation } = useFollow();
   const navigate = useNavigate()
@@ -58,7 +58,7 @@ const HeaderPost = ({ post, customClass = '' }) => {
   };
 
   const shouldShowFollowLogic =
-    post.user?.id &&
+    post.user?.id &&!isInProfilePage&&
     Number(post.user?.id) !== Number(data?.id) &&
     isInitiallyFollowing === false;
 
@@ -93,7 +93,7 @@ const HeaderPost = ({ post, customClass = '' }) => {
             <div className="mt-1 md:mt-0 flex-shrink-0">
               <button
                 onClick={handleFollow}
-                className={`px-2.5 py-0.5 text-[10px] md:text-xs rounded-md font-semibold transition whitespace-nowrap ${
+                className={`px-2.5 py-1 text-[10px] md:text-xs rounded-md  transition whitespace-nowrap ${
                   isfollowing
                     ? "border border-follow-button text-follow-button"
                     : "bg-follow-button text-white"

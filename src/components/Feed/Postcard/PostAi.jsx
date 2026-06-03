@@ -200,7 +200,7 @@ const handleToggleTranslation = () => {
                         animate={{ opacity: 1, y: 10 }} 
                         exit={{ opacity: 0, y: 0 }}
                         transition={{ type: "tween", duration: 0.2 }}
-                        className="absolute -top-20 md:end-20 end-10 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 flex flex-col justify-center z-[100] md:min-w-full w-[180px] text-sm "
+                        className="absolute md:-top-20 -top-15 md:end-20 end-10 bg-white dark:bg-navbar border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 flex flex-col justify-center z-[100] md:min-w-[180px] min-w-[160px] text-sm "
                         onClick={(e) => e.stopPropagation()}
                     >
                         {isQuestion && (

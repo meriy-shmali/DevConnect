@@ -1,6 +1,6 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { IoClose } from "react-icons/io5"
+import { X } from 'lucide-react';
 import { LucideRefreshCw } from 'lucide-react';
 import { Languages } from 'lucide-react';
 import Buttons from '../ui/ButtonGroup'
@@ -20,15 +20,12 @@ const AiModal = ({ open, result, onuse, onclose, onRegenerate, isPending, onTran
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <button
-                onClick={onclose}
-                className="absolute top-3 right-3"
-              >
-                <IoClose className='text-[24px] text-red-600' />
-              </button>
+              <button onClick={onclose} className=" absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 rounded-full transition-colors">
+                         <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700 " />
+                       </button>
               
               {/* 🌟 تعديل العرض النظيف ليدعم المارك داون من غير تكرار حاويات العرض */}
-              <div className="whitespace-pre-wrap overflow-auto  modal-scroll text-gray-700 max-h-[500px] overflow-y-auto text-[18px] text-right p-4 markdown-content"
+              <div className="whitespace-pre-wrap mt-3 overflow-auto  modal-scroll text-gray-700 max-h-[500px] overflow-y-auto text-[18px] md:text-md text-right p-4 markdown-content"
                 style={{ direction: 'rtl', unicodeBidi: 'plaintext', textAlign: 'start' }}>
                 <ReactMarkdown>{result}</ReactMarkdown>
               </div>
@@ -52,7 +49,7 @@ const AiModal = ({ open, result, onuse, onclose, onRegenerate, isPending, onTran
                     <button 
                       onClick={onRegenerate}
                       disabled={isPending}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 disabled:opacity-50"
+                      className="flex text-md items-center gap-2 px-4 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 disabled:opacity-50"
                     >
                       <LucideRefreshCw className={isPending ? "animate-spin" : ""} />
                     </button>

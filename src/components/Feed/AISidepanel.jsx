@@ -19,7 +19,7 @@ const isRTL = i18n.language === "ar";
 animate={{ x: 0 }}
 exit={{ x: isRTL ? -400 : 400 }}
         transition={{ type: "tween", duration: 0.3 }}
-            className="sidebar fixed end-0 top-0 w-[500px] h-screen  bg-gradient-background z-50  shadow-xl p-6   mt-16 rounded-bl-2xl rounded-tl-2xl   border border-white"
+            className="sidebar fixed end-0 -top-4 w-[33%] h-screen  bg-gradient-background z-50  shadow-xl p-6   mt-16 rounded-bl-2xl rounded-tl-2xl   border border-white"
             onClick={(e) => e.stopPropagation()}
           >
             {children}

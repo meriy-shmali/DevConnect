@@ -52,8 +52,7 @@ const BodyPost = ({ post, customClass = '',compact = false, onOpenPost }) => {
     }, 6000);
     return () => clearInterval(interval);
   }, [post.media]);
-
-  const { t } = useTranslation();
+const { t, i18n } = useTranslation();
   const translate = useTranslate();
   const [Translate,   setTranslate]   = useState(null);
   const [isTranslate, setisTransalte] = useState(false);
@@ -102,20 +101,34 @@ const visibleTags = compact
     
 
       {/* ── النص ── */}
-      <p
-        className={`${isText ? "text-lg md:text-xl font-semibold" : "text-sm md:text-base leading-relaxed"} dark:text-gray-100 whitespace-pre-wrap`}
-        style={{ direction: 'rtl', unicodeBid: 'plaintext', textAlign: 'start' }}
-      >
-       {isTranslate ? Translate : displayContent}
-        {!compact && shouldTruncate && !isTranslate && (
-          <button
-            onClick={() => setShowMore(!showMore)}
-            className="ml-1 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400"
-          >
-            {showMore ? t('showless') || "Show less" : t('showmore') || "Show more"}
-          </button>
-        )}
-      </p>
+{/* ── النص ── */}
+<p
+  className={`
+    ${isText ? "text-lg md:text-xl font-semibold" : "text-sm md:text-base leading-relaxed"}
+    dark:text-gray-100 whitespace-pre-wrap
+    /* 🌟 قمنا بحذف شرط لغة الموقع لتجنب تدمير محاذاة المحتوى */
+  `}
+  style={{
+    /* 🎯 هذه الخصائص هي السحر الفعلي لتحديد الاتجاه بناءً على لغة الكلمات داخل المنشور */
+    direction: "auto",
+    unicodeBidi: "plaintext", 
+    textAlign: "start" /* 👈 يضمن محاذاة النصوص التلقائية (العربي يمين، الإنجليزي يسار) */
+  }}
+>
+  {isTranslate ? Translate : displayContent}
+  {!compact && shouldTruncate && !isTranslate && (
+    <button
+      onClick={(e) => {
+        /* منع فتح المنشور عند النقر على زر اقرأ المزيد إذا كان compact */
+        e.stopPropagation(); 
+        setShowMore(!showMore);
+      }}
+      className="mx-1 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 font-normal underline-none"
+    >
+      {showMore ? t('showless') || "Show less" : t('showmore') || "Show more"}
+    </button>
+  )}
+</p>
       
 
       {/* ── الكود ── */}

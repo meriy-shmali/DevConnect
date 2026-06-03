@@ -145,7 +145,7 @@ const AccountForm = () => {
                     value={field.value} 
                     onValueChange={(value) => {
                       field.onChange(value); 
-                      setTheme(value);
+                      
                       i18next.changeLanguage(value);  
                       localStorage.setItem('i18nextLng', value);  
                       document.documentElement.dir = value === 'ar' ? 'rtl' : 'ltr';

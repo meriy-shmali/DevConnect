@@ -9,12 +9,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import AIAssistant from '../Feed/AIAssistant';
 import { RiImageAddFill } from "react-icons/ri";
 import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
-import AiModal from './AiModal';
+import AiModal from '@/components/Feed/AiModal';
 import { usePostActions } from '@/hook/UsePostMutation';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useGetProfile } from '@/hook/UseProfileData';
-
+import Header from './Header';
 
 const CreatepostMobile = () => {
   const { id } = useParams();
@@ -71,19 +71,19 @@ const handleSaveUpdate = () => {
  //   setPostImages(prev => prev.filter((_, i) => i !== index));
 //};
   return (
-     <div className="w-full min-h-screen bg-gray-50 dark:bg-dark-bg dark:bg-[#1E1E1E] ">
+     <div className="w-full h-full    ">
         
-    <div className='flex-col mt-14   space-y-16'>
-    <div> <p className='text-5xl flex justify-center items-center font-semibold dark:text-gray-50'>{t('edit_post')}</p></div>
-    <div className='flex flex-col w-full max-w-[700px] mx-auto bg-white dark:bg-[#1E1E1E]   p-2 rounded-lg'>
+    <div className='flex-col md:mt-20  mt-20  space-y-16'>
+    <div> <p className='md:text-5xl text-4xl font-title flex justify-center items-center font-semibold dark:text-gray-50'>{t('edit_post')}</p></div>
+    <div className='flex flex-col w-full max-w-[700px] mx-auto '>
     
     {/* حقل النص: شفاف، خط كبير، بدون حدود تركيز */}
-    <div className='w-full'>
+    <div className='md:w-full w-fit m-2 shadow rounded-lg bg-white border border-gray-100'>
         <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder=''
-            className='w-full h-auto text-[20px] border-none focus-visible:ring-0 resize-none bg-transparent  placeholder:text-gray-500 dark:text-gray-50 dark:bg-dark-post-background'
+            className='w-full h-auto md:text-lg text-md border-none focus-visible:ring-0 resize-none bg-transparent  placeholder:text-gray-500 dark:text-gray-50 dark:bg-dark-post-background'
         />
     </div>
 
@@ -148,11 +148,11 @@ const handleSaveUpdate = () => {
     
  <div className="pt-0 mb-10 pb-32 flex  items-center justify-center gap-4">
   <button  onClick={handleSaveUpdate} disabled={updateMutation.isPending}
-   className="rounded-md  px-6 py-2 text-[16px] text-white bg-blue-button text-text-button">
+   className="rounded-md  px-5 py-2 md:text-[18px] text-white bg-blue-button hover:bg-hover-blue text-text-button">
     {t('post')}
   </button>
   <button  onClick={() => navigate(-1)}
-   className="rounded-md  px-6 py-2 text-[16px] bg-cancel-button text-text-button">
+   className="rounded-md  px-5 py-2 md:text-[18px] bg-cancel-button hover:bg-[#b53e5d] text-text-button">
     {t('cancel')}
   </button>
   <div className="relative inline-block">
@@ -166,23 +166,20 @@ const handleSaveUpdate = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
                                 transition={{ duration: 0.2 }}
-                                className='absolute md:left-1/5 md:-translate-x-1/2 top-full mt-3 z-[999] w-[280px] xs:w-[260px] pb-2 left-1/6 -translate-x-1/2 '
+                                className='absolute md:left-1/2 md:-translate-x-1/2 top-full mt-3 z-[999] w-[222px] xs:w-[260px] pb-2 left-1/6 -translate-x-1/2 '
                             >
                                 <div className="rounded-xl overflow-hidden bg-white dark:bg-gray-800">
                                     <AIAssistant
-                                        type='mobile'
-                                         improve={() => post.aiaction.improve(codeSnippet || content)}
-     generate={() => post.aiaction.generate(codeSnippet || content)}
-     summarize={() => post.aiaction.summarize(codeSnippet || content)}
-     addtags={() => post.aiaction.addTags(codeSnippet || content)}
-     category={() => post.aiaction.categorize(codeSnippet || content)}
-
-     improveM={post.improveMutation}
-     generateM={post.generateMutation}
-     summarizeM={post.summarizeMutation}
-     addM={post.addtagMutation}
-     categoryM={post.categoryMutation}
-     onClose={() => setAiAssistantOpen(false)}
+                                        type='edit'
+                                         improve={() => post.aiaction.improve(content)}
+                                         generate={() => post.aiaction.generate(content)}
+                                         summarize={() => post.aiaction.summarize(codeSnippet)}
+                                        
+    
+                                         improveM={post.improveMutation}
+                                         generateM={post.generateMutation}
+                                         summarizeM={post.summarizeMutation}
+                                        
                                     />
                                 </div>
                             </motion.div>
@@ -191,24 +188,32 @@ const handleSaveUpdate = () => {
                 </div>
             </div>
 
-           <AiModal 
-    open={post.showModel}
-    result={post.aiResult}
-    onuse={() => {
-      // 🌟 الإصلاح الجوهري هنا:
-      // إذا كانت العملية تلخيص كود، نضع النتيجة في الـ content (لأن الشرح نص عادي)
-      // وإذا كانت تحسين نص أو إعادة صياغة، نحدث الـ content الأساسي للمنشور
-      if (post.aiType === "summarize" || post.aiType === "improve" || post.aiType === "generate") {
-          setContent(post.aiResult); 
-      } else {
-          // في حال كانت العملية تعديل مباشر على كود سنيبت 
-          setCodeSnippet(post.aiResult);
-      }
-      
-      post.setshowModel(false); // إغلاق المودال
-    }}
-    onclose={() => post.setshowModel(false)} 
-/>
+            <AiModal 
+                open={post.showModel}
+                result={post.aiResult}
+                onuse={() => {
+                  // نفس منطق handleUseAi في CreatepostLogic
+                  if (post.aiType === "generate" || post.aiType === "improve") {
+                    setContent(post.aiResult);
+                  } else if (post.aiType === "summarize") {
+                    setContent(prev => prev + "\n\n" + post.aiResult);
+                  } else {
+                    // fallback: إذا كان النوع غير معروف نضعه في الـ codeSnippet
+                    setCodeSnippet(post.aiResult);
+                  }
+                  post.setshowModel(false);
+                }}
+                onclose={() => post.setshowModel(false)}
+                showTranslate={post.aiType === "summarize"}
+                onTranslate={() => post.aiaction.toggleTranslation(codeSnippet)}
+                onRegenerate={() => post.aiaction.regenerate(post.aiType, post.aiType === "summarize" ? codeSnippet : content)}
+                isPending={
+                  post.improveMutation.isPending ||
+                  post.generateMutation.isPending ||
+                  post.summarizeMutation.isPending
+                }
+                hideActionButtons={false}
+            />
         </div></div>
     );
 };

@@ -66,8 +66,9 @@ const commentIdToScroll = location.state?.scrollToComment || new URLSearchParams
   return (
     <div className="w-full flex flex-col items-center space-y-6 md:space-y-8">
         <div className="w-full max-w-[460px] md:max-w-4xl flex flex-col space-y-4 mx-auto">
-        <div key={post.id} className="md:min-h-screen bg-gray-50 dark:bg-dark-main-background py-10 flex justify-center">
+        <div key={post.id} className=" bg-gray-50 dark:bg-dark-main-background flex justify-center">
         <PostCard 
+         removeTopMargin={true}
               post={post}
               scrollToCommentId={commentIdToScroll}
               autoOpenComments={!!commentIdToScroll}
@@ -76,33 +77,27 @@ const commentIdToScroll = location.state?.scrollToComment || new URLSearchParams
                                          [&~div]:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
                                          [&~div_div]:!max-w-full [&~div_div]:box-border [&_.._div]:max-w-[320px]` : undefined}
               HeaderClass={isMobile ? `
-                          flex justify-between items-center w-[114%] -ms-[7%] scale-85 ps-0 !pe-1 gap-0 
-                          [&>div:first-child]:flex-1 [&>div:first-child]:flex [&>div:first-child]:items-center [&>div:first-child]:ps-0 [&>div:first-child]:!w-auto [&>div:first-child]:!min-w-0
-                           
-                           {/* الحاوية اليسرى: نجعلها مرنة لمنع انضغاط الصورة */}
-                           [&>div:first-child]:flex-1 [&>div:first-child]:flex [&>div:first-child]:items-center [&>div:first-child]:ps-0 [&>div:first-child]:!w-auto [&>div:first-child]:!min-w-0
-                           
-                           {/* الصورة (الأفاتار): إلغاء أي هوامش وإجبارها على الالتصاق بأقصى اليسار تماماً */}
-                           [&>div:first-child>div:first-child]:flex-none [&>div:first-child>div:first-child]:!w-[50px] [&>div:first-child>div:first-child]:!min-w-[40px] [&>div:first-child>div:first-child]:me-6 [&>div:first-child>div:first-child]:ms-0
-                           
-                           {/* زيادة المسافة بين الصورة والاسم (العناصر الداخلية للأفاتار والاسم) */}
-                           [&>div:first-child>div:first-child>div:first-child]:ms-0 [&>div:first-child>div:first-child>div:first-child]:gap-x-4
-                           
-                           {/* إزاحة نص الاسم عن الصورة عبر الحشو لليسار */}
-                           [&>div:first-child>div:first-child>span]:ms-8
-                           
-                           {/* زيادة المسافة بين الاسم والأزرار بشكل ملحوظ عن طريق دفع حاوية الأزرار لليمين */}
-                           [&>div:first-child>button]:w-[80px] [&>div:first-child>button]:ms-12
-                           [&_button:nth-last-of-type(2)]:max-w-[20px] 
-                           
-                           {/* الحاوية اليمنى (الأزرار): دفعها لأقصى اليمين لترك مسافة واسعة ومريحة بينها وبين الاسم */}
-                           [&>div:last-child]:flex-none [&>div:last-child]:flex [&>div:last-child]:items-center [&>div:last-child]:justify-end [&>div:last-child]:gap-x-3 [&>div:last-child]:ms-auto
-                           [&>div:last-child>button:first-child]:w-[85px] [&>div:last-child>button:first-child]:px-2
-                           [&_div]:space-x-0 [&>div:last-child]:ps-30 [&>div:last-child]:!me-[-20px]` : undefined} 
-              bodyClass={isMobile ? "h-[300px] scale-90 origin-top px-4 py-0 mb-[-10px] text-sm overflow-hidden custom-scrollbar" : undefined}
-              reactionClass={isMobile ? ` w-full max-w-[350px] mx-auto scale-65 origin-center gap-x-0.5 flex justify-center border-t pt-1 pb-6 mb-[-10px] 
-                                         [&~div]:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
-                                         [&~div_div]:!max-w-full [&~div_div]:box-border [&_.._div]:max-w-[320px]` : undefined}
+                          flex justify-between items-center w-full px-2 py-3 gap-0
+    [&>div:first-child]:flex-1 [&>div:first-child]:flex [&>div:first-child]:items-center [&>div:first-child]:ps-0 [&>div:first-child]:!w-auto [&>div:first-child]:!min-w-0
+    [&>div:first-child>div:first-child]:flex-none [&>div:first-child>div:first-child]:!w-[40px] [&>div:first-child>div:first-child]:!min-w-[40px] [&>div:first-child>div:first-child]:me-3 [&>div:first-child>div:first-child]:ms-0
+    [&>div:first-child>div:first-child>div:first-child]:ms-0 [&>div:first-child>div:first-child>div:first-child]:gap-x-2
+    [&>div:first-child>div:first-child>span]:ms-4
+   [&>div:last-child]:flex-none [&>div:last-child]:flex [&>div:last-child]:items-center [&>div:last-child]:justify-end [&>div:last-child]:gap-x-2 [&>div:last-child]:ms-auto
+    [&>div:last-child>button:first-child]:w-[75px] [&>div:last-child>button:first-child]:px-1
+    [&_div]:space-x-0 [&>div:last-child]:!me-0` : undefined} 
+              bodyClass={isMobile ?  "h-[160px] scale-90 origin-top px-4 py-0 mb-[-10px] text-sm overflow-visible custom-scrollbar" : undefined}
+              reactionClass={isMobile ? `
+    /* 📱 موبايل: جعل الحاوية تأخذ العرض الكامل 100% بدون سكيل خارجي ليلتصق تماماً بالحواف */
+    w-full px-2 flex justify-between items-center pt-2 pb-4 border-gray-100
+    [&>div]:flex [&>div]:items-center [&>div]:gap-x-2 [&_p]:text-[14px] 
+    
+    /* 🎯 تعديل حجم الأيقونة التعبيرية فقط ومنع الأزرار من التمدد عشوائياً */
+    [&_button_svg]:!w-[16px] [&_button_svg]:!h-[16px] [&_button_svg]:max-w-none
+    [&_button]:p-1.5 [&_button]:h-auto [&_button]:w-auto
+    
+    [&~div]:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
+    [&~div_div]:!max-w-full [&~div_div]:box-border:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
+    [&~div_div]:!max-w-full [&~div_div]:box-border [&_.._div]:max-w-[320px]`  : undefined}
             />
       </div>
     </div>

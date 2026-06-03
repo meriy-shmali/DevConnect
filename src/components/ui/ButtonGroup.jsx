@@ -52,13 +52,23 @@ const Buttons = ({ type ,onClick,...props }) => {
       size='sm'>{t('edit')}<MdEdit className='size-[22px]' /></Button>
     )
   }
-  if(type=='onClick={onClick}'){
+  if(type=='cancel'){
     return(
       <Button variant='default'
-      className='bg-cancel-button text-text-button text-[24px]'
+      className='bg-red-700 hover:bg-red-600 text-text-button text-lg'
       size='default'
        onClick={onClick}>
 {t('cancel')}
+      </Button>
+    )
+  }
+    if(type=='ok'){
+    return(
+      <Button variant='default'
+      className='bg-blue-button hover:bg-hover-blue text-text-button text-xl px-8'
+      size='default'
+       onClick={onClick}>
+{t('ok')}
       </Button>
     )
   }
@@ -84,15 +94,15 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
  if(type=='post'){
     return(
-      <Button className='bg-blue-button text-text-button text-[20px] md:text-[25px]' variant='default' onClick={onClick}>{t('post')} </Button>
+      <Button className='bg-blue-button text-text-button text-2xl  md:text-[25px]' variant='default' onClick={onClick}>{t('post')} </Button>
     )
   }
    if(type=='use'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-[25px]' variant='default' onClick={onClick}>{t('use')}</Button>
+      <Button className='bg-blue-button text-text-button md:text-[18px]' variant='default' onClick={onClick}>{t('use')}</Button>
     )
   }
-   if(type=='save'){
+   if(type=='save'||type=='submit'){
     return(
       <Button className='bg-blue-button text-text-button md:text-md' variant='default' size='default'>{t('save')}</Button>
     )

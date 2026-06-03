@@ -30,7 +30,7 @@ const Header = () => {
   }, [updateToken.mutate]);
 
   return (
-    <header className="fixed bg-black dark:bg-gray-50 shadow-md border-b border-gray-200 top-0 left-0 right-0 z-[999] w-full">
+    <header className="fixed bg-black dark:bg-gray-50 shadow-md  top-0 left-0 right-0 z-[999] w-full">
       {/* 1. تم تعديل الحاوية إلى max-w-full لتمتد العناصر إلى الحواف والزوايا تماماً */}
       <div className="max-w-full mx-auto px-4 sm:px-8 h-fit flex items-center justify-between gap-4 md:gap-8" style={{ direction: 'ltr' }}>
         

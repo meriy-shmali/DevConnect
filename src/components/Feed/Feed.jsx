@@ -190,7 +190,7 @@ const Feed = () => {
           </div>
 
           {/* Createpost للشاشات الكبيرة */}
-          <div className="hidden  me-5 lg:flex w-[280px] xl:w-[300px] flex-shrink-0 fixed lg:right-10 top-20 self-start h-fit">
+          <div className="hidden  me-5 lg:flex w-[280px] xl:w-[300px] flex-shrink-0 fixed  lg:end-10 top-20 self-start h-fit">
             <Createpost />
           </div>
         </div>

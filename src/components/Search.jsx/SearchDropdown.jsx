@@ -81,31 +81,49 @@ const SearchDropdown = () => {
   };
 
   const handleItemClick = (item) => {
-    const userId = item.user?.id || item.id;
-    
-    if (activeTab === 'people') {
-      if (userId) {
-        navigate(`/profile/${userId}`);
-        setIsOpen(false);
-      } else {
-        const searchQuery = item.username || item.query || item;
-        setQuery(searchQuery);
-        setIsSearching(true);
-        executeSearch(1);
-      }
-    }
-    // 💡 تم تصحيح اسم التبويب هنا إلى 'tagss' ليطابق الـ state
-    else if (isSearching && (activeTab === 'posts' || activeTab === 'tags')) {
-      navigate(`/posts/${item.id}`, { state: { post: item } });
+ const userId = item.user?.id || item.id;
+  
+  // للتاغات: نأخذ الاسم أو الكلمة المبحوث عنها
+  const tagName = item.name || item.query || (typeof item === 'string' ? item : "");
+  
+  // للمنشورات: نأخذ أيدي المنشور
+  const postId = item.id;
+  
+  // 1. استخراج نص البحث أو اسم الشخص لحفظه في السجل قبل الانتقال
+  const historyQuery = item.username ||  item.user?.username || item.query || item.title || (typeof item === 'string' ? item : "");
+  
+  if (historyQuery && typeof historyQuery === 'string') {
+    // حفظ العنصر في السجل فور النقر عليه
+    saveHistory(historyQuery.trim(), activeTab);
+  }
+  // 2. التنفيذ بناءً على التبويب النشط
+  if (activeTab === 'people') {
+    if (userId) {
+      console.log("Navigating to user profile:", userId);
+      navigate(`/profile/${userId}`);
       setIsOpen(false);
-    } 
-    else {
-      const identifier = item.title || item.query || item;
-      setQuery(identifier); 
+    } else {
+      // حالة احتياطية إذا لم يتوفر ID (مثلاً نص بحث عام)
+      const searchQuery = item.username || item.query || item;
+      setQuery(searchQuery);
       setIsSearching(true);
       executeSearch(1);
     }
-  };
+  }
+  // 2. إذا ضغطنا على منشور (سواء في تبويبة posts أو tags)
+  else if (isSearching && (activeTab === 'posts' || activeTab === 'tags')) {
+    // ننتقل لصفحة المنشور ونمرر البيانات
+    navigate(`/post/${item.id}`, { state: { post: item } });
+    setIsOpen(false);
+  } 
+  // 3. إذا كان مجرد اقتراح نصي (قبل البحث الكامل)
+  else {
+    const identifier = item.title || item.query || item;
+    setQuery(identifier); 
+    setIsSearching(true);
+    executeSearch(1); // تنفيذ البحث فوراً عند الضغط على اقتراح
+  }
+};
  
   return (
     // تم ضبط الحاوية لتملأ الفراغ المتاح لها بالكامل دون تجاوز
@@ -113,12 +131,14 @@ const SearchDropdown = () => {
       <div className="relative">
         <input
           type="text"
-          dir="auto"
+          dir={isRtl ? "rtl" : "ltr"}
           placeholder={t('search')}
           className={`w-full py-1.5 ps-10 pe-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 
               focus:ring-blue-500 bg-gray-100 text-gray-900 text-sm md:text-md font-medium placeholder-gray-500 
               dark:text-black dark:bg-gray-50 dark:border-gray-800 dark:placeholder-gray-400 transition-all
-               ${isRtl ? 'md:pe-12 ps-4 text-right' : 'md:ps-12 pe-4 text-left'}`}
+               ${isRtl ? 'md:pe-12 ps-4 text-right' : 'md:ps-12 pe-4 text-left'}
+                   ${isRtl ? 'text-right' : 'text-left'}`}
+
           value={query}
           onFocus={() => setIsOpen(true)}
           onChange={handleInputChange}
@@ -151,7 +171,7 @@ const SearchDropdown = () => {
             ))}
           </div>
 
-          <div className="py-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
+          <div className="py-2 max-h-[60vh] overflow-y-auto comment-scroll">
             
             {/* --- الحالة 1: السجل (عندما يكون الحقل فارغاً) --- */}
             {!query && recents && (
@@ -183,7 +203,7 @@ const SearchDropdown = () => {
                                 className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover flex-shrink-0 border border-gray-100" 
                                 alt=""
                               />
-                              <div className="flex flex-col space-y-1 min-w-0">
+                              <div className="flex flex-col space-y-1  min-w-0">
                                 <div className="flex items-center gap-3 flex-wrap">
                                   <span className="text-sm md:text-base font-semibold dark:text-white truncate">
                                     {item.user?.username || item.query || item.username}

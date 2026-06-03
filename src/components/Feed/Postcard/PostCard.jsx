@@ -20,7 +20,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Trending from './Trending';
 import { UseMe } from '@/hook/UseQueryMe'
 
-const PostCard = ({post, customWidth, commentClass, HeaderClass, bodyClass, reactionClass, scrollToCommentId, autoOpenComments,compact = false}) => {
+const PostCard = ({post, customWidth, commentClass, HeaderClass, bodyClass, reactionClass, scrollToCommentId, removeTopMargin = false , autoOpenComments,compact = false,isInProfilePage}) => {
   const { t } = useTranslation()
   const { data: currentUser } = UseMe();
   const [sort, setsort] = useState('latest');
@@ -129,9 +129,9 @@ const handleOpenPost = () => {
   }, [scrollToCommentId, paneltype, commentsData]);
 
   return (
-    <div className={`bg-white dark:bg-dark-post-background rounded-2xl shadow-lg border border-gray-200 dark:border-0 h-fit p-4 md:p-5 flex flex-col gap-8 md:mt-5 mt-10 ${customWidth || 'w-full'}`}>
+    <div className={`bg-white dark:bg-dark-post-background rounded-2xl shadow-lg border border-gray-200 px-4 dark:border-0 h-fit p-4 md:p-5 flex flex-col gap-8      ${removeTopMargin ? "mt-0" : "md:mt-5 mt-10"} ${customWidth || 'w-full'}`}>
       <Trending post={post} />
-      <HeaderPost post={post} customClass={HeaderClass} />
+      <HeaderPost post={post} customClass={HeaderClass} isInProfilePage={isInProfilePage} />
      <BodyPost
   post={post}
   customClass={bodyClass}

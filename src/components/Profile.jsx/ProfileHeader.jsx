@@ -27,9 +27,24 @@ const ProfileHeader = ({ userData }) => {
   const { username } = useParams();
   const deleteMutation = useDeleteProfilePhoto();
 const { id } = useParams();
-   const profileTarget = id || 'me';
-      const { data: profile, isLoading } = useGetProfile(profileTarget);
-     const isOwner = profileTarget === 'me' || String(profile?.id) === String(localStorage.getItem('userId'));
+  const profileTarget = id || 'me';
+  const { data: profile, isLoading } = useGetProfile(profileTarget);
+
+  // فك التوكن لمعرفة من المستخدم الحالي المسجل بالمتصفح
+  let loggedInUserId = null;
+  const token = localStorage.getItem("access");
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      loggedInUserId = payload.user_id || payload.id;
+    } catch (e) {}
+  }
+
+  // الآن نتحقق: إذا كان الرابط 'me' أو كان الـ ID الخاص بالملف الشخصي يطابق معرف حسابكِ الحقيقي
+  const currentUserId = userData?.id || userData?.data?.id || profile?.id;
+  const isOwner = 
+    profileTarget === 'me' || 
+    (loggedInUserId && currentUserId && String(currentUserId) === String(loggedInUserId));
   const handleEditClick = () => {
     setShowEditMenu(false);
     fileInputRef.current.click();
@@ -90,7 +105,7 @@ const handleDeletePhoto = async () => {
 };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 max-w-6xl mx-auto">
+    <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-6 max-w-full mx-auto">
         <input 
         type="file" 
         ref={fileInputRef} 
@@ -107,7 +122,7 @@ const handleDeletePhoto = async () => {
                  "/images/default-avatar.png"
                } 
             key={userData?.data?.personal_photo_url || userData?.personal_photo_url } 
-             className={`w-28 h-28 md:w-18 md:h-18
+             className={`w-26 h-26 md:w-18 md:h-18
              rounded-full border-4 border-white shadow-lg object-cover transition-opacity
               ${isUploading ? 'opacity-50' : 'opacity-100'}`} 
              
@@ -134,14 +149,14 @@ const handleDeletePhoto = async () => {
              )}
           </div>   )}
         </div>
-        <div className="flex flex-col items-center md:items-start  ">
+        <div className="flex flex-col md:space-y-3  items-center md:items-start  ">
         <h2 className="text-3xl font-medium text-gray-900 mb-3 mt-4 dark:text-gray-50">{userData?.username}</h2>
         {!isOwner &&(
            <button 
            variant='secondary' type='edit'  size='sm'
            onClick={handleFollowClick}
-           className=" md:w-[100px] w-[100px]  bg-follow-button text-text-button md:text-[24px] text-[24px] 
-           hover:bg-hover-purple rounded-lg justify-center items-center"> {(userData?.is_following || userData?.data?.is_following) ? t('unfollow') : t('follow')}
+           className=" md:w-fit  md:px-2 md:py-1.5 px-2 py-1.5 mt-3 md:mt-0 rounded-md  bg-follow-button text-text-button md:text-lg text-sm 
+           hover:bg-hover-purple  justify-center items-center"> {(userData?.is_following || userData?.data?.is_following) ? t('unfollow') : t('follow')}
            </button>
         )}
       </div>
@@ -174,6 +189,7 @@ const handleDeletePhoto = async () => {
         onClose={() => setIsModalOpen(false)} 
         followers={followers} 
         isLoading={false} 
+        currentUserId={currentUserId}
       />
       <FollowingModal 
         isOpen={ModalOpen} 
@@ -181,6 +197,7 @@ const handleDeletePhoto = async () => {
         userId={userData?.id || userData?.data?.id}  
         followingList={following} 
         isLoading={false} 
+         currentUserId={currentUserId}
       />
      <AiModal 
        isOpen={showUnfollowModal} 

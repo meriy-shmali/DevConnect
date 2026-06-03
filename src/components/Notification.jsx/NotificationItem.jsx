@@ -27,22 +27,22 @@ const NotificationItem = ({ item, onClick }) => {
     <div
       onClick={onClick}
       className={`flex items-center justify-between p-4 transition-colors border-b border-gray-50 dark:bg-dark-post-background
-      last:border-0 cursor-pointer group ml-4 ${item.is_read ? 'bg-white hover:bg-gray-50' : 'bg-gray-200/80'}`}
+      last:border-0 rounded-lg cursor-pointer group ml-4 ${item.is_read ? 'bg-white hover:bg-gray-50' : 'bg-gray-200/50'}`}
     >
       <div className="flex items-center gap-3">
         {/* الصورة الشخصية */}
         <div className="relative flex-shrink-0 mr-2">
           <img
             src={item?.from_user?.personal_photo_url || "/default-avatar.png"}
-            className="w-12 h-12 rounded-full object-cover border border-gray-100 shadow-sm"
+            className="md:w-9 md:h-9 w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm"
             alt="user"
           />
         </div>
 
         {/* نصوص الإشعار */}
-        <div className="flex flex-col gap-0.5">
-          <p className="text-[18px] leading-snug text-black mb-2">
-            <span className={`mr-1 ${item.is_read ? '!text-black dark:!text-gray-400 text-2xl' : '!font-bold text-gray-600 dark:text-gray-200'}`}>
+        <div className="flex flex-col gap-1">
+          <p className="text-[14px] md:text-sm leading-snug text-black mb-2">
+            <span className={`mr-1 ${item.is_read ? '!text-black dark:!text-gray-400 md:text-md' : '!font-bold text-gray-600 dark:text-gray-200'}`}>
               {item?.from_user?.username}
             </span>
             {" "}
@@ -50,7 +50,7 @@ const NotificationItem = ({ item, onClick }) => {
               {t(`notifications_msg.${item?.notification_type}`)}
             </span>
           </p>
-          <span className={`text-[16px] text-gray-600 font-medium ${item.is_read ? '!text-black dark:!text-gray-400' : 'text-gray-600 dark:text-gray-200'}`}>
+          <span className={`text-[10px] md:text-[12px]  flex text-gray-600 font-medium ${item.is_read ? '!text-black dark:!text-gray-400' : 'text-gray-600 dark:text-gray-200'}`}>
             {getRelativeTime(item?.created_at)}
           </span>
         </div>

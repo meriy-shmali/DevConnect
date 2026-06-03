@@ -4,7 +4,7 @@ import { RiImageAddFill } from "react-icons/ri";
 import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { BsStars } from "react-icons/bs";
+import { BsStars } from "react-icons/bs"; 
 
 import AIAssistant from "./AIAssistant";
 import { motion, AnimatePresence, spring, color } from "framer-motion";
@@ -18,7 +18,7 @@ import AiModal from './AiModal';
 const Createpost = () => {
    const containerRef = useRef(null);
   const post=CreatepostLogic();
-  const { t } = useTranslation();
+const { t, i18n } = useTranslation();
   useEffect(() => {
   const handleClickOutside = (e) => {
     if (
@@ -39,7 +39,9 @@ const Createpost = () => {
     <div>
      
     <div ref={containerRef} className="hidden md:block"  onClick={()=>post.setshow(false)}>
-      <div className="w-[310px]  pb-10 bg-gradient-background rounded-[50px] shadow-xl/45">
+      <div  className={`w-[310px] pb-10 bg-gradient-background rounded-[50px] shadow-lg/25 ${
+    i18n.language === "ar" ? "mb-8" : ""
+  }`}>
         <div className="flex-col justify-center items-center mt-2 p-8 space-y-8 pb-10">
           <p className="text-white text-3xl text-center title-font">{t("create")}</p>
 
@@ -48,7 +50,7 @@ const Createpost = () => {
             placeholder={t('share')}
             value={`${post.text}${post.displayCategory ? `\n\ncategory: ${post.displayCategory}` : ""}`}
             onChange={(e) => post.setText(e.target.value)}
-            className="bg-white  dark:bg-gray-100 h-fit overflow-y-auto placeholder:text-xs placeholder:text-gray-400 "
+            className="bg-white md:text-md  dark:bg-gray-100 h-[60px] overflow-y-auto placeholder:text-xs placeholder:text-gray-400 "
           />
       
       
