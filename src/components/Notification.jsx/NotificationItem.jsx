@@ -27,7 +27,7 @@ const NotificationItem = ({ item, onClick }) => {
     <div
       onClick={onClick}
       className={`flex items-center justify-between p-4 transition-colors border-b border-gray-50 dark:bg-dark-post-background
-      last:border-0 rounded-lg cursor-pointer group ml-4 ${item.is_read ? 'bg-white hover:bg-gray-50' : 'bg-gray-200/50'}`}
+      last:border-0 dark:border-none rounded-lg cursor-pointer group ml-4 ${item.is_read ? 'bg-white hover:bg-gray-50 dark:hover:bg-gray-400/10' : 'bg-gray-200/50 dark:bg-gray-100/20'}`}
     >
       <div className="flex  gap-3">
         {/* الصورة الشخصية */}

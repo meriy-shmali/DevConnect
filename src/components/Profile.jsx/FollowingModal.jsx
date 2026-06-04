@@ -10,7 +10,6 @@ const FollowingModal = ({ isOpen, onClose, userId }) => {
   const { data: following, isLoading, error } = useGetFollowing(userId);
   const listData = Array.isArray(following) ? following : (following?.data || following?.results || []);
 
-  // 🟢 الحل الجذري: استخراج الـ ID الخاص بكِ مباشرة من توكن تسجيل الدخول لضمان دقة المقارنة
   let myRealId = null;
   const token = localStorage.getItem("access");
   if (token) {
@@ -25,7 +24,6 @@ const FollowingModal = ({ isOpen, onClose, userId }) => {
   const handleUserClick = (targetUserId) => {
     if (!targetUserId) return;
 
-    // فحص المقارنة الصارم والمحمي بالاعتماد على معرف التوكن الحقيقي
     if (myRealId && String(targetUserId) === String(myRealId)) {
       navigate('/profile/me');
     } else {
@@ -38,21 +36,28 @@ const FollowingModal = ({ isOpen, onClose, userId }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 transition-all duration-300 cursor-pointer" onClick={onClose}>
-      <div className="bg-white relative top-5  rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col  overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 cursor-default dark:bg-dark-post-background" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className="bg-white relative top-5 rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 cursor-default dark:bg-dark-post-background" 
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Header */}
-        <div className=" -mb-4 relative flex items-center justify-start shrink-0 p-4 ">
-          <div className="flex items-center gap-1 dark:text-gray-50 ">
-            <h2 className="text-3xl font-medium tracking-tight p-4 dark:text-gray-50 ">{t('following')}</h2>
-            <Users className="w-7 h-7 " />
+        <div className="-mb-4 relative flex items-center justify-start shrink-0 p-4">
+          <div className="flex items-center gap-1 dark:text-gray-50">
+            <h2 className="text-3xl font-medium tracking-tight p-4 dark:text-gray-50">{t('following')}</h2>
+            <Users className="w-7 h-7" />
           </div>
-          <button onClick={onClose} className=" absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 rounded-full transition-colors">
-            <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700 " />
+          <button onClick={onClose} className="absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 dark:hover:bg-black/20 rounded-full transition-colors">
+            <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700" />
           </button>
         </div>
 
         {/* List Content */}
-        <div className="max-h-[50vh] md:max-h-[52vh] lg:max-h-[58vh] custom-scrollbar flex-1 overflow-y-auto p-4 ml-3 pr-6 space-y-3">
+        {/* 🟢 تم إغلاق انتشار الحدث هنا لضمان عدم إغلاق النافذة فجأة عند الضغط على الـ Loader أو النصوص */}
+        <div 
+          onClick={(e) => e.stopPropagation()} 
+          className="max-h-[50vh] md:max-h-[52vh] lg:max-h-[58vh] custom-scrollbar flex-1 overflow-y-auto p-4 ml-3 pr-6 space-y-3"
+        >
           {isLoading ? (
             <div className="flex flex-col items-center py-10 text-gray-400">
               <Loader2 className="w-8 h-8 animate-spin mb-2" />
@@ -64,7 +69,6 @@ const FollowingModal = ({ isOpen, onClose, userId }) => {
             </div>
           ) : (listData.length > 0 ? (
             listData.map((item) => {
-              // 🟢 دعم شامل ومتكامل لهيكلية الـ API الخاصة بالمتابَعين
               const userDetail = item?.following || item?.following_user || item?.user || item?.receiver || item;
               const extractedId = userDetail?.id || item?.following_id || item?.id;
 
@@ -79,12 +83,12 @@ const FollowingModal = ({ isOpen, onClose, userId }) => {
                     className="w-12 h-12 rounded-full border border-gray-100 object-cover" 
                     alt={userDetail?.username || "user"}
                   />
-                  <span className="font-medium text-xl dark:text-gray-50 ">{userDetail?.username || item?.username}</span>
+                  <span className="font-medium text-xl dark:text-gray-50">{userDetail?.username || item?.username}</span>
                 </div>
               );
             })
           ) : (
-            <p className="text-center py-10 text-gray-400 italic dark:text-gray-50 ">{t('no_following_yet')}</p>
+            <p className="text-center py-10 text-gray-400 italic dark:text-gray-50">{t('no_following_yet')}</p>
           ))}
         </div>
       </div>

@@ -37,7 +37,7 @@ const Comment = ({post, onAddComment, editingComment, setEditingComment, onBestA
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
           }}
-          className=" w-2/3 text-xs md:text-sm border border-gray-300 hover:bg-gray-50 rounded-lg px-3 py-1.5 dark:bg-dark-placeholder dark:placeholder:text-gray-400 dark:text-gray-100 outline-none focus:border-gray-400 transition-colors"
+          className=" flex-2 text-xs md:text-sm border border-gray-300 hover:bg-gray-50 rounded-lg px-3 py-1.5 dark:bg-dark-placeholder dark:placeholder:text-gray-400 dark:text-gray-100 outline-none focus:border-gray-400 transition-colors"
         />
         <IoSend
           onClick={handleSend}

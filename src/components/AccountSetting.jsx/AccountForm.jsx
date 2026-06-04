@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { LogOut, Sun, Moon, Monitor } from 'lucide-react';
 import { UseTheme } from './UseTheme';
 import {
-  Form, FormField, FormItem, FormLabel,
-  FormControl, FormMessage
+   Form, FormField, FormItem, FormLabel,
+   FormControl, FormMessage
 } from "@/components/ui/form";
 import { useTranslation } from "react-i18next";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue, Select } from "@/components/ui/select";
@@ -76,7 +76,8 @@ const AccountForm = () => {
               <FormLabel className="text-main-text dark:text-gray-50 md:w-[220px] lg:w-[300px] flex-shrink-0 text-xl md:text-2xl font-medium">
                 {t('username')}:
               </FormLabel>
-              <div className='flex flex-row items-center flex-1 w-full max-w-[600px] gap-2'>
+              {/* تعديل الـ max-w هنا ليتطابق مع بقية الحقول */}
+              <div className='flex flex-row items-center flex-1 w-full gap-2'>
                 <div className='flex flex-col flex-1 min-w-0 relative'>
                   <FormControl>
                     <InputGroup className=" bg-white border-black border w-full px-3 h-fit rounded-xl focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all dark:bg-dark-post-background dark:border-white/20">
@@ -113,7 +114,7 @@ const AccountForm = () => {
               <FormLabel className="text-main-text dark:text-gray-50 md:w-[220px] lg:w-[300px] flex-shrink-0 text-xl md:text-2xl font-medium">
                 {t('email')}:
               </FormLabel>
-              <div className='w-full max-w-[600px]'>
+              <div className='w-full flex-1'>
                 <FormControl>
                   <InputGroup className="bg-gray-50 border-black/40 border w-full px-3 h-fit rounded-xl dark:bg-zinc-800/50 dark:border-white/10 pointer-events-none opacity-70">
                     <InputGroupInput
@@ -130,22 +131,21 @@ const AccountForm = () => {
           )}
         />
 
-       {/* 🌟 حقل اللغة المطور مع إصلاح مشكلة السكرول */}
+       {/* 🌟 حقل اللغة */}
        <FormField
           control={form.control}
           name="language"
           render={({ field }) => (
             <FormItem className='flex flex-col md:flex-row md:items-center gap-2 md:gap-4 w-full'>
-              <FormLabel className="text-main-text dark:text-gray-50 md:w-[220px] lg:w-[300px] flex-shrink-0 text-xl md:text-2xl font-medium">
+              <FormLabel className="text-main-text dark:text-gray-50  md:w-[220px] lg:w-[300px] flex-shrink-0 text-xl md:text-2xl font-medium">
                 {t('language')}:
               </FormLabel>
-              <div className='w-full max-w-[600px]'>  
+              <div className='w-full flex-1'>  
                 <FormControl>
                   <Select 
                     value={field.value} 
                     onValueChange={(value) => {
                       field.onChange(value); 
-                      
                       i18next.changeLanguage(value);  
                       localStorage.setItem('i18nextLng', value);  
                       document.documentElement.dir = value === 'ar' ? 'rtl' : 'ltr';
@@ -153,11 +153,9 @@ const AccountForm = () => {
                       form.reset({ ...form.getValues(), language: value });
                     }}
                   >
-                    <SelectTrigger className={`bg-white border-black border w-full px-3 h-fit rounded-xl dark:bg-dark-post-background dark:border-white/20 focus:ring-1 focus:ring-blue-button ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : 'text-left'}`}>
+                    <SelectTrigger className={`bg-white border-black border w-full px-3 h-fit rounded-xl  dark:bg-dark-post-background dark:border-white/20 focus:ring-1 focus:ring-blue-button ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : 'text-left'}`}>
                       <SelectValue placeholder={field.value === 'ar' ? t('arabic') : t('english')} />
                     </SelectTrigger>
-                  
-                    {/* 💡 حل السكرول: أضفنا onCloseAutoFocus لمنع Radix من قفل الـ pointer-events */}
                     <SelectContent 
                       className="bg-white dark:bg-dark-post-background border-black border w-[var(--radix-select-trigger-width)]" 
                       side='bottom' 
@@ -167,8 +165,8 @@ const AccountForm = () => {
                       avoidCollisions={false}
                       onCloseAutoFocus={(e) => e.preventDefault()}
                     >
-                      <SelectItem value='en' className="text-[16px] dark:text-dark-text cursor-pointer">{t('english')}</SelectItem>
-                      <SelectItem value='ar' className="text-[16px] dark:text-dark-text cursor-pointer">{t('arabic')}</SelectItem>
+                      <SelectItem value='en' className="text-[16px] dark:hover:bg-gray-100/20 dark:text-dark-text cursor-pointer">{t('english')}</SelectItem>
+                      <SelectItem value='ar' className="text-[16px] dark:hover:bg-gray-100/20 dark:text-dark-text cursor-pointer">{t('arabic')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -177,7 +175,7 @@ const AccountForm = () => {
           )}
         />
 
-       {/* 🌟 حقل المظهر مع إصلاح مشكلة السكرول */}
+       {/* 🌟 حقل المظهر */}
        <FormField
           control={form.control}
           name="mode"
@@ -186,14 +184,12 @@ const AccountForm = () => {
               <FormLabel className="text-main-text dark:text-gray-50 md:w-[220px] lg:w-[300px] flex-shrink-0 text-xl md:text-2xl font-medium">
                 {t('mode')}:
               </FormLabel>
-              <div className='w-full max-w-[600px]'>
+              <div className='w-full flex-1'>
                 <FormControl>
                   <Select onValueChange={(value) => { field.onChange(value); setTheme(value); }} value={theme}>
                     <SelectTrigger className={`bg-white border-black border w-full px-3 h-fit rounded-xl dark:bg-dark-post-background dark:border-white/20 focus:ring-1 focus:ring-blue-button ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : 'text-left'}`}>
                       <SelectValue placeholder={themePlaceholder} />
                     </SelectTrigger>
-                  
-                    {/* 💡 حل السكرول: أضفنا onCloseAutoFocus هنا أيضاً */}
                     <SelectContent 
                       className="bg-white dark:bg-dark-post-background border-black border w-[var(--radix-select-trigger-width)]" 
                       side='bottom' 
@@ -203,19 +199,19 @@ const AccountForm = () => {
                       avoidCollisions={false}
                       onCloseAutoFocus={(e) => e.preventDefault()}
                     >
-                      <SelectItem value='light' className="cursor-pointer">
+                      <SelectItem value='light' className=" dark:hover:bg-gray-100/20 dark:text-white cursor-pointer">
                         <div className={`flex items-center gap-2 w-full ${i18n.language === 'ar' ? 'flex-row-reverse justify-between' : ''}`}>
                           <span className="text-md">{t('light')}</span>
                           <Sun className="w-4 h-4" /> 
                         </div>
                       </SelectItem>
-                      <SelectItem value='dark' className="cursor-pointer">
-                        <div className={`flex items-center gap-2 w-full ${i18n.language === 'ar' ? 'flex-row-reverse justify-between' : ''}`}>
+                      <SelectItem value='dark'  className=" dark:hover:bg-gray-100/20 dark:text-white cursor-pointer">
+                        <div className={`flex items-center gap-2  w-full ${i18n.language === 'ar' ? 'flex-row-reverse justify-between' : ''}`}>
                           <span className="text-md">{t('dark')}</span>
                           <Moon className="w-4 h-4" /> 
                         </div>
                       </SelectItem>
-                      <SelectItem value='system' className="cursor-pointer">
+                      <SelectItem value='system' className="dark:hover:bg-gray-100/20 dark:text-white cursor-pointer">
                         <div className={`flex items-center gap-2 w-full ${i18n.language === 'ar' ? 'flex-row-reverse justify-between' : ''}`}>
                           <span className="text-md">{t('system')}</span>
                           <Monitor className="w-4 h-4" /> 
@@ -229,44 +225,44 @@ const AccountForm = () => {
           )}
         />
             
-       {/* 🌟 رابط تغيير كلمة المرور */}<div className='w-full flex flex-col sm:flex-row justify-between items-center sm:items-center gap-6 mt-10 relative'> 
+       {/* 🌟 فوتر التغيير وتسجيل الخروج السفلي */}
+     {/* 🌟 فوتر التغيير وتسجيل الخروج السفلي */}
+       {/* تم تغيير flex-row إلى flex-col في الموبايل ليصبحوا تحت بعض وفي المنتصف، ويرجع flex-row justify-between في الشاشات الأكبر md */}
+       <div className='w-full flex flex-col items-center gap-6 md:flex-row md:justify-between md:items-center mt-10'> 
   
-  {/* رابط تغيير كلمة المرور: يبقى ثابتاً في مكانه وبمحاذاة الحقول الطبيعية */}
-  <div className='w-full sm:w-auto flex justify-start flex-shrink-0'>
-    <Button 
-      variant='link' 
-      type='button'
-      onClick={() => navigate('/change')}
-      className='p-0 h-auto underline decoration-solid text-xl md:text-xl text-blue-button hover:opacity-90 cursor-pointer' 
-    >
-      {t('change_password')}
-    </Button>
-  </div>
-   
-  {/* زر تسجيل الخروج: 
-      📱 على الموبايل: flex-1 مع w-full ليأخذ الحاوية ويقعد بالمنتصف تماماً بفضل justify-center
-      💻 على اللابتوب (sm فما فوق): يطير تلقائياً لأقصى يمين الشاشة ليحاذي زر الـ Saved العلوي بمساعدة sm:absolute sm:right-0 (أو left-0 بالـ RTL)
-  */}
-  <div className="w-full sm:w-auto flex justify-center sm:absolute sm:right-0 rtl:sm:right-auto rtl:sm:left-0">
-    <button 
-      type="button"
-      onClick={() => {
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        navigate('/', { replace: true });
-      }}
-      className="w-fit mt-2 sm:w-auto bg-[#AF2F51] hover:bg-[#b53e5d] text-white px-3 py-2 rounded-xl flex items-center gap-2 transition-transform active:scale-95 shadow-md justify-center text-sm font-medium cursor-pointer"
-    >  
-      <span>{t('logout')}</span>
-      <LogOut className='w-4 h-4 rtl:rotate-180' />
-    </button>
-  </div>
+          {/* رابط تغيير كلمة المرور */}
+          <div className='flex justify-center md:justify-start flex-shrink-0'>
+            <Button 
+              variant='link' 
+              type='button'
+              onClick={() => navigate('/change')}
+              className='p-0 h-auto underline decoration-solid text-xl md:text-xl text-blue-button hover:opacity-90 cursor-pointer' 
+            >
+              {t('change_password')}
+            </Button>
+          </div>
+           
+          {/* زر تسجيل الخروج: في المنتصف للموبايل ويطير لأقصى اليمين تلقائياً في الشاشات الكبيرة */}
+          <div className="flex justify-center md:justify-end flex-shrink-0 w-full md:w-fit">
+            <button 
+              type="button"
+              onClick={() => {
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
+                navigate('/', { replace: true });
+              }}
+              className="w-fit sm:w-fit bg-[#AF2F51] hover:bg-[#b53e5d] text-white px-5 py-2.5 rounded-xl flex items-center gap-2 transition-transform active:scale-95 shadow-md justify-center text-sm font-medium cursor-pointer"
+            >  
+              <span>{t('logout')}</span>
+              <LogOut className='w-4 h-4 rtl:rotate-180' />
+            </button>
+          </div>
 
-</div>
+        </div>
           
      </form>
    </Form>
-  );
+ );
 }
 
 export default AccountForm;

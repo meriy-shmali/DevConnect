@@ -3,30 +3,25 @@ import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-// currentUserId: id المستخدم الحالي المسجّل دخوله، يُمرَّر من CommentItem
 const HeaderPanel = ({ user, createdAt, type, level, currentUserId }) => {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
   const userId = user?.user_id || user?.id;
 
-  // إذا كان صاحب التعليق هو المستخدم الحالي → /profile/me ، وإلا → /profile/:id
   const profilePath = userId
     ? Number(userId) === Number(currentUserId)
       ? '/profile/me'
       : `/profile/${userId}`
     : null;
-const displayName = user?.user_username || user?.username; 
-  // اختيار الصورة الصحيحة بناءً على ما هو متوفر
-  const displayPhoto = user?.user_photo_url || user?.personal_photo_url;
-  // ضبط اللغة بناءً على لغة التطبيق الحالية
-const getCommentDate = (date) => {
+
+  const displayName = user?.user_username || user?.username; 
+  const displayPhoto = user?.user_photo_url || user?.personal_photo_url || "/images/default-avatar.png";
+
+  const getCommentDate = (date) => {
     if (!date) return '';
     const locale = i18n.language === 'ar' ? 'ar' : 'en';
-
-    // نستخدم fromNow(true) للحصول على النص بدون "منذ" أو "ago"
     let timeStr = dayjs(date).locale(locale).fromNow(true);
 
-    // استبدال يدوي للمصطلحات لضمان الاختصار دون التأثير على باقي الموقع
     if (locale === 'ar') {
       return timeStr
         .replace('ثواني', '1ث').replace('دقيقة واحدة', '1د').replace('دقائق', 'د')
@@ -45,25 +40,28 @@ const getCommentDate = (date) => {
   const formattedDate = getCommentDate(createdAt);
 
   return (
-    
-    <div className="flex items-center space-x-3 relative">
+    // 💡 إزالة space-x واعتماد gap لمنع مشاكل قلب اللغات
+    <div className="flex items-start gap-3 relative w-full">
       <img
         src={displayPhoto}
-        className="md:w-9 md:h-9 h-8 w-8 rounded-full cursor-pointer"
+        className="md:w-9 md:h-9 h-8 w-8 rounded-full cursor-pointer flex-shrink-0 object-cover"
         onClick={() => profilePath && navigate(profilePath)}
+        alt="avatar"
       />
-      <div
-        className="md:text-md text-[14px] capitalize font-semibold dark:text-gray-50 cursor-pointer "
-        onClick={() => profilePath && navigate(profilePath)}
-      >
-        {displayName}
-      </div>
-      {/* يظهر فقط بالتعليقات */}
-      {type === "comments" && (
-        <div className="text-xs text-gray-500 dark:text-gray-200">
-          {formattedDate}
+      {/* 🌟 تجميع الاسم والتاريخ في حاوية مرنة موازية للنص بالأسفل */}
+      <div className="flex items-center gap-2 flex-wrap min-w-0">
+        <div
+          className="md:text-md text-[14px] capitalize font-semibold dark:text-gray-50 cursor-pointer truncate"
+          onClick={() => profilePath && navigate(profilePath)}
+        >
+          {displayName}
         </div>
-      )}
+        {type === "comments" && (
+          <div className="text-xs text-gray-400 dark:text-gray-300 flex-shrink-0 pt-0.5">
+            • {formattedDate}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -56,14 +56,13 @@ const SavedPage = () => {
           </div>
 
           {/* مساحة عرض المنشورات */}
-          <div className="w-full flex justify-center">
+          <div className="w-full flex justify-center flex-shrink-0"> {/* تم نقل flex-shrink-0 إلى هنا داخل الـ className */}
             <SavedPost 
               data={data} 
               isLoading={isLoading} 
               isError={isError} 
               page={page} 
               setPage={setPage} 
-              flex-shrink-0
             />
           </div>
         </div>

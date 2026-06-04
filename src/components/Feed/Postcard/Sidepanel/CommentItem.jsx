@@ -72,7 +72,6 @@ const CommentItem = ({
   return (
     <motion.div
       ref={commentRef}
-      // ✅ هذا الـ id ضروري لـ getElementById في PostCard لعمل الـ scroll
       id={`comment-${item.id}`}
       layout
       initial={{ opacity: 1 }}
@@ -94,11 +93,11 @@ const CommentItem = ({
       } : { backgroundColor: "rgba(0, 0, 0, 0)" }}
       transition={isHighlighted ? { duration: 2, ease: "easeInOut" } : { duration: 0.2 }}
       style={{ paddingLeft: indent + (isHighlighted ? 8 : 0) }}
-      className="flex flex-col space-y-4 mt-5 dark:bg-transparent"
+      className="flex flex-col space-y-2 mt-5 dark:bg-transparent"
     >
 
       {/* header + menu */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start w-full">
         <HeaderPanel
           user={item}
           createdAt={item.created_at}
@@ -107,23 +106,33 @@ const CommentItem = ({
           currentUserId={data?.id}
         />
         {Number(item?.user_id) === Number(data?.id) && (
-          <MenuPanel
-            id={item.id}
-            menu={menu}
-            toggleMenu={toggleMenu}
-            onEdit={() => handleEditClick(item)}
-            onDelete={() => {
-              console.log("item.id:", item.id, "item.parent_id:", item.parent_id, "item.parentId:", item.parentId);
-              handleDeleteComment(item.id, item.parent_id || item.parentId);
-            }}
-          />
+          <div className="flex-shrink-0">
+            <MenuPanel
+              id={item.id}
+              menu={menu}
+              toggleMenu={toggleMenu}
+              onEdit={() => handleEditClick(item)}
+              onDelete={() => {
+                console.log("item.id:", item.id, "item.parent_id:", item.parent_id, "item.parentId:", item.parentId);
+                handleDeleteComment(item.id, item.parent_id || item.parentId);
+              }}
+            />
+          </div>
         )}
       </div>
 
-      <div className="flex justify-between  items-start space-x-2">
+      {/* text area & reactions */}
+      {/* 🌟 دفع المحتوى بالكامل يميناً أو يساراً ليكون تحت الاسم مباشرة بناءً على لغة التعليق */}
+      <div 
+        className="flex justify-between items-start space-x-4 w-full ltr:pl-11 rtl:pr-11"
+        dir="auto"
+      >
         {/* text */}
-        <div className="flex flex-col items-start  flex-1">
-          <p className="text-sm dark:text-gray-100 whitespace-pre-wrap break-words w-full" dir="rtl">
+        <div className="flex flex-col flex-1 min-w-0">
+          <p 
+            className="text-sm dark:text-gray-100 whitespace-pre-wrap break-words w-full text-start" 
+            dir="auto"
+          >
             {displayCommentContent}
             {shouldTruncateComment && (
               <button
@@ -138,17 +147,20 @@ const CommentItem = ({
 
         {/* reactions */}
         {type === "comments" && (
-          <ReactionPanel
-            id={item.id}
-            counts={counts}
-            handleReaction={handleReaction}
-          />
+          <div className="flex-shrink-0">
+            <ReactionPanel
+              id={item.id}
+              counts={counts}
+              handleReaction={handleReaction}
+            />
+          </div>
         )}
       </div>
 
       {/* actions */}
+      {/* 🌟 إزاحة الأزرار الفرعية لتصطف عمودياً تحت نص التعليق بدقة */}
       {type === "comments" && (
-        <div>
+        <div className="w-full ">
           <ActionPanel
             item={item}
             repliesCount={countreply?.[item.id] ?? item.replies_count ?? 0}
@@ -165,21 +177,23 @@ const CommentItem = ({
 
       {/* input */}
       {replyInput[item.id] && (
-        <Replyinput
-          value={replyText[item.id] || ""}
-          onChange={(e) =>
-            setreplyText(prev => ({
-              ...prev,
-              [item.id]: e.target.value
-            }))
-          }
-          onSend={() => handlesendreply(item.id)}
-        />
+        <div className="w-full ltr:pl-11 rtl:pr-11">
+          <Replyinput
+            value={replyText[item.id] || ""}
+            onChange={(e) =>
+              setreplyText(prev => ({
+                ...prev,
+                [item.id]: e.target.value
+              }))
+            }
+            onSend={() => handlesendreply(item.id)}
+          />
+        </div>
       )}
 
       {/* replies */}
       {viewreply[item.id] && (
-        <div className="relative pl-3 mt-2 space-y-3">
+        <div className="relative pl-3 mt-2 space-y-2">
           <AnimatePresence mode="popLayout">
             {replies.slice(0, visibleReplies).map(reply => (
               <CommentItem

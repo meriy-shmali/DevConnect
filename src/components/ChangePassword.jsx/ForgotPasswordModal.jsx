@@ -133,9 +133,9 @@ export const ForgotPasswordModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40  p-4">
       <div className="bg-white  dark:bg-dark-post-background w-full max-w-md rounded-xl p-6 shadow-2xl relative">
-        <button onClick={onClose} className="absolute end-4 top-5 text-red-500 hover:text-black dark:hover:text-white">
-          <X size={18} />
-        </button>
+       <button onClick={onClose} className=" absolute top-3 end-4 p-2 z-10 hover:bg-gray-50 dark:hover:bg-black/20 rounded-full transition-colors">
+                  <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700 " />
+                </button>
 
           <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

@@ -61,23 +61,23 @@ const SavedPost = ({ data, isLoading, isError, page, setPage }) => {
             <PostCard 
               post={post}
               customWidth="w-full" 
-              commentClass={isMobile ? `w-full max-w-[350px] mx-auto scale-90 origin-center gap-x-0.5 flex justify-center border-t pt-1 pb-6 mb-[-10px] 
-                                       [&~div]:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
-                                       [&~div_div]:!max-w-full [&~div_div]:box-border [&_.._div]:max-w-[320px]` : undefined}
-              HeaderClass={isMobile ? `flex justify-between items-center w-[114%] -ms-[7%] scale-85 ps-0 !pe-1 gap-0 
-                                       [&>div:first-child]:flex-1 [&>div:first-child]:flex [&>div:first-child]:items-center [&>div:first-child]:ps-0 [&>div:first-child]:!w-auto [&>div:first-child]:!min-w-0
-                                       [&>div:first-child>div:first-child]:flex-none [&>div:first-child>div:first-child]:!w-[50px] [&>div:first-child>div:first-child]:!min-w-[40px] [&>div:first-child>div:first-child]:me-6 [&>div:first-child>div:first-child]:ms-0
-                                       [&>div:first-child>div:first-child>div:first-child]:ms-0 [&>div:first-child>div:first-child>div:first-child]:gap-x-4
-                                       [&>div:first-child>div:first-child>span]:ms-8
-                                       [&>div:first-child>button]:w-[80px] [&>div:first-child>button]:ms-12
-                                       [&_button:nth-last-of-type(2)]:max-w-[20px] 
-                                       [&>div:last-child]:flex-none [&>div:last-child]:flex [&>div:last-child]:items-center [&>div:last-child]:justify-end [&>div:last-child]:gap-x-3 [&>div:last-child]:ms-auto
-                                       [&>div:last-child>button:first-child]:w-[85px] [&>div:last-child>button:first-child]:px-2
-                                       [&_div]:space-x-0 [&>div:last-child]:ps-30 [&>div:last-child]:!me-[-20px]` : undefined} 
-              bodyClass={isMobile ? "h-[300px] scale-90 origin-top px-4 py-0 mb-[-10px] text-sm overflow-hidden custom-scrollbar" : "w-full text-base"}
-              reactionClass={isMobile ? `w-full max-w-[350px] mx-auto scale-65 origin-center gap-x-0.5 flex justify-center border-t pt-1 pb-6 mb-[-10px] 
-                                         [&~div]:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
-                                         [&~div_div]:!max-w-full [&~div_div]:box-border [&_.._div]:max-w-[320px]` : undefined}
+              commentClass={isMobile ? `w-full max-w-[350px] mx-auto scale-95 origin-center gap-x-0.5 flex justify-between pt-1 pb-6 mb-[-10px] 
+                ` : undefined}
+              // تصحيح التنسيق: جعلنا العرض حقيقي ومستقر w-full بدلاً من التمدد خارج الكارد
+              HeaderClass={isMobile ? `flex justify-between items-center w-full scale-95 origin-center gap-2 ps-0 pe-1 
+                [&>div:first-child]:flex-1 [&>div:first-child]:flex [&>div:first-child]:items-center [&>div:first-child]:ps-0 [&>div:first-child]:!w-auto [&>div:first-child]:!min-w-0
+                [&>div:first-child>div:first-child]:flex-none [&>div:first-child>div:first-child]:!w-[50px] [&>div:first-child>div:first-child]:!min-w-[40px] [&>div:first-child>div:first-child]:me-6 [&>div:first-child>div:first-child]:ms-0
+                [&>div:first-child>div:first-child>div:first-child]:ms-0 [&>div:first-child>div:first-child>div:first-child]:gap-x-4
+                [&>div:first-child>div:first-child>span]:ms-8
+                [&>div:first-child>button]:w-[80px] [&>div:first-child>button]:ms-12
+                [&_button:nth-last-of-type(2)]:max-w-[20px] 
+                [&>div:last-child]:flex-none [&>div:last-child]:flex [&>div:last-child]:items-center [&>div:last-child]:justify-end [&>div:last-child]:gap-x-3 [&>div:last-child]:ms-auto
+                [&>div:last-child>button:first-child]:w-[85px] [&>div:last-child>button:first-child]:px-2
+                [&_div]:space-x-0 [&>div:last-child]:ps-30 [&>div:last-child]:!me-[-20px]` : undefined} 
+              bodyClass={isMobile ? "h-[300px] scale-95 origin-top px-4 py-0 mb-[-10px] text-sm overflow-hidden custom-scrollbar" : "w-full text-base"}
+              reactionClass={isMobile ? `w-full max-w-[350px] mx-auto scale-95 origin-center gap-x-0.5 flex justify-between  pb-6 mb-[-10px] 
+                [&~div]:!max-w-[320px] [&~div]:!w-full [&~div]:mx-auto 
+                [&~div_div]:!max-w-full [&~div_div]:box-border [&_.._div]:max-w-[320px]` : undefined}
             />
           </div>
         ))}

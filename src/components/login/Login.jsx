@@ -1,23 +1,39 @@
 import React from 'react'
 import LoginForm from './LoginForm'
-import Buttons from '../ui/ButtonGroup'
-import { Button } from '../ui/button'
 import { useTranslation } from "react-i18next";
+
 const Login = () => {
-  const { t ,} = useTranslation();
+  const { t } = useTranslation();
+  
   return (
-    <div className='bg-main-background h-full    relative z-50   dark:text-dark-text  flex flex-col items-center md:flex-row md:justify-between md:overflow-hidden '>
-      <div className='md:mt-8 md:px-12 mt-12  flex flex-col md:space-y-3 items-center md:items-start '>
-        <div className='flex-col md:space-y-6 space-y-1'><p className='title-font text-3xl sm:text-3xl md:text-3xl lg:text-4xl font-bold  text-center md:text-left'>{t('welcome_back')}</p></div>
-        <div className='  md:mt-6 mt-8 flex-col justify-start space-y-6 '>
-        <LoginForm />
+    // تم تغيير h-full إلى min-h-screen وتأمين التوسيط والـ flex-row
+    <div className='bg-main-background min-h-screen relative z-50 dark:text-dark-text flex flex-col md:flex-row items-center justify-center lg:justify-between px-6 md:px-12 lg:px-24 py-2 gap-10 max-w-7xl mx-auto w-full'>
+      
+      {/* قسم الفورم والترحيب */}
+      <div className='mt-12 md:mt-0 flex flex-col items-center md:items-start w-full max-w-[450px]'>
+        <div className='w-full mb-10'>
+          {/* تم تعديل md:text-left إلى md:text-start لدعم الـ RTL تلقائياً */}
+          <p className='title-font text-3xl lg:text-4xl font-bold text-center md:text-start leading-tight'>
+            {t('welcome_back')}
+          </p>
         </div>
         
+        <div className='w-full'>
+          <LoginForm />
         </div>
+      </div>
         
-      <div className='w-[290px]  md:w-[500px]  h-fit sticky top-0 flex-shrink-0  '><img src='src/images/login.png'/></div>
+      {/* قسم الصورة - جعلناه مرناً ومحدداً بحد أقصى لمنع دفع العناصر */}
+      <div className='w-full max-w-[300px] md:max-w-[400px] lg:max-w-[500px] flex-shrink-0 flex justify-center'>
+        <img 
+          src='src/images/login.png' 
+          alt="Login illustration" 
+          className='w-full h-auto object-contain'
+        />
+      </div>
+
     </div>
   )
 }
 
-export default Login
+export default Login;

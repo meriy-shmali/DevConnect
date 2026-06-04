@@ -24,7 +24,7 @@ i18n.use(initReactI18next).init({
         createaccount:"Sing up",
         create_account:"Create Account",
         Noaccount:" Don't have an account?",
-        register:"Register",
+        register:"Sign up",
         firstname:"First Name",
         lastname:"Last Name",
         username:"UserName",

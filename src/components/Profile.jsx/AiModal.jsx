@@ -23,7 +23,7 @@ const AiModal = ({ isOpen, result, onuse, onClose }) => {
           >
             <button 
               onClick={onClose} 
-              className="absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 rounded-full transition-colors"
+              className="absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 dark:hover:bg-black/20 rounded-full transition-colors"
             >
               <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700" />
             </button>

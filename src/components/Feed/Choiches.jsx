@@ -17,7 +17,7 @@ const Choiches = ({ setCategory }) => {
   const handleCategoryChange = (id) => { setActiveTab(id); setCategory(id); };
 
   return (
-    <div className="flex items-center gap-5 md:gap-9  pe-4 md:px-4  justify-center    md:py-5 mt-16 md:mt-0">
+    <div className="flex items-center gap-5 md:gap-9 xl:gap-16  pe-4 md:px-4  justify-center    md:py-5 mt-16 md:mt-0">
       {tabs.map((tab) => (
         <div key={tab.id} className="relative group">
           <button
@@ -29,12 +29,12 @@ const Choiches = ({ setCategory }) => {
             {activeTab === tab.id && (
               <motion.div
                 layoutId="underline"
-                className="absolute bottom-0  left-0 right-0 h-0.5 bg-current rounded-full"
+                className="absolute bottom-0  start-0 end-0 h-0.5 bg-current rounded-full"
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
             )}
             {activeTab !== tab.id && (
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current opacity-20 rounded-full transition-all duration-300 group-hover:w-full" />
+              <div className="absolute bottom-0 start-0 w-0 h-0.5 bg-current opacity-20 rounded-full transition-all duration-300 group-hover:w-full" />
             )}
           </button>
         </div>

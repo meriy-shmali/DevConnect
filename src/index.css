@@ -310,7 +310,25 @@ body {
   width: 6px !important;
   height: 6px !important; /* الارتفاع للأفقي مع إجبار المتصفح */
 }
+/* 🌟 تخصيص السكرول بار الأفقي لمعاينة الصور في كارت إنشاء المنشور */
+.preview-scroll::-webkit-scrollbar {
+  height: 5px; /* ارتفاع صغير جداً ومناسب للسكرول الأفقي */
+  width: 5px;
+}
 
+.preview-scroll::-webkit-scrollbar-track {
+  background: transparent; /* خلفية شفافة تماماً لمنع التداخل مع لون الكارت المائل */
+}
+
+.preview-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25); /* لون أبيض شفاف يتناسب بشكل مذهل مع الـ gradient-background */
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.preview-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45); /* يزداد وضوحاً عند تمرير الماوس فوقه */
+}
 /* 🌟 2. مسار السكرول لكل الطبقات */
 .code-scroll::-webkit-scrollbar-track,
 .code-scroll *::-webkit-scrollbar-track {

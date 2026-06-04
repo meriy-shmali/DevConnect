@@ -1,4 +1,3 @@
-import{z}from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import loginschema from '@/components/Schema/LoginSchema.jsx';
@@ -8,13 +7,12 @@ import { useAuth } from '@/context/AuthContext';
 import { getchoichreq } from '@/api/Getchoichapi';
 import { useState } from 'react';
 import { ForgotPasswordModal } from '../ChangePassword.jsx/ForgotPasswordModal';
-
 import { useQueryClient } from '@tanstack/react-query';
 import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
 } from "@/components/ui/form";
-import { MailIcon ,LockIcon } from 'lucide-react';
+import { MailIcon, LockIcon } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,151 +23,163 @@ import {
 import Buttons from '../ui/ButtonGroup';
 import { uselogin } from '@/hook/UseMutaionLogin';
 
-const LoginForm=()=>{
-  const{t}=useTranslation()
+const LoginForm = () => {
+  const { t } = useTranslation();
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
-const queryClient = useQueryClient();
-    const navigate=useNavigate();
-const form = useForm({
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const form = useForm({
     resolver: zodResolver(loginschema),
     defaultValues: {
       email: "",
       password: "",
     },
-    
   });
-  const loginMutaion=uselogin();
- const { setCurrentUser } = useAuth(); // 🌟 تأكدي من جلب الـ setCurrentUser من الـ Hook في الأعلى
 
-const onSubmit = async (data) => {
-  const toastId = toast.loading("Logging in...");
+  const loginMutaion = uselogin();
+  const { setCurrentUser } = useAuth(); 
 
-  loginMutaion.mutate(data, {
-    onSuccess: (res) => {
-      // 🌟 جلب التوكنات بشكل آمن حسب طريقة رد الباك إيند (سواء داخل data أو مباشرة)
-      const access = res?.data?.access || res?.access;
-      const refresh = res?.data?.refresh || res?.refresh;
+  const onSubmit = async (data) => {
+    const toastId = toast.loading("Logging in...");
 
-      if (access && refresh) {
-        // 1. حفظ التوكنات فوراً في الـ localStorage
-        localStorage.setItem("access", access);
-        localStorage.setItem("refresh", refresh);
+    loginMutaion.mutate(data, {
+      onSuccess: (res) => {
+        const access = res?.data?.access || res?.access;
+        const refresh = res?.data?.refresh || res?.refresh;
 
-        // 2. تحديث الـ Context فوراً ليعلم التطبيق أن هناك مستخدم سجل دخوله
-        // نقوم بوضع قيمة مؤقتة أو تفكيك التوكن، المهم ألا تبقى null
-        setCurrentUser({ loggedIn: true }); 
+        if (access && refresh) {
+          localStorage.setItem("access", access);
+          localStorage.setItem("refresh", refresh);
 
-        // 3. التوجيه الفوري إلى صفحة الـ Feed لمنع أي تضارب
-        navigate("/feed", { replace: true });
+          setCurrentUser({ loggedIn: true }); 
 
-        // 4. عمل الـ prefetch في الخلفية دون التأثير على سرعة التوجيه
-        queryClient.prefetchQuery({
-          queryKey: ['posts', undefined], 
-          queryFn: () => getchoichreq(),
-          staleTime: 1000 * 60 * 5,
-        });
+          navigate("/feed", { replace: true });
 
+          queryClient.prefetchQuery({
+            queryKey: ['posts', undefined], 
+            queryFn: () => getchoichreq(),
+            staleTime: 1000 * 60 * 5,
+          });
+
+          toast.dismiss(toastId);
+          toast.success(t('Login_sucess'), {
+            id: toastId,
+            duration: 2000
+          });
+          form.reset();
+        } else {
+          toast.dismiss(toastId);
+          toast.error("خطأ في بنية البيانات القادمة من السيرفر");
+          console.error("استجابة الباك إيند غير متوقعة:", res);
+        }
+      },
+      onError: () => {
         toast.dismiss(toastId);
-        toast.success(t('Login_sucess'), {
+        toast.error(t('Login_error'), {
           id: toastId,
-          duration: 2000
         });
-        form.reset();
-      } else {
-        toast.dismiss(toastId);
-        toast.error("خطأ في بنية البيانات القادمة من السيرفر");
-        console.error("استجابة الباك إيند غير متوقعة:", res);
       }
-    },
-    onError: () => {
-      toast.dismiss(toastId);
-      toast.error(t('Login_error'), {
-        id: toastId,
-      });
-    }
-  });
-};
- return (
-  
-   <Form {...form}>
-  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    });
+  };
 
-    <FormField
-      control={form.control}
-      name="email"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel className="text-xl md:text-2xl">{t('email')}:</FormLabel>
-          <FormControl>
-            <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-[300px] md:w-[500px] h-fit rounded-2xl">
-              <InputGroupInput
-                {...field}
-                type="email"
-                placeholder="Example@mail.com"
-                className="placeholder:md:text-md text-sm mt-1  "
-              />
-              <InputGroupAddon>
-                <MailIcon className='md:size-5 size-4 mr-2' />
-              </InputGroupAddon>
-            </InputGroup>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+  return (
+    <Form {...form}>
+      {/* تم جعل الحاوية w-full لتتناسب مرونتها مع شاشات اللابتوب المختلفة */}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full">
 
-    <FormField
-      control={form.control}
-      name="password"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel className=" text-xl md:text-2xl">{t('password')}:</FormLabel>
-          <FormControl>
-            <InputGroup className=" hover:bg-hover-placeholder bg-light-placeholder shadow w-[300px]  md:w-[500px] h-fit rounded-2xl">
-              <InputGroupInput
-                {...field}
-                type="password"
-                placeholder={t('enterpass')}
-                className="placeholder:md:text-md text-sm mt-2 "
-              />
-              <InputGroupAddon>
-                <LockIcon className='md:size-5 size-4 mr-3' />
-              </InputGroupAddon>
-            </InputGroup>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-   <div><div className='flex justify-start items-start'>
-  <Button
-    variant='link'
-    onClick={(e) => {
-      e.preventDefault();
-      setIsForgotModalOpen(true);
-    }}
-    className='underline text-md md:text-lg text-gray-700 hover:text-gray-500 '
-  >
-    {t('forgot_password')}
-  </Button>
-</div>
+        {/* حقل البريد الإلكتروني */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => ( // ✅ تم إصلاح الخطأ هنا عبر تمرير الـ field بشكل صحيح
+            <FormItem className="w-full">
+              <FormLabel className="text-lg md:text-xl font-medium">{t('email')}:</FormLabel>
+              <FormControl>
+                {/* تم استبدال العرض الثابت بـ w-full مع تحديد max-w لحماية الشاشات الكبيرة */}
+                <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
+                  <InputGroupInput
+                    {...field}
+                    type="email"
+                    placeholder="Example@mail.com"
+                    className="placeholder:text-sm text-sm flex-grow bg-transparent border-none outline-none"
+                  />
+                  <InputGroupAddon className="flex-shrink-0 flex items-center">
+                    <MailIcon className='md:size-5 size-4 opacity-70' />
+                  </InputGroupAddon>
+                </InputGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-{isForgotModalOpen && (
-  <ForgotPasswordModal
-    isOpen={isForgotModalOpen}
-    onClose={() => setIsForgotModalOpen(false)}
-  />
-)}</div>
-           <div className='flex justify-center '><Buttons type="login" disabled={loginMutaion.isPending} /></div> 
-            
-            <div className='flex-col  justify-center justify-items-center  '>
-            <div className='flex justify-center items-center'><p className='text-lg'>{t('Noaccount')}</p>
-            <Button onClick={()=>navigate('/register') } variant='link' className=' underline text-md text-gray-700 hover:text-gray-500 hover:font-semibold'>{t('createaccount')}</Button></div>
-            </div>
-  </form>
-</Form>
+        {/* حقل كلمة المرور */}
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => ( // ✅ تم إصلاح الخطأ هنا عبر تمرير الـ field بشكل صحيح
+            <FormItem className="w-full">
+              <FormLabel className="text-lg md:text-xl font-medium">{t('password')}:</FormLabel>
+              <FormControl>
+                {/* تم استبدال العرض الثابت بـ w-full مع تحديد max-w لحماية الشاشات الكبيرة */}
+                <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
+                  <InputGroupInput
+                    {...field}
+                    type="password"
+                    placeholder={t('enterpass')}
+                    className="placeholder:text-sm text-sm flex-grow bg-transparent border-none outline-none"
+                  />
+                  <InputGroupAddon className="flex-shrink-0 flex items-center">
+                    <LockIcon className='md:size-5 size-4 opacity-70' />
+                  </InputGroupAddon>
+                </InputGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
+        {/* روابط المساعدة (نسيت كلمة المرور) */}
+        <div className='flex justify-start w-full max-w-[500px]'>
+          <Button
+            variant='link'
+            onClick={(e) => {
+              e.preventDefault();
+              setIsForgotModalOpen(true);
+            }}
+            className='underline text-sm md:text-base text-gray-600 hover:text-gray-800 p-0 h-auto'
+          >
+            {t('forgot_password')}
+          </Button>
+        </div>
+
+        {isForgotModalOpen && (
+          <ForgotPasswordModal
+            isOpen={isForgotModalOpen}
+            onClose={() => setIsForgotModalOpen(false)}
+          />
+        )}
+
+        {/* زر تسجيل الدخول موجه في المنتصف */}
+        <div className='flex justify-center w-full max-w-[500px] pt-6 pb-2 hover:opacity-85 active:scale-95 transition-all duration-200'>
+          <Buttons type="login" disabled={loginMutaion.isPending} />
+        </div> 
+        
+        {/* إنشاء حساب جديد */}
+        <div className='flex flex-row justify-center items-center gap-1 text-sm md:text-base pt-2 w-full max-w-[500px]'>
+          <p className='text-gray-500'>{t('Noaccount')}</p>
+          <Button 
+            onClick={() => navigate('/register')} 
+            variant='link' 
+            className='underline text-gray-700 hover:text-gray-900 font-medium p-0 h-auto'
+          >
+            {t('createaccount')}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
 
- export default LoginForm;
+export default LoginForm;

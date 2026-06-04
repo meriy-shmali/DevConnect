@@ -9,13 +9,12 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
   
   const listData = Array.isArray(followers) ? followers : (followers?.results || followers?.data || []);
 
-  // 🟢 استخراج الـ ID الخاص بكِ مباشرة من توكن تسجيل الدخول لضمان عدم حدوث مشاكل
   let myRealId = null;
   const token = localStorage.getItem("access");
   if (token) {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      myRealId = payload.user_id || payload.id; // حسب الحقل المخزن داخل التوكن بسيرفركِ
+      myRealId = payload.user_id || payload.id;
     } catch (e) {
       console.error("Error decoding token in modal", e);
     }
@@ -24,7 +23,6 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
   const handleUserClick = (targetUserId) => {
     if (!targetUserId) return;
 
-    // فحص المقارنة الذكي والمحمي
     if (myRealId && String(targetUserId) === String(myRealId)) {
       navigate('/profile/me');
     } else {
@@ -36,22 +34,29 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 transition-all duration-300 cursor-pointer " onClick={onClose}>
-      <div className="bg-white relative top-5 rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 cursor-default dark:bg-dark-post-background " onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 transition-all duration-300 cursor-pointer" onClick={onClose}>
+      <div 
+        className="bg-white relative top-5 rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 cursor-default dark:bg-dark-post-background" 
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Header */}
-        <div className=" -mb-4 relative flex items-center justify-start shrink-0 p-4 ">
+        <div className="-mb-4 relative flex items-center justify-start shrink-0 p-4">
           <div className="flex items-center gap-2 dark:text-gray-50">
-            <h2 className="text-3xl font-medium tracking-tight p-4 dark:text-gray-50 ">{t('followers')}</h2>
-            <Users className="w-7 h-7 " />
+            <h2 className="text-3xl font-medium tracking-tight p-4 dark:text-gray-50">{t('followers')}</h2>
+            <Users className="w-7 h-7" />
           </div>
-          <button onClick={onClose} className=" absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 rounded-full transition-colors">
-            <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700 " />
+          <button onClick={onClose} className="absolute top-5 end-4 p-2 z-10 hover:bg-gray-50 dark:hover:bg-black/20 rounded-full transition-colors">
+            <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700" />
           </button>
         </div>
 
         {/* List Content */}
-        <div className="max-h-[50vh] md:max-h-[52vh] lg:max-h-[58vh] custom-scrollbar overflow-y-auto p-4 ml-3 pr-6 space-y-3">
+        {/* أضفنا منع انتشار الحدث هنا لضمان استقرار المودال عند التعامل مع العناصر الفرعية وحالات التحميل */}
+        <div 
+          onClick={(e) => e.stopPropagation()} 
+          className="max-h-[50vh] md:max-h-[52vh] lg:max-h-[58vh] custom-scrollbar overflow-y-auto p-4 ml-3 pr-6 space-y-3"
+        >
           {isLoading ? (
             <div className="flex flex-col items-center py-10 text-gray-400">
               <Loader2 className="w-8 h-8 animate-spin mb-2" />
@@ -63,7 +68,6 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
             </div>
           ) : (listData.length > 0 ? (
             listData.map((item) => {
-              // استخراج الكائن الداخلي للمتابع بشكل مرن
               const userDetail = item?.follower || item?.follower_user || item?.user || item?.sender || item;
               const extractedId = userDetail?.id || item?.follower_id || item?.id;
 
