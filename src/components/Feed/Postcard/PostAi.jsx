@@ -206,7 +206,7 @@ const handleToggleTranslation = () => {
                         {isQuestion && (
                         <div>
                             <button onClick={() => handleAction('best_answer')}
-                                className="px-4 py-1.5 flex items-center justify-start w-full hover:font-semibold dark:hover:text-gray-700 transition-colors" >
+                                className="px-4 py-1.5 flex items-center justify-start w-full hover:font-semibold dark:text-gray-700 dark:hover:text-gray-700 transition-colors" >
                                 <div className='flex flex-row justify-center items-center space-x-3'>
                                     <FaCheck className='text-yellow-400'/> 
                                     <p className='text-xs md:text-sm'>{t('bestanswer')}</p>
@@ -216,7 +216,7 @@ const handleToggleTranslation = () => {
                         <div>
                             <button 
                                 onClick={() => handleAction('summarize_post')}
-                                className="px-4 py-1.5 flex items-center justify-start dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
+                                className="px-4 py-1.5 flex items-center justify-start dark:text-gray-700 dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
                             >
                                 <div className='flex flex-row justify-center items-center space-x-2'>
                                     <RiFlashlightFill className='text-yellow-400 size-5'/>
@@ -228,7 +228,7 @@ const handleToggleTranslation = () => {
                             <div>
                                 <button 
                                     onClick={() => handleAction('explain_code')}
-                                    className="px-4 py-1.5 flex items-center justify-start dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
+                                    className="px-4 py-1.5 flex items-center justify-start dark:text-gray-700 dark:hover:text-gray-700 hover:font-semibold w-full transition-colors"
                                 >
                                     <div className='flex flex-row justify-center items-center space-x-3'>
                                         <FaCode className='text-yellow-400 size-5'/>

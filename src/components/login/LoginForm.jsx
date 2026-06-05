@@ -12,7 +12,7 @@ import {
   Form, FormField, FormItem, FormLabel,
   FormControl, FormMessage
 } from "@/components/ui/form";
-import { MailIcon, LockIcon } from 'lucide-react';
+import { MailIcon, LockIcon, Eye, EyeOff } from 'lucide-react'; // 🌟 تم إضافة Eye و EyeOff هنا
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +26,8 @@ import { uselogin } from '@/hook/UseMutaionLogin';
 const LoginForm = () => {
   const { t } = useTranslation();
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
+  // 🌟 State للتحكم بإظهار وإخفاء كلمة المرور
+  const [showPassword, setShowPassword] = useState(false); 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -85,18 +87,16 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      {/* تم جعل الحاوية w-full لتتناسب مرونتها مع شاشات اللابتوب المختلفة */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full">
 
         {/* حقل البريد الإلكتروني */}
         <FormField
           control={form.control}
           name="email"
-          render={({ field }) => ( // ✅ تم إصلاح الخطأ هنا عبر تمرير الـ field بشكل صحيح
+          render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel className="text-lg md:text-xl font-medium">{t('email')}:</FormLabel>
               <FormControl>
-                {/* تم استبدال العرض الثابت بـ w-full مع تحديد max-w لحماية الشاشات الكبيرة */}
                 <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
                   <InputGroupInput
                     {...field}
@@ -118,19 +118,36 @@ const LoginForm = () => {
         <FormField
           control={form.control}
           name="password"
-          render={({ field }) => ( // ✅ تم إصلاح الخطأ هنا عبر تمرير الـ field بشكل صحيح
+          render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel className="text-lg md:text-xl font-medium">{t('password')}:</FormLabel>
               <FormControl>
-                {/* تم استبدال العرض الثابت بـ w-full مع تحديد max-w لحماية الشاشات الكبيرة */}
-                <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
+                {/* تم إضافة group و focus-within هنا لتنسيق الأيقونات والحدود بشكل تفاعلي ومحاذاة العناصر */}
+                <InputGroup className="group hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4 focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all">
                   <InputGroupInput
                     {...field}
-                    type="password"
+                    // 🌟 يتغير النوع ديناميكياً حسب الـ State
+                    type={showPassword ? 'text' : 'password'} 
                     placeholder={t('enterpass')}
-                    className="placeholder:text-sm text-sm flex-grow bg-transparent border-none outline-none"
+                    // 🌟 الكلاس [::-ms-reveal]:hidden يقوم بإخفاء زر متصفح Edge التلقائي نهائياً
+                    className="placeholder:text-sm text-sm flex-grow bg-transparent border-none outline-none [::-ms-reveal]:hidden"
+                    autoComplete="current-password"
                   />
-                  <InputGroupAddon className="flex-shrink-0 flex items-center">
+                  
+                  {/* 🌟 زر التبديل المخصص لإظهار وإخفاء كلمة المرور */}
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword(prev => !prev)}
+                    className='outline-none focus:outline-none ml-2 mr-1 group-focus-within:text-blue-button hover:opacity-70 transition-colors'
+                  >
+                    {showPassword ? (
+                      <EyeOff className='md:size-5 size-4 text-gray-500 group-focus-within:text-blue-button opacity-70' />
+                    ) : (
+                      <Eye className='md:size-5 size-4 text-gray-500 group-focus-within:text-blue-button opacity-70' />
+                    )}
+                  </button>
+
+                  <InputGroupAddon className="flex-shrink-0 flex items-center border-l pl-2 border-gray-300/50 dark:border-white/10">
                     <LockIcon className='md:size-5 size-4 opacity-70' />
                   </InputGroupAddon>
                 </InputGroup>
@@ -170,7 +187,10 @@ const LoginForm = () => {
         <div className='flex flex-row justify-center items-center gap-1 text-sm md:text-base pt-2 w-full max-w-[500px]'>
           <p className='text-gray-500'>{t('Noaccount')}</p>
           <Button 
-            onClick={() => navigate('/register')} 
+            type='button' /* 🌟 السطر السحري: هذا التعديل يمنع إرسال الفورم وظهور التوست */
+    onClick={(e) => {
+      e.preventDefault(); /* لزيادة الأمان ومنع أي سلوك افتراضي */
+      navigate('/register');}}
             variant='link' 
             className='underline text-gray-700 hover:text-gray-900 font-medium p-0 h-auto'
           >

@@ -5,15 +5,32 @@ import { toast } from 'react-hot-toast';
 import i18next from 'i18next';
 
 export const useUpdateAccount = () => {
-  const queryClient =useQueryClient();
+  const queryClient = useQueryClient();
     return useMutation({
         mutationFn: updateusernamereq,
-         onMutate:()=>{},
-           onSuccess: (response) => {
+        onMutate: () => {},
+        onSuccess: (response) => {
           toast.success(i18next.t('update_success'));
           queryClient.invalidateQueries(['accountData']);
-          },
-         onError: () => {},
+        },
+       onError: (error) => {
+  const status = error?.response?.status;
+  const usernameError = error?.response?.data?.username?.[0] || '';
+
+  if (status === 400) {
+    if (usernameError.includes('already') || 
+        usernameError.includes('taken') ||
+        usernameError.includes('exists')) {
+      toast.error(i18next.t('username_taken'));
+    } else if (usernameError.includes('must start with letter')) {
+      toast.error(i18next.t('username_invalid'));
+    } else {
+      toast.error(i18next.t('update_error'));
+    }
+  } else {
+    toast.error(i18next.t('update_error'));
+  }
+},
     });
 };
 export const useGetAccountData = () => {

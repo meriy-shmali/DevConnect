@@ -116,7 +116,7 @@ const ProfileHeader = ({ userData }) => {
           <img   
             src={userData?.data?.personal_photo_url || userData?.personal_photo_url || "/images/default-avatar.png"} 
             key={userData?.data?.personal_photo_url || userData?.personal_photo_url} 
-            className={`w-26 h-26 md:w-18 md:h-18 rounded-full border-4 border-white shadow-lg object-cover transition-opacity ${isUploading ? 'opacity-50' : 'opacity-100'}`} 
+            className={`w-26 h-26 md:w-18 md:h-18 rounded-full border-2 border-white shadow-lg object-cover transition-opacity ${isUploading ? 'opacity-50' : 'opacity-100'}`} 
           />
           {isOwner && (
             <div>

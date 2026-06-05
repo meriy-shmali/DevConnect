@@ -67,7 +67,7 @@ const ProfilePage = ({ userData }) => {
                     [&>div:last-child]:flex-none [&>div:last-child]:flex [&>div:last-child]:items-center [&>div:last-child]:justify-end [&>div:last-child]:gap-x-2 [&>div:last-child]:ms-auto
                     [&>div:last-child>button:first-child]:w-[75px] [&>div:last-child>button:first-child]:px-1
                     [&_div]:space-x-0 [&>div:last-child]:!me-0` 
-                    : `flex justify-between items-center w-[112%] -ml-[6%] scale-90 px-0 gap-0 
+                    : `flex justify-between items-center w-[110%] -ml-[6%] scale-85 px-0 gap-0 
                     [&>div:first-child]:flex-none [&>div:first-child]:flex [&>div:first-child]:items-center [&>div:first-child]:pl-4 [&>div:first-child]:!w-[300px] [&>div:first-child]:!min-w-[300px] [&>div:first-child]:!flex-none
                     [&>div:first-child>div:first-child]:flex-none [&>div:first-child>div:first-child]:w-[140px] [&>div:first-child>div:first-child]:mr-auto
                     [&>div:first-child>div:first-child>span]:ml-3 
@@ -84,7 +84,7 @@ const ProfilePage = ({ userData }) => {
                     [&>div:first-child>div:first-child]:!flex-none`}
                   bodyClass={isMobile
                     ? "h-[160px] scale-90 origin-top px-4 py-0 mb-[-10px] text-sm overflow-hidden custom-scrollbar"
-                    : "h-[180px] scale-100 origin-top px-4 py-9 mb-[-10px] text-sm overflow-hidden custom-scrollbar"}
+                    : "h-[180px] scale-100 origin-top px-4 py-4 mb-[-10px] text-sm overflow-hidden custom-scrollbar"}
                   reactionClass={isMobile ? `
                     /* 📱 موبايل: جعل الحاوية تأخذ العرض الكامل 100% */
                     w-full px-2 flex justify-between items-center pt-2 pb-4 border-gray-100

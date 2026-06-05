@@ -236,7 +236,7 @@ const AccountForm = () => {
               variant='link' 
               type='button'
               onClick={() => navigate('/change')}
-              className='p-0 h-auto underline decoration-solid text-xl md:text-xl text-blue-button hover:opacity-90 cursor-pointer' 
+              className='p-0 h-auto underline decoration-solid text-xl md:text-xl text-blue-button hover:text-hover-blue cursor-pointer' 
             >
               {t('change_password')}
             </Button>

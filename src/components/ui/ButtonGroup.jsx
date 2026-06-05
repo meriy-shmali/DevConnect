@@ -14,12 +14,12 @@ const Buttons = ({ type ,onClick,...props }) => {
     
     return (
       <Button {...props}
-        className='bg-blue-button text-text-button md:text-lg text-sm hover:bg-hover-blue md:p-2 md:h-10 md:px-4 p-2 '
+        className='bg-blue-button text-text-button md:text-lg text-sm 2xl:text-4xl 2xl:px-8 2xl:py-8 2xl:rounded-2xl hover:bg-hover-blue md:p-2 md:h-10 md:px-4 p-2 '
         variant='secondary'
         onClick={()=>navigate('/login') }
         /*size='lg'*/
       >
-        {t('start')}<FaArrowRightLong className='text-text-button' />
+        {t('start')}<FaArrowRightLong className='text-text-button 2xl:text-3xl' />
       </Button>
     );
   }
@@ -29,11 +29,11 @@ const Buttons = ({ type ,onClick,...props }) => {
     return (
       <Button
         variant='link'
-        className='text-text-button md:text-xl text-lg '
+        className='text-text-button md:text-xl text-lg 2xl:text-3xl'
         onClick={() => i18n.changeLanguage(isArabic ? "en" : "ar")}
         
       >
-        <MdOutlineGTranslate className='text-text-button  md:size-8 size-6' />
+        <MdOutlineGTranslate className='text-text-button  md:size-8 size-6 2xl:size-12' />
        {isArabic ? "English" : "Arabic"}
       </Button>
     );
@@ -104,7 +104,7 @@ const Buttons = ({ type ,onClick,...props }) => {
   }
    if(type=='save'||type=='submit'){
     return(
-      <Button className='bg-blue-button text-text-button md:text-md' variant='default' size='default'>{t('save')}</Button>
+      <Button className='bg-blue-button hover:bg-hover-blue text-text-button md:text-md' variant='default' size='default'>{t('save')}</Button>
     )
   }
   if(type=='ai'){

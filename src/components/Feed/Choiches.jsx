@@ -17,7 +17,7 @@ const Choiches = ({ setCategory }) => {
   const handleCategoryChange = (id) => { setActiveTab(id); setCategory(id); };
 
   return (
-    <div className="flex items-center gap-5 md:gap-9 xl:gap-16  pe-4 md:px-4  justify-center    md:py-5 mt-16 md:mt-0">
+    <div className="flex items-center md: gap-5 md:gap-12 lg:gap-12 xl:gap-24 xl:pe-[30%] lg:pe-6 pe-4 md:px-4 md:pe-7  justify-center    md:py-5 mt-16 md:mt-0">
       {tabs.map((tab) => (
         <div key={tab.id} className="relative group">
           <button

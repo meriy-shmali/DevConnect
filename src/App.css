@@ -1,8 +1,9 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* 🌟 التعديل هنا: قمنا بتصفير القيود لجعل المشروع يفرش على كامل الشاشة */
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .logo {

@@ -81,7 +81,7 @@ const HeaderPost = ({ post, customClass = '',isInProfilePage = false }) => {
         <div className="flex flex-col md:flex-row md:items-center md:gap-3 min-w-0">
           <div className="min-w-0">
             <p
-              className="font-semibold text-sm md:text-md dark:text-white truncate cursor-pointer"
+              className="font-semibold text-sm md:text-lg dark:text-white truncate cursor-pointer"
               onClick={() => navigate(getProfilePath(post.user?.id))}
             >
               {post.user?.username}
@@ -108,15 +108,15 @@ const HeaderPost = ({ post, customClass = '',isInProfilePage = false }) => {
 
       {/* ── الجانب الأيمن: نوع المنشور + قائمة ── */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        <div className={`rounded-full border px-2.5 py-1 flex-shrink-0 whitespace-nowrap ${
-          post.post_type === 'question'    ? 'text-hover-question border-hover-question'       :
-          post.post_type === 'project'     ? 'text-hover-project border-hover-project'         :
-          post.post_type === 'information' ? 'text-hover-information border-hover-information' :
-          post.post_type === 'article'     ? 'text-hover-articles border-hover-articles'       :
+        <div className={`rounded-full border dark:border-dark-placeholder font-semibold title-font  px-2.5 py-1 flex-shrink-0 whitespace-nowrap ${
+post.post_type === 'question'    ? 'text-hover-question bg-hover-question/10 ' :      
+    post.post_type === 'project'     ? 'text-hover-project bg-hover-project/10 ' :     
+    post.post_type === 'information' ? 'text-hover-information bg-hover-information/10' :
+    post.post_type === 'article'     ? 'text-hover-articles bg-hover-articles/10 ' :
           'text-black border-black'
         }`}>
           {post?.post_type && (
-            <p className="text-xs md:text-sm font-medium">
+            <p className="text-xs md:text-[16px]">
               {t(`post_types.${post.post_type}`, post.post_type)}
             </p>
           )}

@@ -295,7 +295,39 @@ body {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);*/
 }
+/* تخصيص أنيميشن الانتقال بين الثيمات */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 
+/* حركة التمدد الدائري عند التحول للوضع المظلم */
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+.dark::view-transition-new(root) {
+  z-index: 999;
+  animation: clipPathReveal 0.5s ease-in forwards;
+}
+
+/* حركة التمدد الدائري عند التحول للوضع المضيء */
+html:not(.dark)::view-transition-old(root) {
+  z-index: 1;
+}
+html:not(.dark)::view-transition-new(root) {
+  z-index: 999;
+  animation: clipPathReveal 0.5s ease-in forwards;
+}
+
+@keyframes clipPathReveal {
+  from {
+    clip-path: circle(0% at 50% 50%);
+  }
+  to {
+    clip-path: circle(150% at 50% 50%);
+  }
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -417,4 +449,17 @@ body {
 .animate-reveal {
   animation: reveal-text 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
   color: #ffffff;
+}
+/* إخفاء أيقونة إظهار/إخفاء الباسوورد التلقائية في متصفح Edge */
+input::-ms-reveal {
+  display: none;
+}
+
+/* إخفاء أيقونة إظهار/إخفاء الباسوورد التلقائية في المتصفحات المبنية على Chromium لو ظهرت */
+input::-webkit-contacts-auto-fill-button, 
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute; 
+  right: 0;
 }

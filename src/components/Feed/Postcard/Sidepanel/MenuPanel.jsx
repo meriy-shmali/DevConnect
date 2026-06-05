@@ -42,19 +42,21 @@ const MenuPanel = ({ id, menu, toggleMenu, onEdit, onDelete, size = 17 }) => {
           onClick={(e) => e.stopPropagation()}
         >
           {/* 🌟 تعديل الأزرار لتصبح بعرض كامل w-full ومع ميزة منع انكسار السطور whitespace-nowrap */}
+         <div className=' dark:hover:bg-zinc-800 w-full hover:bg-gray-50'>
           <button 
             onClick={onEdit} 
-            className="px-3 py-1 text-blue-500 hover:bg-gray-50 dark:hover:bg-zinc-800 flex items-center w-full justify-start text-sm md:text-base whitespace-nowrap"
+            className="px-3 py-1 text-blue-500   flex items-center  justify-start text-sm md:text-base whitespace-nowrap"
           >
             <MdEdit className='me-2 flex-shrink-0'/> {t('edit')} 
-          </button>
-        
+          </button></div>
+        <div className='dark:hover:bg-zinc-800 w-full hover:bg-gray-50'>
           <button 
             onClick={onDelete} 
-            className="px-3 py-1 text-red-500 hover:bg-gray-50 dark:hover:bg-zinc-800 flex items-center w-full justify-start text-sm md:text-base whitespace-nowrap"
+            className="px-3 py-1 text-red-500  flex items-center  justify-start text-sm md:text-base whitespace-nowrap"
           >
             <RiDeleteBin6Fill className='me-2 flex-shrink-0'/> {t('delete')}
           </button>
+          </div>
         </motion.div>
       )}
     </div>

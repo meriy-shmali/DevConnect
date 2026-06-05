@@ -13,13 +13,13 @@ const AccountSetting = () => {
     <div className="w-full bg-main-background dark:bg-dark-background dark:bg-[#1E1E1E] dark:text-gray-50 transition-colors duration-300 overflow-x-hidden">
       
       {/* 🌟 المين الحاضن: حددنا له max-w موحد لضمان التوازى الشاقولي للأطراف على كل الشاشات */}
-      <main className="w-full max-w-[1000px] mx-auto px-4 lg:px-12 py-4 mt-8 lg:mt-14 flex flex-col items-start">
+      <main className="w-full max-w-[1000px] mx-auto px-4 lg:px-12 xl:px-0 py-4 mt-8 lg:mt-14 flex flex-col items-start">
          
          {/* الحاوية العلوية: flex-row ممتد يرمي زر Saved في آخر الطرف يميناً دائماً */}
          <div className="flex flex-row justify-between items-center w-full pb-4 min-h-[60px]">
            
            {/* العنوان الرئيسي كمظهركِ الأصلي */}
-           <h1 className="title-font text-3xl sm:text-3xl md:text-3xl lg:text-4xl font-bold mt-6 mb-4 sm:my-0 flex-shrink-0">
+           <h1 className="title-font text-3xl sm:text-3xl md:text-3xl lg:text-4xl xl:5xl font-bold mt-6 mb-4 sm:my-0 flex-shrink-0">
              {t('account_setting')}
            </h1>
 

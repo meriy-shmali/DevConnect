@@ -75,7 +75,7 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
                 <div
                   key={extractedId} 
                   onClick={() => handleUserClick(extractedId)}
-                  className="flex items-center gap-8 p-2 hover:bg-gray-50 rounded-xl transition-all group cursor-pointer border border-transparent hover:border-gray-200"
+                  className="flex items-center gap-8 p-2 hover:bg-gray-50  dark:hover:bg-gray-100/20 dark:border-none rounded-xl transition-all group cursor-pointer border border-transparent hover:border-gray-200"
                 >
                   <img 
                     src={userDetail?.personal_photo_url || "/images/default-avatar.png"} 

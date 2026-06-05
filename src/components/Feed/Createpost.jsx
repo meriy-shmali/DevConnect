@@ -39,7 +39,7 @@ const Createpost = () => {
       <div ref={containerRef} className="hidden md:block">
         
         {/* ضبط مرونة الـ width للتناسب التام مع اللابتوب */}
-        <div className={`w-full max-w-[310px] xl:max-w-[320px] pb-12 bg-gradient-background rounded-[40px] shadow-lg/25 transition-all duration-300 ${
+        <div className={`w-full max-w-[290px] lg:max-w-[320] xl:max-w-[360px] pb-12 bg-gradient-background rounded-[40px] shadow-lg/25 transition-all duration-300 ${
           i18n.language === "ar" ? "mb-8" : ""
         }`}>
           <div className="flex flex-col justify-center items-center mt-2 p-6 xl:p-8 space-y-7 pb-8">
@@ -123,7 +123,7 @@ const Createpost = () => {
 
             {/* AI TRIGGER BLOCK */}
             <div className="flex items-start justify-center gap-2 flex-wrap pt-2 w-full">
-              <div className='text-[18px] xl:text-[15px] text-gray-200 text-center leading-7'>
+              <div className='text-[16px] xl:text-[15px] text-gray-200 text-center leading-7'>
                 {t("help")}
                 <Button 
                   className="text-[16px] bg-white/10 hover:bg-white/20 ms-2 border border-white/30 rounded-full py-1 h-fit transition-all transform hover:scale-105" 

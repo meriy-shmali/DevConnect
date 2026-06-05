@@ -84,9 +84,9 @@ const Feed = () => {
             ${showChoices ? "translate-y-0 opacity-100" : "-translate-y-24 opacity-0 pointer-events-none"}
           `}
         >
-          <div className="w-full md:max-w-[700px] lg:min-w-full xl:px-20 md:px-4">
+          <div className="w-full md:max-w-[800px] lg:min-w-full xl:px-20 md:px-4">
             {/* تم تعديل الحاوية هنا لتتوافق مع اتجاهات الـ RTL والـ LTR بشكل ديناميكي */}
-            <div className={`bg-main-background w-screen relative md:start-0 dark:bg-dark-main-background md:w-fit ${isRtl ? "start-3 xl:start-10" : "end-3 xl:end-10"}`}>
+            <div className={`bg-main-background md:pe-5 w-screen relative md:start-0 dark:bg-dark-main-background md:w-[100%] lg:w-[66%] xl:w-[100%] ${isRtl ? "start-3 xl:start-10" : "end-3 xl:end-10"}`}>
               <div className="md:py-2 py-3">
                 <Choiches setCategory={setcategory} />
               </div>
@@ -102,7 +102,7 @@ const Feed = () => {
             - في حال العربي (RTL): نترك الفراغ من اليسار ليفسح مجالاً للكارد المتموضع يساراً (lg:ps-[360px] أو lg:pl-[360px]).
             - في حال الإنجليزي (LTR): نترك الفراغ من اليمين (lg:pe-[360px]).
           */}
-          <div className={`flex flex-col w-full min-w-0 flex-1 ${isRtl ? "lg:pl-[350px]" : "lg:pr-[350px]"}`}>
+          <div className={`flex flex-col w-full min-w-0 flex-1 ${isRtl ? "md:pl-[280px] lg:pl-[350px]":"md:pr-[280px] lg:pr-[350px]"}`}>
             <div className="flex flex-col gap-4 mt-24 md:mt-15">
               {isLoading && !isPlaceholderData ? (
                 [...Array(3)].map((_, i) => <InstagramSkeleton key={i} />)
@@ -144,7 +144,7 @@ const Feed = () => {
           - عندما تكون اللغة عربية، يتم الحساب وتطبيق المواصفات على جهة الـ left ليطير الكارد إلى اليسار بشكل متناسق ومبهر.
         */}
         <div
-          className="hidden lg:block fixed top-20 z-20 w-[310px]"
+          className="hidden  md:block fixed top-20 z-20 w-[290px]"
           style={{
             [isRtl ? "left" : "right"]: `max(40px, calc((100vw - 1300px) / 2 + 40px))`,
           }}
@@ -153,7 +153,7 @@ const Feed = () => {
         </div>
 
         {/* Createpost للموبايل */}
-        <div className="lg:hidden mt-5 px-4 w-full max-w-[480px] mx-auto">
+        <div className="md:hidden  mt-5 px-4 w-full max-w-[480px] mx-auto">
           <CreatepostMobile />
         </div>
 

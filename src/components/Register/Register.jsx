@@ -12,11 +12,11 @@ const Register = () => {
       
       {/* قسم الفورم والعنوان */}
       {/* h-full يجعل القسم يستغل كامل الارتفاع المتاح ليتحكم بالسكرول داخله */}
-      <div className='flex flex-col w-full max-w-[450px] lg:max-w-[500px] h-full justify-center py-12'>
+      <div className='flex flex-col w-full max-w-[450px] lg:max-w-[500px] h-full  xl:max-w-[600px] xl:h-[900px] justify-center py-12'>
         
         {/* عنوان الصفحة - ثابت لا يتحرك */}
         <div className='w-full md:mb-10 flex-shrink-0'>
-          <p className='title-font text-3xl lg:text-4xl font-bold text-center md:text-start leading-tight'>
+          <p className='title-font text-3xl lg:text-4xl xl:5xl font-bold text-center md:text-start leading-tight'>
             {t('create_account')}
           </p>
         </div>
@@ -29,7 +29,7 @@ const Register = () => {
       </div>
         
       {/* قسم الصورة الجانبية - ثابتة ولا تتحرك مع السكرول */}
-     <div className='w-full max-w-[300px] md:max-w-[400px] lg:max-w-[500px] flex-shrink-0 flex justify-center'>
+     <div className='w-full max-w-[300px] md:max-w-[400px] lg:max-w-[500px] xl:max-w-[600px] flex-shrink-0 flex justify-center'>
         <img 
           src='src/images/login.png' 
           alt="Login illustration" 

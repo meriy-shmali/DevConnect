@@ -7,13 +7,26 @@ export const UseTheme = () => {
     return 'system';
   };
 
-  const [theme, setTheme] = useState(getInitialTheme);
+  const [theme, _setTheme] = useState(getInitialTheme);
+
+  // 🌟 تعديل التابع ليدعم أنيميشن التمدد الدائري الاحترافي
+  const setTheme = (newTheme) => {
+    // إذا كان المتصفح لا يدعم الخاصية الحديثة، نغير الثيم بشكل طبيعي
+    if (!document.startViewTransition) {
+      _setTheme(newTheme);
+      return;
+    }
+
+    // إطلاق أنيميشن الانتقال
+    document.startViewTransition(() => {
+      _setTheme(newTheme);
+    });
+  };
 
   useEffect(() => {
     const root = document.documentElement;
 
     const applyTheme = (value) => {
-      // 👈 التعديل هنا: إذا كان الخيار سستم، يفحص المتصفح فوراً هل هو دارك أم لا
       if (value === "system") {
         const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         if (isSystemDark) {
@@ -28,23 +41,18 @@ export const UseTheme = () => {
       }
     };
 
-    // تطبيق الثيم فوراً عند تغير الاختيار أو تحميل الصفحة
     applyTheme(theme);
     localStorage.setItem("theme", theme);
 
-    // دعم مراقبة تغيير ثيم النظام المباشر (Live)
     if (theme === "system") {
       const media = window.matchMedia("(prefers-color-scheme: dark)");
-
       const handler = (e) => {
-        // عندما يتغير ثيم الجهاز أثناء تصفح المستخدم للموقع
         if (e.matches) {
           root.classList.add("dark");
         } else {
           root.classList.remove("dark");
         }
       };
-
       media.addEventListener("change", handler);
       return () => media.removeEventListener("change", handler);
     }
