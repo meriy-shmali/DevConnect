@@ -55,28 +55,24 @@ const CommentItem = ({
   const hasMore = replies.length > visibleReplies;
   const MAX_LEVEL = 1;
   const indent = Math.min(level, MAX_LEVEL) * 20;
-  const isHighlighted = item?.id && highlightedCommentId && String(item.id) === String(highlightedCommentId);
-const commentRef = useRef(null);
+  const isHighlighted = Number(item.id) === Number(highlightedCommentId);
+  const commentRef = useRef(null);
 
-// 1. تعديل التوقيت والانتظار حتى يستقر الـ DOM تماماً بعد فتح الـ Sidebar
-useEffect(() => {
-  if (isHighlighted && commentRef.current) {
-    const timer = setTimeout(() => {
-      if (commentRef.current) {
+  useEffect(() => {
+    if (isHighlighted && commentRef.current) {
+      setTimeout(() => {
         commentRef.current.scrollIntoView({
           behavior: 'smooth',
-          block: 'center' // يضع التعليق في منتصف الشاشة بدقة ليكون مرئياً بالكامل
+          block: 'center'
         });
-      }
-    }, 700); // مهلة كافية لفتح السايد بار وعمل رندرة للتعليقات
-    
-    return () => clearTimeout(timer);
-  }
-}, [isHighlighted, highlightedCommentId]);
+      }, 300);
+    }
+  }, [isHighlighted]);
 
   return (
     <motion.div
       ref={commentRef}
+      // ✅ هذا الـ id ضروري لـ getElementById في PostCard لعمل الـ scroll
       id={`comment-${item.id}`}
       layout
       initial={{ opacity: 1 }}
@@ -102,7 +98,7 @@ useEffect(() => {
     >
 
       {/* header + menu */}
-      <div className="flex justify-between items-start w-full">
+      <div className="flex justify-between items-center">
         <HeaderPanel
           user={item}
           createdAt={item.created_at}
@@ -111,33 +107,23 @@ useEffect(() => {
           currentUserId={data?.id}
         />
         {Number(item?.user_id) === Number(data?.id) && (
-          <div className="flex-shrink-0">
-            <MenuPanel
-              id={item.id}
-              menu={menu}
-              toggleMenu={toggleMenu}
-              onEdit={() => handleEditClick(item)}
-              onDelete={() => {
-                console.log("item.id:", item.id, "item.parent_id:", item.parent_id, "item.parentId:", item.parentId);
-                handleDeleteComment(item.id, item.parent_id || item.parentId);
-              }}
-            />
-          </div>
+          <MenuPanel
+            id={item.id}
+            menu={menu}
+            toggleMenu={toggleMenu}
+            onEdit={() => handleEditClick(item)}
+            onDelete={() => {
+              console.log("item.id:", item.id, "item.parent_id:", item.parent_id, "item.parentId:", item.parentId);
+              handleDeleteComment(item.id, item.parent_id || item.parentId);
+            }}
+          />
         )}
       </div>
 
-      {/* text area & reactions */}
-      {/* 🌟 دفع المحتوى بالكامل يميناً أو يساراً ليكون تحت الاسم مباشرة بناءً على لغة التعليق */}
-      <div 
-        className="flex justify-between items-start space-x-4 w-full ltr:pl-11 rtl:pr-11"
-        dir="auto"
-      >
+      <div className="flex justify-between ms-12 items-start space-x-2">
         {/* text */}
-        <div className="flex flex-col flex-1 min-w-0">
-          <p 
-            className="text-sm dark:text-gray-100 whitespace-pre-wrap break-words w-full text-start" 
-            dir="auto"
-          >
+        <div className="flex flex-col items-start flex-1">
+          <p className="text-md dark:text-gray-100 whitespace-pre-wrap break-words w-full">
             {displayCommentContent}
             {shouldTruncateComment && (
               <button
@@ -152,20 +138,17 @@ useEffect(() => {
 
         {/* reactions */}
         {type === "comments" && (
-          <div className="flex-shrink-0">
-            <ReactionPanel
-              id={item.id}
-              counts={counts}
-              handleReaction={handleReaction}
-            />
-          </div>
+          <ReactionPanel
+            id={item.id}
+            counts={counts}
+            handleReaction={handleReaction}
+          />
         )}
       </div>
 
       {/* actions */}
-      {/* 🌟 إزاحة الأزرار الفرعية لتصطف عمودياً تحت نص التعليق بدقة */}
       {type === "comments" && (
-        <div className="w-full ">
+        <div>
           <ActionPanel
             item={item}
             repliesCount={countreply?.[item.id] ?? item.replies_count ?? 0}
@@ -182,23 +165,21 @@ useEffect(() => {
 
       {/* input */}
       {replyInput[item.id] && (
-        <div className="w-full ltr:pl-11 rtl:pr-11">
-          <Replyinput
-            value={replyText[item.id] || ""}
-            onChange={(e) =>
-              setreplyText(prev => ({
-                ...prev,
-                [item.id]: e.target.value
-              }))
-            }
-            onSend={() => handlesendreply(item.id)}
-          />
-        </div>
+        <Replyinput
+          value={replyText[item.id] || ""}
+          onChange={(e) =>
+            setreplyText(prev => ({
+              ...prev,
+              [item.id]: e.target.value
+            }))
+          }
+          onSend={() => handlesendreply(item.id)}
+        />
       )}
 
       {/* replies */}
       {viewreply[item.id] && (
-        <div className="relative pl-3 mt-2 space-y-2">
+        <div className="relative pl-3 mt-2 space-y-3">
           <AnimatePresence mode="popLayout">
             {replies.slice(0, visibleReplies).map(reply => (
               <CommentItem
