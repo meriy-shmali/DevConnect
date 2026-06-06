@@ -55,19 +55,22 @@ const CommentItem = ({
   const hasMore = replies.length > visibleReplies;
   const MAX_LEVEL = 1;
   const indent = Math.min(level, MAX_LEVEL) * 20;
-  const isHighlighted = Number(item.id) === Number(highlightedCommentId);
-  const commentRef = useRef(null);
+  const isHighlighted = item?.id && highlightedCommentId && String(item.id) === String(highlightedCommentId);
+const commentRef = useRef(null);
 
-  useEffect(() => {
-    if (isHighlighted && commentRef.current) {
-      setTimeout(() => {
-        commentRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }, 300);
-    }
-  }, [isHighlighted]);
+useEffect(() => {
+  if (isHighlighted && commentRef.current) {
+    // استخدام تركيز خفيف للتأكد من استقرار العناصر المستأجرة في الـ DOM
+    const timer = setTimeout(() => {
+      commentRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }, 400); // زيادة المهلة قليلاً إلى 400ms لتأمين استجابة المتصفح بعد التحميل
+    
+    return () => clearTimeout(timer);
+  }
+}, [isHighlighted, highlightedCommentId]);
 
   return (
     <motion.div
