@@ -25,7 +25,7 @@ const AiModal = ({ open, result, onuse, onclose, onRegenerate, isPending, onTran
                        </button>
               
               {/* 🌟 تعديل العرض النظيف ليدعم المارك داون من غير تكرار حاويات العرض */}
-              <div className="whitespace-pre-wrap mt-3 overflow-auto  modal-scroll text-gray-700 dark:text-white max-h-[500px] overflow-y-auto text-[18px] md:text-[18px] text-right p-4 markdown-content"
+              <div className="whitespace-pre-wrap mt-3 overflow-auto  modal-scroll text-gray-700 dark:text-white max-h-[300px] overflow-y-auto text-[18px] md:text-[18px] text-right p-4 markdown-content"
                 style={{ direction: 'rtl', unicodeBidi: 'plaintext', textAlign: 'start' }}>
                 <ReactMarkdown>{result}</ReactMarkdown>
               </div>

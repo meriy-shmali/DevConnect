@@ -28,7 +28,7 @@ const AiModal = ({ isOpen, result, onuse, onClose }) => {
               <X className="w-5 h-5 text-red-500 text-xl font-light hover:text-red-700 dark:text-red-700" />
             </button>
             
-            <div className="whitespace-pre-wrap text-gray-700 max-h-[500px] md:text-xl text-lg overflow-y-auto dark:text-gray-50 mt-2">
+            <div className="whitespace-pre-wrap text-gray-700 max-h-[300px] md:text-xl text-lg overflow-y-auto dark:text-gray-50 mt-2">
               {result}
             </div>
             
