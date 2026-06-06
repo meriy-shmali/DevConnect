@@ -116,7 +116,7 @@ const CreatepostMobile = () => {
                   <Textarea
                       value={codeSnippet}
                       onChange={(e) => setCodeSnippet(e.target.value)}
-                      className='w-full h-[250px] font-mono bg-[#1c1e21] text-pink-400 border-none focus-visible:ring-0 text-sm dark:text-gray-50 dark:bg-dark-post-background'
+                      className='w-full h-[250px] font-mono bg-[#1c1e21] text-pink-400 border-none resize focus-visible:ring-0 text-sm dark:text-gray-50 dark:bg-dark-post-background'
                   />
               </div>
           )}
