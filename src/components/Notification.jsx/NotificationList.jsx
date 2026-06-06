@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import NotificationItem from './NotificationItem';
-import { useNotificationLogic } from '@/hook-temp/UseNotificationLogic';
+import { useNotificationLogic } from '@/hook/UseNotificationLogic';
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import { useQuery } from '@tanstack/react-query'; 

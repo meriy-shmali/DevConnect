@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import Buttons from '../ui/ButtonGroup';
-import { useregister } from '@/hook-temp/UseMutationRegister';
+import { useregister } from '@/hook/UseMutationRegister';
 
 const RegisterForm = () => {
   const { t, i18n } = useTranslation();

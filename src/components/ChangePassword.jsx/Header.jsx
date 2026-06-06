@@ -6,12 +6,12 @@ import SearchDropdown from '../Search.jsx/SearchDropdown';
 import { IoNotifications } from "react-icons/io5";
 import { MdSettings } from "react-icons/md";
 import NotificationModal from '../Notification.jsx/NotificationList';
-import { useNotificationMutation } from '@/hook-temp/UseNotificationMutation';
+import { useNotificationMutation } from '@/hook/UseNotificationMutation';
 import { Bell } from 'lucide-react';
 import { getUnreadCountReq } from '@/api/NotificationApi';
 import { requestForToken } from '@/firebase/firebaseConfig';
 import { useNavigate } from 'react-router-dom';
-import { useGetProfile } from '@/hook-temp/UseProfileData';
+import { useGetProfile } from '@/hook/UseProfileData';
 
 const Header = () => {
   const navigate = useNavigate();

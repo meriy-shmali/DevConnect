@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { GoPeople } from "react-icons/go";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { motion, AnimatePresence } from "framer-motion";
-import { useFollow } from '@/hook-temp/UseFollow';
+import { useFollow } from '@/hook/UseFollow';
 import { useTranslation } from 'react-i18next';
 import { staticsuggestion } from '@/Utils/data/staticsuggestion';
-import { UseSugesstion } from '@/hook-temp/UseQuerySuggestion';
+import { UseSugesstion } from '@/hook/UseQuerySuggestion';
 const Suggestion = () => {
   
   const { t } = useTranslation();

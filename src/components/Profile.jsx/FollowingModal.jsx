@@ -2,7 +2,7 @@ import React from 'react';
 import { X, Users, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useGetFollowing } from '@/hook-temp/UseGetFollowing';
+import { useGetFollowing } from '@/hook/UseGetFollowing';
 
 const FollowingModal = ({ isOpen, onClose, userId }) => {
   const { t } = useTranslation();

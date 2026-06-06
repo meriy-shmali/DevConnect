@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { X, Loader2 } from 'lucide-react';
-import { useUpdatePersonalInfo } from '@/hook-temp/UseProfileData';
+import { useUpdatePersonalInfo } from '@/hook/UseProfileData';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editProfileSchema } from '../Schema/EditProfileSchema';
 import { Input } from '../ui/input';

@@ -15,7 +15,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import Buttons from '../ui/ButtonGroup';
-import { useChangePasswordMutation } from '@/hook-temp/UseMutationChangePassword';
+import { useChangePasswordMutation } from '@/hook/UseMutationChangePassword';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 
 const ChangeForm = () => {

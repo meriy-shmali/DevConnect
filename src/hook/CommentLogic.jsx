@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { usecommentreaction, useDeletecomment, usetranslatecomment,useEditcomment, useaddreply } from "@/hook-temp/UseMutationComment";
-import { usegetreplies } from "@/hook-temp/UseQueryComment";
+import { usecommentreaction, useDeletecomment, usetranslatecomment,useEditcomment, useaddreply } from "@/hook/UseMutationComment";
+import { usegetreplies } from "@/hook/UseQueryComment";
 import { staticReplies } from "@/Utils/data/staticReplies";
 import { useAuth } from "@/context/AuthContext";
 import {useQueryClient } from "@tanstack/react-query";

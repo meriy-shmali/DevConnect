@@ -3,7 +3,7 @@ import Header from '../ChangePassword.jsx/Header';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import PostPage from './PostPage';
-import { useGetSavedPosts } from '@/hook-temp/UseMutationAccount';
+import { useGetSavedPosts } from '@/hook/UseMutationAccount';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 

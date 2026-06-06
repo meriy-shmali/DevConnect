@@ -5,7 +5,7 @@ import hljs from "highlight.js";
 import "highlight.js/styles/github-dark.css";
 import { useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next';
-import { useTranslate } from '@/hook-temp/UseMutationTrans';
+import { useTranslate } from '@/hook/UseMutationTrans';
 import { motion } from 'framer-motion';
 
 const BodyPost = ({ post, customClass = '',compact = false, onOpenPost }) => {

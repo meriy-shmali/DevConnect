@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Users, Edit2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useGetFollowers } from '@/hook-temp/UseGetFollowers';
-import { useGetFollowing } from '@/hook-temp/UseGetFollowing';
+import { useGetFollowers } from '@/hook/UseGetFollowers';
+import { useGetFollowing } from '@/hook/UseGetFollowing';
 import { MdEdit } from 'react-icons/md';
 import FollowersModal from './FollowersModal';
 import FollowingModal from './FollowingModal';
@@ -10,8 +10,8 @@ import { useGetProfile } from '@/hook/useProfileData';
 import AiModal from './AiModal';
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useParams } from "react-router-dom";
-import { useUpdateProfilePhoto, useDeleteProfilePhoto } from '@/hook-temp/UseUpdateProfileMutation';
-import { useFollow } from '@/hook-temp/UseFollow';
+import { useUpdateProfilePhoto, useDeleteProfilePhoto } from '@/hook/UseUpdateProfileMutation';
+import { useFollow } from '@/hook/UseFollow';
 
 const ProfileHeader = ({ userData }) => {
   const { t } = useTranslation();
