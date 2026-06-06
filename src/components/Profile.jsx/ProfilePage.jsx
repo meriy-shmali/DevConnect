@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ProfileHeader from './ProfileHeader';
 import PersonalInfoCard from './PersonalInfoCard';
 import PostCard from '../Feed/Postcard/PostCard'; // ملف المنشور المنفصل
-import { useGetProfile } from '@/hook/useProfileData';
+import { useGetProfile } from '@/hook/UseProfileData';
 
 const ProfilePage = ({ userData }) => {
    const navigate = useNavigate();
