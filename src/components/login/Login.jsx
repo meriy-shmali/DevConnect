@@ -1,7 +1,7 @@
 import React from 'react'
 import LoginForm from './LoginForm'
 import { useTranslation } from "react-i18next";
-import loginImg from '../images/login.png'
+
 const Login = () => {
   const { t } = useTranslation();
   
@@ -26,7 +26,7 @@ const Login = () => {
       {/* قسم الصورة - جعلناه مرناً ومحدداً بحد أقصى لمنع دفع العناصر */}
       <div className='w-full max-w-[300px] md:max-w-[400px] lg:max-w-[500px] xl:max-w-[600px] 2xl:max-w-[700px] flex-shrink-0 flex justify-center'>
         <img 
-          src={loginImg}
+          src='/login.png'
           alt="Login illustration" 
           className='w-full h-auto object-contain'
         />
