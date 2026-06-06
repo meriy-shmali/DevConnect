@@ -61,7 +61,7 @@ self.addEventListener('notificationclick', (event) => {
   let url = '/';
   const commentId = event.notification.data.comment_id; 
   if (targetType === 'follow') url =`/profile/${targetId}`;
-  else if (targetId) url = commentId ? `/posts/${targetId}?commentId=${commentId}` : `/posts/${targetId}`;
+  else if (targetId) url = commentId ? `/post/${targetId}?commentId=${commentId}` : `/post/${targetId}`;
 
   event.waitUntil(clients.openWindow(url));
 });
