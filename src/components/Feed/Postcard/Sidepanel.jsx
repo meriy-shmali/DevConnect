@@ -9,7 +9,7 @@ import HeaderPanel from "./Sidepanel/HeaderPanel";
 import { FaRegCommentDots } from "react-icons/fa";
 import { useEffect, useRef } from "react";
 
-const SidebarPanel = ({ title, icon, items, showFilter, onClose, type, sort, setSort, postId, setCommentCount, highlightedCommentId, currentUser }) => {
+const SidebarPanel = ({ title, icon, items,highlightedCommentId, showFilter, onClose, type, sort, setSort, postId, setCommentCount, currentUser }) => {
   const isComments = type === "comments";
 
   const logic = useCommentLogic(
@@ -20,7 +20,17 @@ const SidebarPanel = ({ title, icon, items, showFilter, onClose, type, sort, set
   
   const { i18n, t } = useTranslation();
   const isRTL = i18n.language === "ar";
-  
+  // 🌟 كود إضافي داخل SidebarPanel لفتح الردود تلقائياً إذا كان الإشعار لرد فرعي
+  useEffect(() => {
+    if (highlightedCommentId && isComments && items?.length > 0) {
+      items.forEach(item => {
+        const hasTargetReply = item.replies?.some(r => String(r.id) === String(highlightedCommentId));
+        if (hasTargetReply && typeof logic.handleViewreply === 'function') {
+          logic.handleViewreply(item.id);
+        }
+      });
+    }
+  }, [highlightedCommentId, items, isComments, logic]);
   const {
     showmenu,
     setshowmenu,

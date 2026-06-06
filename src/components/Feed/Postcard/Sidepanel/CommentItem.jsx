@@ -58,15 +58,17 @@ const CommentItem = ({
   const isHighlighted = item?.id && highlightedCommentId && String(item.id) === String(highlightedCommentId);
 const commentRef = useRef(null);
 
+// 1. تعديل التوقيت والانتظار حتى يستقر الـ DOM تماماً بعد فتح الـ Sidebar
 useEffect(() => {
   if (isHighlighted && commentRef.current) {
-    // استخدام تركيز خفيف للتأكد من استقرار العناصر المستأجرة في الـ DOM
     const timer = setTimeout(() => {
-      commentRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }, 400); // زيادة المهلة قليلاً إلى 400ms لتأمين استجابة المتصفح بعد التحميل
+      if (commentRef.current) {
+        commentRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center' // يضع التعليق في منتصف الشاشة بدقة ليكون مرئياً بالكامل
+        });
+      }
+    }, 700); // مهلة كافية لفتح السايد بار وعمل رندرة للتعليقات
     
     return () => clearTimeout(timer);
   }

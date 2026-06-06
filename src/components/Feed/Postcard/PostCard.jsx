@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useLocation } from 'react-router-dom';
 import HeaderPost from './HeaderPost'
 import BodyPost from './BodyPost'
 import Reaction from './Reaction'
@@ -21,6 +22,7 @@ import Trending from './Trending';
 import { UseMe } from '@/hook/UseQueryMe'
 
 const PostCard = ({post, customWidth, commentClass, HeaderClass, bodyClass, reactionClass, scrollToCommentId, removeTopMargin = false , autoOpenComments,compact = false,isInProfilePage}) => {
+  const location = useLocation();
   const { t } = useTranslation()
   const { data: currentUser } = UseMe();
   const [sort, setsort] = useState('latest');
@@ -55,6 +57,19 @@ const handleOpenPost = () => {
     setpaneltype('comments');
   };
 
+
+  // 2. أضيفي هذا الـ useEffect لفتح قائمة التعليقات تلقائياً فوراً إذا كان هناك تعليق مستهدف قادم من الإشعارات
+  useEffect(() => {
+    if (highlightedCommentId && post?.id) {
+      // استدعي الدالة المسؤولة عن فتح السايد بانل للتعليقات في مشروعك
+      // بناءً على ملفك، الدالة هي handleToggleComments أو setNewPanelType("comments")
+      if (typeof handleToggleComments === 'function') {
+        handleToggleComments();
+      } else if (typeof setpaneltype === 'function') {
+        setpaneltype("comments"); 
+      }
+    }
+  }, [highlightedCommentId, post?.id]);
   const commentsData = usecomment(post.id, sort);
   const data = usequeryreaction(post.id, paneltype !== "comments" ? paneltype : null);
   const queryClient = useQueryClient();
