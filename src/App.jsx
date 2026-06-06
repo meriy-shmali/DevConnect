@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 import { useEffect } from 'react';
 import { requestForToken } from './firebase/firebaseConfig';
 import { useNotificationMutation } from './hook/UseNotificationMutation';
-import { useNotificationLogic } from './hook/useNotificationLogic';
+import { useNotificationLogic } from './hook/UseNotificationLogic';
 //import { RouterProvider } from 'react-router';
 //import { ToastContainer } from 'react-toastify';
 //import 'react-toastify/dist/ReactToastify.css';
