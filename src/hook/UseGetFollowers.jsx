@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchFollowers, followUser } from '@/Api/FollowersApi';
+import { fetchFollowers, followUser } from '@/api/FollowersApi';
 
 export const useGetFollowers = (userId) => {
   return useQuery({
