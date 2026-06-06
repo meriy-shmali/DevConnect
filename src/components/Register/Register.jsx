@@ -1,7 +1,7 @@
 import React from 'react'
 import RegisterForm from './RegisterForm'
 import { useTranslation } from "react-i18next";
-
+import loginImg from '../images/login.png'
 const Register = () => {
   const { t } = useTranslation();
   
@@ -31,7 +31,7 @@ const Register = () => {
       {/* قسم الصورة الجانبية - ثابتة ولا تتحرك مع السكرول */}
      <div className='w-full max-w-[300px] md:max-w-[400px] lg:max-w-[500px] xl:max-w-[600px] flex-shrink-0 flex justify-center'>
         <img 
-          src='src/images/login.png' 
+          src={loginImg}
           alt="Login illustration" 
           className='w-full h-auto object-contain'
         />

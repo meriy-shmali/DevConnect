@@ -2,7 +2,7 @@ import React from 'react'
 import Buttons from './ui/ButtonGroup'
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
-
+import welcomeImg from '../images/welcome.png';
 function Welcomepage() {
   const navigate = useNavigate(); 
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ function Welcomepage() {
           {/* قسم الصورة */}
           <div className='w-full max-w-[320px] md:max-w-[450px] lg:max-w-[500px] xl:max-w-[550px] 2xl:max-w-[1000px] flex justify-center'>
             <img 
-              src='/src/images/welcome.png' 
+              src={welcomeImg} 
               alt="Welcome" 
               className='w-full h-auto object-contain' 
             />
