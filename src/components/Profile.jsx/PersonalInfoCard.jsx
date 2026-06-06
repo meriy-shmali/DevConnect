@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { MdEdit } from 'react-icons/md';
 import EditProfileModal from './EditProfileModel';
 import { useParams } from 'react-router-dom';
-import { useIsOwner } from '@/hook/UseIsOwner';
+import { useIsOwner } from '@/hook-temp/UseIsOwner';
 import { useGetProfile} from '@/hook/useProfileData';
 import { useAuth } from '@/context/AuthContext';
 const PersonalInfoCard = ({ info ,  userData}) => {

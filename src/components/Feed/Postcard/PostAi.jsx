@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { BsStars } from 'react-icons/bs'
 import { FaCode } from "react-icons/fa6";
 import { RiFlashlightFill } from "react-icons/ri";
-import { usesmartsummary } from '@/hook/UseMutationsmartsummary';
-import { useTranslatepost } from '@/hook/UsemutationTranslatepost';
+import { usesmartsummary } from '@/hook-temp/UseMutationsmartsummary';
+import { useTranslatepost } from '@/hook-temp/UsemutationTranslatepost';
 import { FaCheck } from "react-icons/fa";
-import { useExplainecode } from '@/hook/UseMutaionexplainecode';
+import { useExplainecode } from '@/hook-temp/UseMutaionexplainecode';
 import AiModal from '../AiModal';
 import toast from 'react-hot-toast';
-import { usebestanswer } from '@/hook/UseMutationbestanswer';
+import { usebestanswer } from '@/hook-temp/UseMutationbestanswer';
 
 const PostAi = ({ id, content, code, codeLanguage,postType, onBestAnswerFound }) => {
     // 🌟 إصلاح: تفكيك i18n هنا لقراءة اللغة الحالية للموقع بدون أخطاء

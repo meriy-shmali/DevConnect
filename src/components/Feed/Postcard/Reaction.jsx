@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import CustomTooltip from './ReactioHover';
 import { FaRegCommentDots } from "react-icons/fa";
-import { usereaction } from '@/hook/UseMutationreact';
+import { usereaction } from '@/hook-temp/UseMutationreact';
 import { useQueryClient } from '@tanstack/react-query';
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { motion } from 'framer-motion';
-import { usesave } from '@/hook/UseMutationSave';
+import { usesave } from '@/hook-temp/UseMutationSave';
 
 const Reaction = ({ post, onOpenReaction, onClose, reactionData, incrementComment, commentCount, onOpenComments, customClass = '' }) => {
 

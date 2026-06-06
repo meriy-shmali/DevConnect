@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { LiaUserAltSlashSolid } from "react-icons/lia";
 import { useTranslation } from "react-i18next";
-import { useCommentLogic } from "@/hook/CommentLogic";
+import { useCommentLogic } from "@/hook-temp/CommentLogic";
 import CommentItem from "./Sidepanel/CommentItem";
 import HeaderPanel from "./Sidepanel/HeaderPanel";
 import { FaRegCommentDots } from "react-icons/fa";

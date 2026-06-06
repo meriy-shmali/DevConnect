@@ -11,14 +11,14 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { PiBugBeetle } from "react-icons/pi";
 import { MdLightbulbOutline } from "react-icons/md";
-import { usequeryreaction } from '@/hook/UseQueryreact';
-import { useaddcomment } from '@/hook/UseMutationComment';
-import { usecomment } from '@/hook/UseQueryComment';
+import { usequeryreaction } from '@/hook-temp/UseQueryreact';
+import { useaddcomment } from '@/hook-temp/UseMutationComment';
+import { usecomment } from '@/hook-temp/UseQueryComment';
 import { useEffect } from 'react'
 import { FaRegCommentDots } from 'react-icons/fa6';
 import { useQueryClient } from "@tanstack/react-query";
 import Trending from './Trending';
-import { UseMe } from '@/hook/UseQueryMe'
+import { UseMe } from '@/hook-temp/UseQueryMe'
 
 const PostCard = ({post, customWidth, commentClass, HeaderClass, bodyClass, reactionClass, scrollToCommentId, removeTopMargin = false , autoOpenComments,compact = false,isInProfilePage}) => {
   const { t } = useTranslation()

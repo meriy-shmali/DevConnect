@@ -5,11 +5,11 @@ import { Navigate } from "react-router-dom";
 import Choiches from "./Choiches";
 import PostCard from "./Postcard/PostCard";
 import { staticposts } from "@/Utils/data/staticpost";
-import { usechoich } from "@/hook/UseQuerychoich";
+import { usechoich } from "@/hook-temp/UseQuerychoich";
 import Suggestion from "./Postcard/Suggestion";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { UseTheme } from "@/hook/UseTheme";
+import { UseTheme } from "@/hook-temp/UseTheme";
 import InstagramSkeleton from "./Skelton";
 import CreatepostMobile from "./CreatepostMobile";
 

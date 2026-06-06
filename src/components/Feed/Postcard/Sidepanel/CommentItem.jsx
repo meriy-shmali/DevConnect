@@ -4,7 +4,7 @@ import MenuPanel from "./MenuPanel";
 import ReactionPanel from "./ReactionPanel";
 import ActionPanel from "./ActionPanel";
 import { useState, useRef, useEffect } from "react";
-import { UseMe } from "@/hook/UseQueryMe";
+import { UseMe } from "@/hook-temp/UseQueryMe";
 import { AnimatePresence, motion } from "framer-motion";
 
 const CommentItem = ({

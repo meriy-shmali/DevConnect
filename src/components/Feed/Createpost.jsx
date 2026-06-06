@@ -8,7 +8,7 @@ import { BsStars } from "react-icons/bs";
 
 import AIAssistant from "./AIAssistant";
 import { motion, AnimatePresence } from "framer-motion";
-import CreatepostLogic from "@/hook/CreatepostLogic";
+import CreatepostLogic from "@/hook-temp/CreatepostLogic";
 import AISidePanel from "./AISidepanel";
 import AiModal from './AiModal';
 

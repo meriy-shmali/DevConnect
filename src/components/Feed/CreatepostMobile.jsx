@@ -1,4 +1,4 @@
-import CreatepostLogic from '@/hook/CreatepostLogic';
+import CreatepostLogic from '@/hook-temp/CreatepostLogic';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

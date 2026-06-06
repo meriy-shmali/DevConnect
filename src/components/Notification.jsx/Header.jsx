@@ -4,10 +4,10 @@ import { IoNotifications } from "react-icons/io5";
 import { MdSettings } from "react-icons/md";
 import SearchDropdown from '../Search.jsx/SearchDropdown';
 import NotificationModal from '../Notification.jsx/NotificationList';
-import { useNotificationMutation } from '@/hook/UseNotificationMutation';
+import { useNotificationMutation } from '@/hook-temp/UseNotificationMutation';
 import { requestForToken } from '@/firebase/firebaseConfig';
 import { useNavigate } from 'react-router-dom';
-import { useGetProfile } from '@/hook/UseProfileData';
+import { useGetProfile } from '@/hook-temp/UseProfileData';
 import { getUnreadCountReq } from '@/api/NotificationApi';
 
 const Header = () => {

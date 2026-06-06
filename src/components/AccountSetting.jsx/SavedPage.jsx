@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { useTranslation } from "react-i18next";
 import SavedPost from './SavedPost';
-import { useGetSavedPosts } from '@/hook/UseMutationAccount';
+import { useGetSavedPosts } from '@/hook-temp/UseMutationAccount';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const SavedPage = () => {

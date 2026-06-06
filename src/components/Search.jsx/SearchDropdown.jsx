@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearch } from '@/hook/UseSearchMutation';
+import { useSearch } from '@/hook-temp/UseSearchMutation';
 import PostSearchResult from './PostSearchResult'; 
 import { IoClose, IoSearchSharp } from 'react-icons/io5'; 
 import { MdHistory } from 'react-icons/md';

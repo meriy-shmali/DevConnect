@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import changepasswordschema from '../Schema/ChangePasswordSchema';
-import { useSendOtp, useResetPassword } from "@/hook/UseMutationChangePassword";
+import { useSendOtp, useResetPassword } from "@/hook-temp/UseMutationChangePassword";
 import { Input } from "../ui/input"; 
 import { Button } from "../ui/button";
 import { X,Eye,EyeOff } from "lucide-react";

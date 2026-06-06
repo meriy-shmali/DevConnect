@@ -1,4 +1,4 @@
-import CreatepostLogic from '@/hook/CreatepostLogic';
+import CreatepostLogic from '@/hook-temp/CreatepostLogic';
 import React, { useState, useEffect, useRef } from 'react'; // 1. قمنا بإضافة useRef هنا
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '../ui/textarea';
@@ -10,10 +10,10 @@ import AIAssistant from '../Feed/AIAssistant';
 import { RiImageAddFill } from "react-icons/ri";
 import { FaFileAlt, FaRegTrashAlt } from "react-icons/fa";
 import AiModal from '@/components/Feed/AiModal';
-import { usePostActions } from '@/hook/UsePostMutation';
+import { usePostActions } from '@/hook-temp/UsePostMutation';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { useGetProfile } from '@/hook/UseProfileData';
+import { useGetProfile } from '@/hook-temp/UseProfileData';
 import Header from './Header';
 
 const CreatepostMobile = () => {

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
-import { useFollow } from '@/hook/UseFollow'
+import { useFollow } from '@/hook-temp/UseFollow'
 import MenuPanel from './Sidepanel/MenuPanel'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { usePostActions } from '@/hook/UsePostMutation'
+import { usePostActions } from '@/hook-temp/UsePostMutation'
 import 'dayjs/locale/ar';
 import { useTranslation } from 'react-i18next';
-import { UseMe } from '@/hook/UseQueryMe'
+import { UseMe } from '@/hook-temp/UseQueryMe'
 
 dayjs.extend(relativeTime);
 
