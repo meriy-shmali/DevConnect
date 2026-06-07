@@ -95,14 +95,14 @@ const LoginForm = () => {
           name="email"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="text-lg md:text-xl font-medium">{t('email')}:</FormLabel>
+              <FormLabel className="text-lg dark:text-black md:text-xl font-medium">{t('email')}:</FormLabel>
               <FormControl>
                 <InputGroup className="hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
                   <InputGroupInput
                     {...field}
                     type="email"
                     placeholder="Example@mail.com"
-                    className="placeholder:text-sm text-sm flex-grow bg-transparent border-none outline-none"
+                    className="placeholder:text-sm dark:text-black text-sm flex-grow bg-transparent border-none outline-none"
                   />
                   <InputGroupAddon className="flex-shrink-0 flex items-center">
                     <MailIcon className='md:size-5 size-4 opacity-70' />
@@ -120,10 +120,10 @@ const LoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="text-lg md:text-xl font-medium">{t('password')}:</FormLabel>
+              <FormLabel className="text-lg dark:text-black md:text-xl font-medium">{t('password')}:</FormLabel>
               <FormControl>
                 {/* تم إضافة group و focus-within هنا لتنسيق الأيقونات والحدود بشكل تفاعلي ومحاذاة العناصر */}
-                <InputGroup className="group hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4 focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all">
+                <InputGroup className="group dark:text-black hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4 focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all">
                   <InputGroupInput
                     {...field}
                     // 🌟 يتغير النوع ديناميكياً حسب الـ State

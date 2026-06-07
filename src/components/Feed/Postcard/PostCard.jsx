@@ -18,7 +18,7 @@ import { FaRegCommentDots } from 'react-icons/fa6';
 import { useQueryClient } from "@tanstack/react-query";
 import Trending from './Trending';
 import { UseMe } from '@/hook/UseQueryMe'
-
+import { useLocation } from 'react-router-dom';
 const PostCard = ({
   post,
   customWidth,
@@ -34,6 +34,7 @@ const PostCard = ({
   handleOpenPost,    // ✅ prop
 }) => {
   const { t } = useTranslation()
+  const location = useLocation();
   const { data: currentUser } = UseMe();
   const [sort, setsort] = useState('latest');
   const [paneltype, setpaneltype] = useState(autoOpenComments ? 'comments' : null);
@@ -112,24 +113,50 @@ const PostCard = ({
     );
   };
 
+useEffect(() => {
+    let activeCommentId = scrollToCommentId || location.state?.scrollToComment || null;
+
+    // إذا لم يجده في الـ state، يقرأه من الـ URL Query Params
+    if (!activeCommentId) {
+      const searchParams = new URLSearchParams(location.search);
+      activeCommentId = searchParams.get('comment');
+    }
+
+    if (activeCommentId) {
+      // فتح السايد بار فوراً إذا كان مغلقاً
+      setpaneltype('comments');
+      // تخزين المعرف في السيرفر/الحالة للبدء بالـ scroll والـ highlight
+      setHighlightedCommentId(activeCommentId);
+
+      // 🌟 خطوة ذكية: تنظيف الـ URL حتى لا يظل يعيد فتح السايد بار إذا أغلقه المستخدم يدوياً
+      if (location.search.includes('comment=')) {
+        window.history.replaceState(null, '', location.pathname);
+      }
+    }
+  }, [scrollToCommentId, location.state?.scrollToComment, location.search]);
+
+
+  // 🌟 2. الـ useEffect الثاني: مسؤول فقط عن عمل الـ Scroll والـ Highlight (بشرط أن يكون السايد بار مفتوحاً والبيانات جاهزة)
   useEffect(() => {
-    if (scrollToCommentId && paneltype === 'comments') {
+    // نتحقق أن السايد بار مفتوح، وهناك تعليق مستهدف، والبيانات تم تحميلها بنجاح
+    if (highlightedCommentId && paneltype === 'comments' && commentsData) {
       const timer = setTimeout(() => {
-        const commentElement = document.getElementById(`comment-${scrollToCommentId}`);
+        const commentElement = document.getElementById(`comment-${highlightedCommentId}`);
         if (commentElement) {
           commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        // ✅ يشغّل الـ highlight في CommentItem عبر framer-motion
-        setHighlightedCommentId(scrollToCommentId);
-        // ✅ يزيل الـ highlight بعد 2.5 ثانية
-        setTimeout(() => {
+
+        // ✅ إزالة الـ highlight تلقائياً بعد 2.5 ثانية لإعادة الكومبوننت لوضعه الطبيعي دون إغلاق السايد بار
+        const highlightTimer = setTimeout(() => {
           setHighlightedCommentId(null);
         }, 2500);
+
+        return () => clearTimeout(highlightTimer);
       }, 400);
 
       return () => clearTimeout(timer);
     }
-  }, [scrollToCommentId, paneltype, commentsData]);
+  }, [highlightedCommentId, paneltype, commentsData]);
 
   return (
     <div className={`bg-white dark:bg-dark-post-background rounded-2xl shadow-lg border border-gray-200 px-4 dark:border-0 h-fit p-4 md:p-5 flex flex-col gap-8 ${removeTopMargin ? "mt-0" : "md:mt-5 mt-10"} ${customWidth || 'w-full'}`}>

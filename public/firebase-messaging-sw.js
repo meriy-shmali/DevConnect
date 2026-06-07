@@ -52,17 +52,34 @@ messaging.onBackgroundMessage((payload) => {
 
 // مستمع الضغط (تأكدي من مطابقة أسماء الحقول كما في الـ JSON المرسل)
 
+// داخل ملف firebase-messaging-sw.js
 self.addEventListener('notificationclick', (event) => {
   const targetId = event.notification.data.target_id;
   const targetType = event.notification.data.target_type;
-  
-  event.notification.close();
-  
-  let url = '/';
+  // 🌟 جلب الـ comment_id القادم من سيرفر الخلفية في الفايربيز
   const commentId = event.notification.data.comment_id; 
-  if (targetType === 'follow') url =`/profile/${targetId}`;
-  else if (targetId) url = commentId ? `/post/${targetId}?commentId=${commentId}` : `/post/${targetId}`;
 
-  event.waitUntil(clients.openWindow(url));
+  event.notification.close();
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // 🌟 بناء الرابط الذكي ليحتوي على الـ comment parameter إن وُجد
+      let targetUrl = `/post/${targetId}`;
+      if (targetType !== 'follow' && commentId) {
+        targetUrl = `/post/${targetId}?comment=${commentId}`;
+      } else if (targetType === 'follow') {
+        targetUrl = `/profile/${targetId}`;
+      }
+
+      for (const client of clientList) {
+        if (client.url.includes(targetUrl) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
+    })
+  );
 });
  

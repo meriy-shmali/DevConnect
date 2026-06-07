@@ -22,12 +22,14 @@ export const useNotificationLogic = (onClose) => {
           onClick: () => {
             const targetId = payload.data?.target_id;
             const targetType = payload.data?.target_type;
+            const commentId = payload.data?.comment_id; // 🌟 إضافة قراءة معرّف التعليق من بيانات الفايربيز
 
             if (targetType === "follow") {
               navigate(`/profile/${targetId}`);
             } else {
-              // ✅ نفس الـ route الصحيح /post/ بدون s
-              navigate(`/post/${targetId}`);
+              // 🌟 إذا كان هناك تعليق قادم، ندمجه بالرابط كـ بارامتر، وإلا نذهب للرابط العادي
+              const url = commentId ? `/post/${targetId}?comment=${commentId}` : `/post/${targetId}`;
+              navigate(url);
             }
           },
         });
@@ -66,7 +68,7 @@ export const useNotificationLogic = (onClose) => {
       const finalPostId = post_id || target_id;
 
       if (finalPostId) {
-        // ✅ /post/ بدون s — نفس الـ route في PostPage.jsx
+        // نُبقي على الـ state للإشعارات المنبثقة من داخل أداة الإشعارات بالموقع
         navigate(`/post/${finalPostId}`, {
           state: { scrollToComment: comment_id || null }
         });

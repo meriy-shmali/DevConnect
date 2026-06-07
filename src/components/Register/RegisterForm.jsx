@@ -117,7 +117,7 @@ const RegisterForm = () => {
             name={item.name}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel className="text-lg md:text-xl font-medium">{item.label}:</FormLabel>
+                <FormLabel className="text-lg  dark:text-black md:text-xl font-medium">{item.label}:</FormLabel>
                 <FormControl>
                   <InputGroup className="group hover:bg-hover-placeholder bg-light-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4 focus-within:ring-1 focus-within:ring-blue-button focus-within:border-blue-button transition-all">
                     <InputGroupInput
@@ -125,7 +125,7 @@ const RegisterForm = () => {
                       type={item.type}
                       placeholder={item.label}
                       // 🌟 [::-ms-reveal]:hidden تمنع متصفح Edge من إظهار أيقونته التلقائية المزدوجة
-                      className="placeholder:text-sm text-sm flex-grow bg-transparent border-none outline-none [::-ms-reveal]:hidden"
+                      className="placeholder:text-sm dark:text-black text-sm flex-grow bg-transparent border-none outline-none [::-ms-reveal]:hidden"
                       autoComplete={item.isPasswordField ? "new-password" : undefined}
                     />
                     
@@ -196,7 +196,7 @@ const RegisterForm = () => {
             <FormItem className="w-full">
               <FormLabel className="text-lg md:text-xl font-medium">{t('phone')}:</FormLabel>
               <FormControl>
-                <InputGroup className="bg-light-placeholder hover:bg-hover-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
+                <InputGroup className= "bg-light-placeholder dark:text-black hover:bg-hover-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
                   <InputGroupInput
                     {...field}
                     type="tel"

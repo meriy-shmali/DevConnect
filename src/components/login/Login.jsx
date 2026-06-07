@@ -13,7 +13,7 @@ const Login = () => {
       <div className='mt-12 md:mt-0 lg:mt-0 xl:mt-0 2xl:mt-0 flex flex-col items-center md:items-start w-full max-w-[450px] md:max-w-[500px] lg:max-w-[550px] xl:max-w-[600px] 2xl:max-w-[650px]'>
         <div className='w-full mb-10'>
           {/* تم تعديل md:text-left إلى md:text-start لدعم الـ RTL تلقائياً */}
-          <p className='title-font text-3xl lg:text-4xl xl:5xl 2xl:8xl font-bold text-center md:text-start leading-tight'>
+          <p className='title-font dark:text-black text-3xl lg:text-4xl xl:5xl 2xl:8xl font-bold text-center md:text-start leading-tight'>
             {t('welcome_back')}
           </p>
         </div>

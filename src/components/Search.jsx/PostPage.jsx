@@ -10,7 +10,7 @@ const PostPage = () => {
    const { t, i18n } = useTranslation();
    const { id } = useParams();
    const location = useLocation();
-const commentIdToScroll = location.state?.scrollToComment || new URLSearchParams(location.search).get('commentId')
+const commentIdToScroll = location.state?.scrollToComment || new URLSearchParams(location.search).get('comment');
   const statePost = location.state?.post;
 
   const { data: fetchedPost, isLoading, isError } = useQuery({
