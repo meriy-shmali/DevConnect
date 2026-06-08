@@ -23,7 +23,7 @@ export const useSearch = (query, activeTab) => {
   const { data: suggestionsData } = useQuery({
     queryKey: ['suggestions', query, activeTab],
     queryFn: () => searchApi.getSuggestions(query, activeTab),
-    enabled: query.length > 0 && !isSearching,
+    enabled: query.length > 0 && !isSearching,staleTime: 10000
   });
   
   const suggestions = suggestionsData?.results || [];

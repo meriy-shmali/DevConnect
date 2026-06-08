@@ -1,5 +1,5 @@
 import CreatepostLogic from '@/hook/CreatepostLogic';
-import React, { useState, useEffect, useRef } from 'react'; // 1. قمنا بإضافة useRef هنا
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
@@ -29,24 +29,17 @@ const CreatepostMobile = () => {
   const [postImages, setPostImages] = useState([]); 
   const [codeSnippet, setCodeSnippet] = useState('');
   
-  // 2. إنشاء مرجع (Ref) للإشارة إلى حاوية الـ AI بالكامل
   const aiMenuRef = useRef(null);
 
-  // 3. تأثير (Effect) لمراقبة الضغط خارج حاوية الـ AI
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // إذا كانت القائمة مفتوحة والضغط تم خارج العناصر التابعة لـ aiMenuRef، نقوم بإغلاقها
       if (post.show && aiMenuRef.current && !aiMenuRef.current.contains(event.target)) {
         post.setshow(false);
       }
     };
-
-    // تسجيل الحدث عند فتح القائمة
     if (post.show) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-
-    // تنظيف الحدث عند إغلاق القائمة أو تفكيك المكون لحماية الذاكرة
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -59,7 +52,6 @@ const CreatepostMobile = () => {
     if (foundPost) {
         setContent(foundPost.content);
         setCodeSnippet(foundPost.code || "");
-        
         if (foundPost.media && postImages.length === 0) {
           setPostImages(foundPost.media);
         }
@@ -68,26 +60,29 @@ const CreatepostMobile = () => {
 
   if (isLoading) return <div className="text-center mt-20 text-2xl">{t('is_loading')}</div>;
 
-  const handleSaveUpdate = () => {
-      if (!id) return;
+  const handleSaveUpdate = async () => {
+    if (!id) return;
 
-      const formData = new FormData();
-      formData.append('content', content);
-      formData.append('code', codeSnippet || "");
-      formData.append('code_language', "javascript");
-      imagesToDelete.forEach(imageId => {
-          formData.append('delete_images', imageId);
-      });
-      try {
-          updateMutation.mutateAsync({ 
-              postId: id, 
-              data: formData 
-          });
-          
-          navigate('/profile/me');
-      } catch (error) {
-          console.error("Error updating post:", error);
-      }
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('code', codeSnippet || "");
+    formData.append('code_language', "javascript");
+    imagesToDelete.forEach(imageId => {
+        formData.append('delete_images', imageId);
+    });
+
+    try {
+        // ✅ ننتظر الـ mutation تنتهي قبل الانتقال
+        await updateMutation.mutateAsync({ 
+            postId: id, 
+            data: formData 
+        });
+        // الانتقال يصير بعد نجاح الـ mutation فقط
+        navigate('/profile/me');
+    } catch (error) {
+        console.error("Error updating post:", error);
+        // لا ننتقل في حالة الخطأ
+    }
   };
 
   return (
@@ -100,28 +95,25 @@ const CreatepostMobile = () => {
         </div>
         
         <div className='flex flex-col w-full max-w-[700px] mx-auto '>
-          {/* حقل النص */}
-          <div className='md:w-full ms-14 w-[300px] m-2 shadow rounded-lg bg-white border border-gray-100'>
+          <div className='md:w-full ms-14 md:ms-0 w-[300px] m-2 shadow rounded-lg bg-white border border-gray-100'>
               <Textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder=''
-                  className='md:w-full  h-fit  md:text-lg text-md border-none focus-visible:ring-0  bg-transparent placeholder:text-gray-500 dark:text-gray-50 dark:bg-dark-post-background'
+                  className='md:w-full h-fit md:text-lg text-md border-none focus-visible:ring-0 bg-transparent placeholder:text-gray-500 dark:text-gray-50 dark:bg-dark-post-background'
               />
           </div>
 
-          {/* عرض الكود إن وجد */}
           {codeSnippet && (
-              <div className='my-3 rounded-md overflow-hidden border border-gray-700'>
+              <div className='my-3 md:w-full w-[300px] ms-14 md:ms-0   rounded-md overflow-hidden border border-gray-700'>
                   <Textarea
                       value={codeSnippet}
                       onChange={(e) => setCodeSnippet(e.target.value)}
-                      className='w-full h-[250px] font-mono bg-[#1c1e21] text-pink-400 border-none resize focus-visible:ring-0 text-sm dark:text-gray-50 dark:bg-dark-post-background'
+                      className='md:w-full  h-[250px] font-mono bg-[#1c1e21] text-pink-400 border-none resize focus-visible:ring-0 text-sm dark:text-gray-50 dark:bg-dark-post-background'
                   />
               </div>
           )}
 
-          {/* شبكة الصور */}
           {postImages.length > 0 && (
               <div className={`grid gap-1 mt-2 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 
                   ${postImages.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
@@ -142,12 +134,10 @@ const CreatepostMobile = () => {
                               try {
                                   const formData = new FormData();
                                   formData.append('delete_images', img.id);
-                                  
                                   await updateMutation.mutateAsync({ 
                                       postId: id, 
                                       data: formData 
                                   });
-
                                   setPostImages(prev => prev.filter((_, i) => i !== index));
                               } catch (error) {
                                   console.error("Failed to delete image");
@@ -164,17 +154,23 @@ const CreatepostMobile = () => {
         </div>
         
         <div className="pt-0 mb-10 pb-32 flex items-center justify-center gap-4">
-          <button onClick={handleSaveUpdate} disabled={updateMutation.isPending}
-            className="rounded-md px-5 py-2 md:text-[18px] text-white bg-blue-button hover:bg-hover-blue text-text-button">
-            {t('post')}
+          {/* ✅ زر النشر - disabled أثناء التحميل مع مؤشر واضح */}
+          <button 
+            onClick={handleSaveUpdate} 
+            disabled={updateMutation.isPending}
+            className="rounded-md px-5 py-2 md:text-[18px] text-white bg-blue-button hover:bg-hover-blue text-text-button disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {updateMutation.isPending ? t('saving') || '...' : t('post')}
           </button>
           
-          <button onClick={() => navigate(-1)}
-            className="rounded-md px-5 py-2 md:text-[18px] bg-cancel-button hover:bg-[#b53e5d] text-text-button">
+          <button 
+            onClick={() => navigate(-1)}
+            disabled={updateMutation.isPending}
+            className="rounded-md px-5 py-2 md:text-[18px] bg-cancel-button hover:bg-[#b53e5d] text-text-button disabled:opacity-60"
+          >
             {t('cancel')}
           </button>
 
-          {/* 4. ربط الـ ref بالحاوية التي تجمع الزر والقائمة المنبثقة معاً */}
           <div ref={aiMenuRef} className="relative inline-block">
             <Button className="text-[18px] border-2 rounded-[50px] pt-1 pb-1 text-black border-black dark:bg-dark-post-background dark:text-gray-50" 
               onClick={() => post.setshow(!post.show)}>
@@ -188,7 +184,7 @@ const CreatepostMobile = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.2 }}
-                    className='absolute md:left-1/2 md:-translate-x-1/2 top-full mt-3 z-[999] w-[222px] xs:w-[260px] pb-2 left-1/6 -translate-x-1/2 '
+                    className='absolute md:left-1/2 md:-translate-x-1/2 top-full mt-3 z-[999] w-[222px] xs:w-[260px] pb-2 left-1/6 -translate-x-1/2'
                 >
                     <div className="rounded-xl overflow-hidden bg-white dark:bg-gray-800">
                         <AIAssistant

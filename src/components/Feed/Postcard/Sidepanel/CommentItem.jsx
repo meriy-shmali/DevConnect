@@ -123,7 +123,7 @@ const CommentItem = ({
       <div className="flex justify-between ms-12 items-start space-x-2">
         {/* text */}
         <div className="flex flex-col items-start flex-1">
-          <p className="text-md dark:text-gray-100 whitespace-pre-wrap break-words w-full">
+          <p className="md:text-md text-sm dark:text-gray-100 whitespace-pre-wrap break-words w-full">
             {displayCommentContent}
             {shouldTruncateComment && (
               <button

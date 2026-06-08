@@ -48,7 +48,13 @@ const CreatepostMobile = () => {
                         className='w-[300px] h-[100px] text-lg placeholder:text-gray-400 bg-gray-50 dark:bg-gray-50 '
                     />
                 </div>
-                
+                  {post.displayCategory && (
+              <div className="w-full flex justify-start ">
+                <span className="bg-white/20 text-white -mt-6 text-[11px] px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+                  {t("category")}: {post.displayCategory}
+                </span>
+              </div>
+            )}
                 {/* PREVIEW AREA */}
                 {post.previewUrl && post.previewUrl.length > 0 && (
                     <div className="flex items-center gap-2 p-1 rounded-lg justify-center ">
@@ -93,7 +99,7 @@ const CreatepostMobile = () => {
 
                 <div className='flex justify-center  items-center'>
                     <div className='flex-col space-y-9'>
-                        <div className='flex-row justify-center items-center text-2xl p-2 text-gray-200 text-center leading-12 '>
+                        <div className='flex-row justify-center items-center  text-2xl p-2 text-gray-200 text-center leading-12 '>
                             {t('help')}
                             <Button className="text-[22px] border-2 rounded-[50px] ms-3 pt-1 pb-1 border-white text-gray-200 " onClick={() => post.setshow(!post.show)}>
                                 {t('ai')}<BsStars className='size-[22px] text-amber-300'/>

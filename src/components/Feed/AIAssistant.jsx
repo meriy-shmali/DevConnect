@@ -11,8 +11,8 @@ const AIAssistant = ({ improve,generate,summarize,addtags,category, improveM, ad
     if(type=='mobile'){
   return (
     <div >
-        <div className=' -mt-8  bg-gradient-background w-[200px] relative left-1/2 rounded-xl     text-white shadow-xl/30'>
-            <div className=' text-xl p-2'>{t('ai')}</div>
+        <div className=' -mt-8  bg-gradient-background w-[200px] relative left-1/3 rounded-xl     text-white shadow-xl/30'>
+            <div className=' text-xl text-center p-2'>{t('ai')}</div>
             <div className='flex-col items-start justify-start  space-y-1 text-[24px] p-2 me-10 '> 
               {/* منمنع ارسال اكتر من طلب واحد للباك */}
               <button onClick={generate} disabled={generateM.isPending} ><Button variant='ai'><BsFillFilePostFill className='size-[22px] text-yellow-300' /> {t('rephrase')}</Button></button> 

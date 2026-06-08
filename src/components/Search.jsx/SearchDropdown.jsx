@@ -21,7 +21,7 @@ const SearchDropdown = () => {
   const { 
     results, recents, suggestions, 
     executeSearch, deleteRecent, saveHistory, 
-    isSearching, setIsSearching 
+    isSearching, setIsSearching ,isLoading
   } = useSearch(query, activeTab);
 
   const getActiveList = () => {
@@ -302,16 +302,27 @@ initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.98 }}
                       )}
                     </div>
                   ))}
+{!isLoading && !isExpanded && currentList.length > 10 && (
+ <button className="w-full py-3 text-blue-600 font-bold" onClick={() => setIsExpanded(true)}>
+{t('show_more')}
+</button>
+)}
+ {isSearching && (<>
+{/* 1. تظهر الـ Loading أثناء معالجة الطلب في السيرفر */}
+{isLoading && (
+<div className="py-10 text-center flex flex-col items-center justify-center gap-3">
+<div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+<span className="text-gray-500 font-semibold">{t('loading...')}</span>
+</div>
+)}
 
-                  {!isExpanded && currentList.length > 10 && (
-                    <button className="w-full py-2.5 text-sm text-blue-600 font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" onClick={() => setIsExpanded(true)}>
-                      {t('show_more')}
-                    </button>
-                  )}
-                  
-                  {isSearching && itemsCount === 0 && (
-                    <div className="py-8 text-center text-gray-400 text-xs italic">{t('no_results')}</div>
-                  )}
+{/* 2. تظهر رسالة لا توجد نتائج فقط في حال اكتمال التحميل تماماً والمصفوفة فارغة */}
+{!isLoading && itemsCount === 0 && (
+<div className="py-10 text-center text-gray-500 italic">
+ {t('no_results')}
+</div>
+)}
+</>)}
                 </div>
               )}
             </div>
