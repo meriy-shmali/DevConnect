@@ -93,7 +93,7 @@ const Feed = () => {
         >
           <div className="w-full md:max-w-[800px] lg:min-w-full xl:px-20 md:px-4">
             {/* تم تعديل الحاوية هنا لتتوافق مع اتجاهات الـ RTL والـ LTR بشكل ديناميكي */}
-            <div className={`bg-main-background md:pe-5 w-screen relative md:start-0 dark:bg-dark-main-background md:w-[100%] lg:w-[66%] xl:w-[100%] ${isRtl ? "start-3 xl:start-10" : "end-3 xl:end-10"}`}>
+            <div className={`bg-main-background  md:pe-5 w-screen relative md:start-0 dark:bg-dark-main-background md:w-[100%] lg:w-[66%] xl:w-[100%] ${isRtl ? "start-3 xl:start-10" : "end-3 xl:end-10"}`}>
               <div className="md:py-2 py-3">
                 <Choiches setCategory={setcategory} />
               </div>

@@ -95,7 +95,7 @@ const CreatepostMobile = () => {
         </div>
         
         <div className='flex flex-col w-full max-w-[700px] mx-auto '>
-          <div className='md:w-full ms-14 md:ms-0 w-[300px] m-2 shadow rounded-lg bg-white border border-gray-100'>
+          <div className='md:w-full ms-12 md:ms-0 w-[300px] m-2 shadow rounded-lg bg-white border border-gray-100'>
               <Textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
@@ -105,7 +105,7 @@ const CreatepostMobile = () => {
           </div>
 
           {codeSnippet && (
-              <div className='my-3 md:w-full w-[300px] ms-14 md:ms-0   rounded-md overflow-hidden border border-gray-700'>
+              <div className='my-3 md:w-full w-[300px] ms-12 md:ms-0   rounded-md overflow-hidden border border-gray-700'>
                   <Textarea
                       value={codeSnippet}
                       onChange={(e) => setCodeSnippet(e.target.value)}

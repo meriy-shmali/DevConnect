@@ -139,12 +139,16 @@ const ProfileHeader = ({ userData }) => {
         <div className="flex flex-col md:space-y-3 items-center md:items-start">
           <h2 className="text-3xl font-medium text-gray-900 mb-3 mt-4 dark:text-gray-50">{userData?.username}</h2>
           {!isOwner && (
-            <button 
-              onClick={handleFollowClick}
-              className="md:w-fit md:px-2 md:py-1.5 px-2 py-1.5 mt-3 md:mt-0 rounded-md bg-follow-button text-text-button md:text-lg text-sm hover:bg-hover-purple justify-center items-center"
-            > 
-              {(userData?.is_following || userData?.data?.is_following) ? t('unfollow') : t('follow')}
-            </button>
+           <button 
+  onClick={handleFollowClick}
+  className={`md:w-fit md:px-2 md:py-1.5 px-2 py-1.5 mt-3 md:mt-0 rounded-md transition whitespace-nowrap ${
+    (userData?.is_following || userData?.data?.is_following)
+      ? "border border-follow-button text-follow-button"
+      : "bg-follow-button text-text-button md:text-lg text-sm hover:bg-hover-purple"
+  }`}
+>
+  {(userData?.is_following || userData?.data?.is_following) ? t('unfollow') : t('follow')}
+</button>
           )}
         </div>
       </div>
