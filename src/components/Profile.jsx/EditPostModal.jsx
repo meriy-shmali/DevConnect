@@ -153,12 +153,12 @@ const CreatepostMobile = () => {
           )}
         </div>
         
-        <div className="pt-0 mb-10 pb-32 flex items-center justify-center gap-4">
+        <div className="pt-0 mb-10 pb-32 flex items-center justify-center gap-3 md:gap-4">
           {/* ✅ زر النشر - disabled أثناء التحميل مع مؤشر واضح */}
           <button 
             onClick={handleSaveUpdate} 
             disabled={updateMutation.isPending}
-            className="rounded-md px-5 py-2 md:text-[18px] text-white bg-blue-button hover:bg-hover-blue text-text-button disabled:opacity-60 disabled:cursor-not-allowed"
+            className="rounded-md md:px-5 md:py-2 md:text-[18px] text-sm px-4 py-1.5 text-white bg-blue-button hover:bg-hover-blue text-text-button disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {updateMutation.isPending ? t('saving') || '...' : t('post')}
           </button>
@@ -166,15 +166,15 @@ const CreatepostMobile = () => {
           <button 
             onClick={() => navigate(-1)}
             disabled={updateMutation.isPending}
-            className="rounded-md px-5 py-2 md:text-[18px] bg-cancel-button hover:bg-[#b53e5d] text-text-button disabled:opacity-60"
+            className="rounded-md md:px-5 md:py-2 px-3 py-1.5 text-sm md:text-[18px] bg-cancel-button hover:bg-[#b53e5d] text-text-button disabled:opacity-60"
           >
             {t('cancel')}
           </button>
 
           <div ref={aiMenuRef} className="relative inline-block">
-            <Button className="text-[18px] border-2 rounded-[50px] pt-1 pb-1 text-black border-black dark:bg-dark-post-background dark:text-gray-50" 
+            <Button className="md:text-[18px] text-sm border-2 rounded-[50px] pt-1 pb-1 text-black border-black dark:bg-dark-post-background dark:text-gray-50" 
               onClick={() => post.setshow(!post.show)}>
-              {t('ai')}<BsStars className='size-[22px] text-amber-300'/>
+              {t('ai')}<BsStars className='md:size-[22px] size-[20px] text-amber-300'/>
             </Button>
             
             <AnimatePresence>
