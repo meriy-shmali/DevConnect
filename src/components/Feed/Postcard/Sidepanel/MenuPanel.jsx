@@ -38,21 +38,21 @@ const MenuPanel = ({ id, menu, toggleMenu, onEdit, onDelete, size = 17 }) => {
           exit={{ y: 2 }}
           transition={{ type: "tween", duration: 0.1 }}
           /* 🌟 قمنا بزيادة عرض القائمة قليلاً إلى w-[120px] لترتاح الكلمات بداخلها */
-          className="absolute end-4 top-5 bg-white dark:bg-dark-post-background border border-gray-200 dark:border-zinc-700 rounded-lg shadow-xl py-1.5 flex flex-col z-[9999] w-[120px] text-lg"
+          className="absolute end-4 top-5 bg-white dark:bg-dark-post-background border border-gray-200 dark:border-zinc-700 rounded-lg shadow-xl py-1.5 flex flex-col z-[9999] min-w-[100px] text-lg"
           onClick={(e) => e.stopPropagation()}
         >
           {/* 🌟 تعديل الأزرار لتصبح بعرض كامل w-full ومع ميزة منع انكسار السطور whitespace-nowrap */}
          <div className=' dark:hover:bg-zinc-800 w-full hover:bg-gray-50'>
           <button 
             onClick={onEdit} 
-            className="px-3 py-1 text-blue-500   flex items-center  justify-start text-sm md:text-base whitespace-nowrap"
+            className="px-3 py-1 w-full text-blue-500   flex items-center  justify-start text-sm md:text-base whitespace-nowrap"
           >
             <MdEdit className='me-2 flex-shrink-0'/> {t('edit')} 
           </button></div>
         <div className='dark:hover:bg-zinc-800 w-full hover:bg-gray-50'>
           <button 
             onClick={onDelete} 
-            className="px-3 py-1 text-red-500  flex items-center  justify-start text-sm md:text-base whitespace-nowrap"
+            className="px-3 py-1 text-red-500  flex items-center w-full  justify-start text-sm md:text-base whitespace-nowrap"
           >
             <RiDeleteBin6Fill className='me-2 flex-shrink-0'/> {t('delete')}
           </button>

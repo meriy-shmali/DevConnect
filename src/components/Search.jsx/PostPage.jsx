@@ -85,7 +85,7 @@ const commentIdToScroll = location.state?.scrollToComment || new URLSearchParams
    [&>div:last-child]:flex-none [&>div:last-child]:flex [&>div:last-child]:items-center [&>div:last-child]:justify-end [&>div:last-child]:gap-x-2 [&>div:last-child]:ms-auto
     [&>div:last-child>button:first-child]:w-[75px] [&>div:last-child>button:first-child]:px-1
     [&_div]:space-x-0 [&>div:last-child]:!me-0` : undefined} 
-              bodyClass={isMobile ?  "h-[160px] scale-90 origin-top px-4 py-0 mb-[-10px] text-sm overflow-visible custom-scrollbar" : undefined}
+              bodyClass={isMobile ?  "min-h-[160px] scale-90 origin-top px-4 py-0 mb-[-10px] text-sm overflow-visible custom-scrollbar" : undefined}
               reactionClass={isMobile ? `
     /* 📱 موبايل: جعل الحاوية تأخذ العرض الكامل 100% بدون سكيل خارجي ليلتصق تماماً بالحواف */
     w-full px-2 flex justify-between items-center pt-2 pb-4 border-gray-100

@@ -122,10 +122,10 @@ const SearchDropdown = () => {
           type="text"
           dir={isRtl ? "rtl" : "ltr"}
           placeholder={t('search')}
-          className={`w-full py-1.5 ps-10 pe-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 
-              focus:ring-blue-500 bg-gray-100 text-gray-900 text-sm md:text-md font-medium placeholder-gray-500 
+          className={`w-full py-1.5 ps-8 md:ps-10 pe-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 
+              focus:ring-blue-500 bg-gray-100 text-gray-900 text-xs md:text-md font-medium placeholder-gray-500 
               dark:text-black dark:bg-gray-50 dark:border-gray-800 dark:placeholder-gray-400 transition-all
-               ${isRtl ? 'md:pe-12 ps-4 text-right' : 'md:ps-12 pe-4 text-left'}`}
+               ${isRtl ? 'md:pe-12 ps-1  text-right' : 'md:ps-12 pe-4 text-left'}`}
           value={query}
           onFocus={() => setIsOpen(true)}
           onChange={handleInputChange}
@@ -133,7 +133,7 @@ const SearchDropdown = () => {
         />
         <IoSearchSharp 
           onClick={handleSearchConfirm}
-          className={`absolute top-1/2 transition-colors cursor-pointer transform -translate-y-1/2 h-5 w-5 text-gray-500 dark:text-black z-10 ${isRtl ? 'end-4' : 'start-4'}`} 
+          className={`absolute top-1/2 transition-colors cursor-pointer transform -translate-y-1/2 md:h-5 md:w-5 h-3 w-3 text-gray-500 dark:text-black z-10 ${isRtl ? 'start-4' : 'start-4'}`} 
         />
       </div>
 
@@ -154,7 +154,7 @@ initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.98 }}
 >
             
             {/* Tabs */}
-            <div className="flex justify-around py-0.5 border-b border-gray-100 dark:border-gray-800">
+            <div className="flex justify-around py-0.5   dark:border-gray-800">
               {['people', 'tags', 'posts'].map(tab => (
                 <button
                   key={tab}

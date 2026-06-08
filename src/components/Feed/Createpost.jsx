@@ -39,7 +39,7 @@ const Createpost = () => {
       <div ref={containerRef} className="hidden md:block">
         
         {/* ضبط مرونة الـ width للتناسب التام مع اللابتوب */}
-        <div className={`w-full max-w-[290px] lg:max-w-[320] xl:max-w-[360px] pb-12 bg-gradient-background rounded-[40px] shadow-lg/25 transition-all duration-300 ${
+        <div className={`w-full max-w-[290px] lg:max-w-[320] xl:max-w-[500px] pb-12 bg-gradient-background rounded-[40px] shadow-lg/25 transition-all duration-300 ${
           i18n.language === "ar" ? "mb-8" : ""
         }`}>
           <div className="flex flex-col justify-center items-center mt-2 p-6 xl:p-8 space-y-7 pb-8">

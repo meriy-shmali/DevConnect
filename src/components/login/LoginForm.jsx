@@ -194,7 +194,7 @@ const LoginForm = () => {
             variant='link' 
             className='underline text-gray-700 hover:text-gray-900 font-medium p-0 h-auto'
           >
-            {t('createaccount')}
+            {t('register')}
           </Button>
         </div>
       </form>

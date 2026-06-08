@@ -101,12 +101,12 @@ const CreatepostMobile = () => {
         
         <div className='flex flex-col w-full max-w-[700px] mx-auto '>
           {/* حقل النص */}
-          <div className='md:w-full w-fit m-2 shadow rounded-lg bg-white border border-gray-100'>
+          <div className='md:w-full ms-14 w-[300px] m-2 shadow rounded-lg bg-white border border-gray-100'>
               <Textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder=''
-                  className='w-full h-auto md:text-lg text-md border-none focus-visible:ring-0 resize-none bg-transparent placeholder:text-gray-500 dark:text-gray-50 dark:bg-dark-post-background'
+                  className='md:w-full  h-fit  md:text-lg text-md border-none focus-visible:ring-0  bg-transparent placeholder:text-gray-500 dark:text-gray-50 dark:bg-dark-post-background'
               />
           </div>
 

@@ -67,7 +67,7 @@ const AIAssistant = ({ improve,generate,summarize,addtags,category, improveM, ad
   return (
     <div >
         <div className='  bg-gradient-background    text-white shadow-xl/30'>
-            <div className=' text-xl p-2'>{t('ai')}</div>
+            <div className=' text-xl text-center p-2'>{t('ai')}</div>
             <div className='flex-col me-12 items-start justify-start  space-y-1  p-2 '> 
               {/* منمنع ارسال اكتر من طلب واحد للباك */}
               <button onClick={generate} disabled={generateM.isPending} ><Button variant='ai'><BsFillFilePostFill className='size-[22px] text-yellow-300' /> {t('rephrase')}</Button></button> 

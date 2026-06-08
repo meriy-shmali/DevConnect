@@ -194,7 +194,7 @@ const RegisterForm = () => {
           name="phone_number"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="text-lg md:text-xl font-medium">{t('phone')}:</FormLabel>
+              <FormLabel className="text-lg dark:text-black md:text-xl font-medium">{t('phone')}:</FormLabel>
               <FormControl>
                 <InputGroup className= "bg-light-placeholder dark:text-black hover:bg-hover-placeholder shadow w-full max-w-[500px] h-fit rounded-2xl flex items-center px-4">
                   <InputGroupInput
@@ -213,7 +213,7 @@ const RegisterForm = () => {
           )}
         />
         
-        <div className='flex justify-center w-full max-w-[500px] pt-6 pb-2 hover:opacity-85 active:scale-95 transition-all duration-200'>
+        <div className='flex justify-center w-full max-w-[500px] pt-6 pb-2 xl:mb-30 hover:opacity-85 active:scale-95 transition-all duration-200'>
           <Buttons type="register" disabled={registerMutation.isPending} />
         </div> 
 

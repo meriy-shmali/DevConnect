@@ -45,10 +45,12 @@ const ProfilePage = ({ userData }) => {
             postsArray.map((post) => (
               <div 
                 key={post.id} 
+               
                 className="w-full max-w-[460px] md:max-w-4xl flex flex-col space-y-4 mx-auto overflow-visible relative"
               >
                 <PostCard 
                   post={post}
+                   onBodyClick={() => navigate(`/post/${post.id}`, { state: { post } })}
                   isInProfilePage={true}
                   compact={true}
                   customWidth={isMobile ? "w-full" : "max-w-[500px] w-full"}

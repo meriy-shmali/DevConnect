@@ -26,7 +26,7 @@ const CreatepostMobile = () => {
     };
 
     return (
-        <div className='bg-gradient-background min-h-screen'>
+        <div className=' p-8 bg-gradient-background min-h-screen'>
             <div className='relative top-15 right-1/3 me-12'>
                 <button onClick={() => navigate('/feed')}>
                     <IoArrowBack className='text-gray-50 text-3xl' />
@@ -45,7 +45,7 @@ const CreatepostMobile = () => {
                         placeholder={t('share')}
                         value={currentText}
                         onChange={(e) => handleTextChange(e.target.value)}
-                        className='w-[350px] h-[100px] text-lg placeholder:text-gray-400 bg-gray-50 dark:bg-gray-50 '
+                        className='w-[300px] h-[100px] text-lg placeholder:text-gray-400 bg-gray-50 dark:bg-gray-50 '
                     />
                 </div>
                 
@@ -59,7 +59,7 @@ const CreatepostMobile = () => {
                                     className="w-20 h-20 object-cover rounded"
                                 />
                                 <button onClick={() => post.removeImage(index)}>
-                                    <FaRegTrashAlt className="text-red-500 hover:text-red-700 text-[25px] mt-2 text-center" />
+                                    <FaRegTrashAlt className="text-red-500 hover:bg-red-600  p-1 rounded-full shadow transition-all transform scale-90 group-hover:scale-100 text-[25px] mt-2 text-center" />
                                 </button>
                             </div>
                         ))}
@@ -75,13 +75,13 @@ const CreatepostMobile = () => {
                 />
                 
                 <div className="flex justify-center gap-x-3 mt-2">
-                    <Button onClick={() => post.uploadRef.current.click()}>
-                        <RiImageAddFill className="text-gray-200 dark:text-gray-200 size-[40px]" />
+                    <Button  className="bg-white/10 hover:bg-white/20 py-5 border border-white/20 rounded-[10px] " onClick={() => post.uploadRef.current.click()}>
+                        <RiImageAddFill className="text-white size-[25px]" />
                     </Button>
-                    <button onClick={() => post.handlePost({ redirectAfterPost: true })} className='bg-blue-button w-fit text-white text-2xl rounded-lg px-4 py-1.5'>{t('post')}</button> 
+                    <button onClick={() => post.handlePost({ redirectAfterPost: true })} className='text-white bg-post-button hover:bg-hover-purple px-3 py-1 rounded-[10px] text-sm font-medium transition-colors shadow-md'>{t('post')}</button> 
                    {post.text.trim() !== "" && (
                                  <Button
-                                   className="text-white bg-cancel w-fit h-fit py-1.5 text-2xl"
+                                  className="text-white bg-cancel/80 hover:bg-cancel px-3 py-6 rounded-[10px] text-sm font-medium transition-colors"
                                    onClick={() => {
                                      post.resetForm();
                                    }}

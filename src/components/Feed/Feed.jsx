@@ -62,18 +62,25 @@ const Feed = () => {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
+    
     <div className="feed-page-bg w-full min-h-screen overflow-x-hidden bg-feed-page-bg dark:bg-feed-page-bg">
       <div className="relative min-h-screen w-full pt-16 md:pt-20">
 
-        {/* زر إنشاء منشور للموبايل */}
-        <div className="md:hidden fixed w-screen flex justify-center py-6 z-50 bg-main-background dark:bg-dark-main-background px-4 -mt-6">
-          <div
-            onClick={() => navigate("/post-mobile")}
-            className="border-2 border-gray-400 w-full max-w-[260px] p-2 rounded-full text-center text-sm font-medium text-gray-500 cursor-pointer dark:text-gray-300 dark:border-gray-300"
-          >
-            {t("create")}
-          </div>
-        </div>
+        {/* زر إنشاء منشور للموبايل — هاد يكفي */}
+<div className="md:hidden fixed w-screen flex justify-center py-6 z-50 bg-main-background dark:bg-dark-main-background px-4 -mt-6">
+  <div
+    onClick={() => navigate("/post-mobile")}
+    className="border-2 border-gray-400 w-full max-w-[260px] p-2 rounded-full text-center text-sm font-medium text-gray-500 cursor-pointer dark:text-gray-300 dark:border-gray-300"
+  >
+    {t("create")}
+  </div>
+</div>
+
+{/* احذف هاد الـ div ↓ */}
+{/* <div className="md:hidden mt-5 px-4 ...">
+  <CreatepostMobile />
+</div> */}
+       
 
         {/* شريط الخيارات الثابت */}
         <div
@@ -144,7 +151,7 @@ const Feed = () => {
           - عندما تكون اللغة عربية، يتم الحساب وتطبيق المواصفات على جهة الـ left ليطير الكارد إلى اليسار بشكل متناسق ومبهر.
         */}
         <div
-          className="hidden  md:block fixed top-20 z-20 w-[290px]"
+          className="hidden  md:block fixed top-20 xl:top-30 z-20 w-[290px] xl:w-[310px]"
           style={{
             [isRtl ? "left" : "right"]: `max(40px, calc((100vw - 1300px) / 2 + 40px))`,
           }}
@@ -153,9 +160,7 @@ const Feed = () => {
         </div>
 
         {/* Createpost للموبايل */}
-        <div className="md:hidden  mt-5 px-4 w-full max-w-[480px] mx-auto">
-          <CreatepostMobile />
-        </div>
+        
 
       </div>
     </div>

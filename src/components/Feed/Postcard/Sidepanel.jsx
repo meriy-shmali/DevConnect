@@ -127,13 +127,13 @@ const SidebarPanel = ({ title, icon, items, highlightedCommentId, showFilter, on
               >
                 <button
                   onClick={() => { setSort("latest"); setshowmenu(false); }}
-                  className="px-3 py-1 md:text-md text-sm hover:text-gray-600 dark:hover:text-gray-800"
+                  className="px-3 py-1 md:text-md text-sm dark:text-black hover:text-gray-600 dark:hover:text-gray-800"
                 >
                   {t("latest")}
                 </button>
                 <button
                   onClick={() => { setSort("oldest"); setshowmenu(false); }}
-                  className="px-1.5 py-1 md:text-md text-sm hover:text-gray-600 dark:hover:text-gray-800"
+                  className="px-1.5 py-1 md:text-md text-sm hover:text-gray-600 dark:text-black dark:hover:text-gray-800"
                 >
                   {t("oldest")}
                 </button>
@@ -143,7 +143,7 @@ const SidebarPanel = ({ title, icon, items, highlightedCommentId, showFilter, on
         )}
 
         {/* items */}
-        <div className="flex-col md:space-y-4">
+        <div className="flex-col space-y-4 md:space-y-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-50 space-y-4 relative top-[200%] md:top-[100%] md:text-3xl text-2xl">
               <div>{type === 'comments' ? <FaRegCommentDots className="md:text-6xl text-6xl" /> : <LiaUserAltSlashSolid className="md:text-7xl text-6xl" />}</div>

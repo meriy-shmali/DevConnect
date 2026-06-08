@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useTranslate } from '@/hook/UseMutationTrans';
 import { motion } from 'framer-motion';
 
-const BodyPost = ({ post, customClass = '',compact = false, onOpenPost }) => {
+const BodyPost = ({ post,onBodyClick, customClass = '',compact = false, onOpenPost }) => {
   const [showMore, setShowMore]       = useState(false)
   const [copy, setcopy]               = useState(false)
   const [currentImage, setCurrentImage] = useState(0)
@@ -89,7 +89,7 @@ const visibleTags = compact
   : normalizedTags;
   return (
 <div
-  onClick={compact ? onOpenPost : undefined}
+ onClick={onBodyClick || (compact ? onOpenPost : undefined)}
   className={`
     w-full flex flex-col
     ${compact ? "cursor-pointer" : ""}

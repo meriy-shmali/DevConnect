@@ -28,10 +28,11 @@ const PostCard = ({
   reactionClass,
   scrollToCommentId,
   autoOpenComments,
-  removeTopMargin,   // ✅ prop
-  isInProfilePage,   // ✅ prop
-  compact,           // ✅ prop
-  handleOpenPost,    // ✅ prop
+  removeTopMargin,  
+  isInProfilePage,   
+  compact,           
+  handleOpenPost,  
+  onBodyClick,  
 }) => {
   const { t } = useTranslation()
   const location = useLocation();
@@ -166,6 +167,7 @@ useEffect(() => {
         post={post}
         customClass={bodyClass}
         compact={compact}
+        onBodyClick={onBodyClick} 
         onOpenPost={compact ? handleOpenPost : undefined}
       />
       <Reaction
