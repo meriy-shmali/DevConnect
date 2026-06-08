@@ -15,7 +15,7 @@ const Register = () => {
       <div className='flex flex-col w-full max-w-[450px] lg:max-w-[500px] h-screen xl:max-w-[600px] xl:h-[900px] justify-center py-12 overflow-y-auto'>
         
         {/* عنوان الصفحة - ثابت لا يتحرك */}
-        <div className='w-full mt-8 xl:mt-30  md:mt-1 md:mb-10 mb-10 flex-shrink-0'>
+        <div className='w-full mt-1 xl:mt-30  md:mt-1 md:mb-10 mb-10 flex-shrink-0'>
           <p className='title-font dark:text-black text-3xl lg:text-4xl xl:5xl font-bold text-center md:text-start leading-tight'>
             {t('create_account')}
           </p>
