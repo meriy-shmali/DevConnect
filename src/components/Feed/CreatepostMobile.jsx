@@ -141,6 +141,12 @@ const CreatepostMobile = () => {
                     onuse={post.handleUseAi}
                     showTranslate={post.aiType === "summarize"} 
                     hideActionButtons={false} 
+                    onRegenerate={() => post.aiaction.regenerate(post.aiType, currentText)}
+    isPending={
+      post.improveMutation.isPending || 
+      post.generateMutation.isPending || 
+      post.summarizeMutation.isPending
+    }
                     onTranslate={post.aiaction?.toggleTranslation}
                     onclose={() => post.setshowModel(false)} 
                 />

@@ -205,29 +205,33 @@ const CreatepostMobile = () => {
       </div>
 
       <AiModal 
-          open={post.showModel}
-          result={post.aiResult}
-          onuse={() => {
-            if (post.aiType === "generate" || post.aiType === "improve") {
-              setContent(post.aiResult);
-            } else if (post.aiType === "summarize") {
-              setContent(prev => prev + "\n\n" + post.aiResult);
-            } else {
-              setCodeSnippet(post.aiResult);
-            }
-            post.setshowModel(false);
-          }}
-          onclose={() => post.setshowModel(false)}
-          showTranslate={post.aiType === "summarize"}
-          onTranslate={() => post.aiaction.toggleTranslation(codeSnippet)}
-          onRegenerate={() => post.aiaction.regenerate(post.aiType, post.aiType === "summarize" ? codeSnippet : content)}
-          isPending={
-            post.improveMutation.isPending ||
-            post.generateMutation.isPending ||
-            post.summarizeMutation.isPending
-          }
-          hideActionButtons={false}
-      />
+    open={post.showModel}
+    result={post.aiResult}
+    onuse={() => {
+      // ✅ تحديث النصوص الذكي بناءً على نوع العملية المدعومة في الـ Edit
+      if (post.aiType === "generate" || post.aiType === "improve") {
+        setContent(post.aiResult);
+      } else if (post.aiType === "summarize") {
+        // إذا كان تلخيص كود، نرفقه أسفل النص الحالي كشرح
+        setContent(prev => prev ? prev + "\n\n" + post.aiResult : post.aiResult);
+      }
+      post.setshowModel(false);
+    }}
+    onclose={() => post.setshowModel(false)}
+    showTranslate={post.aiType === "summarize"}
+    onTranslate={() => post.aiaction.toggleTranslation(codeSnippet)}
+    // ✅ الإصلاح الجوهري: تمرير النص/الكود المحلي الفعلي بناءً على نوع الأكشن الحالي
+    onRegenerate={() => {
+      const currentParam = post.aiType === "summarize" ? codeSnippet : content;
+      post.aiaction.regenerate(post.aiType, currentParam);
+    }}
+    isPending={
+      post.improveMutation.isPending ||
+      post.generateMutation.isPending ||
+      post.summarizeMutation.isPending
+    }
+    hideActionButtons={false}
+/>
     </div>
   );
 };
