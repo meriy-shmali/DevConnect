@@ -280,8 +280,8 @@ initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.98 }}
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                   <span className="text-sm md:text-base font-semibold dark:text-white truncate">{item.username}</span>
                                   {(item.user?.is_following || item.is_following) && (
-                                    <span className="text-[11px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-bold flex-shrink-0">
-                                      {t('followingg')}
+                                    <span className="text-[11px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold flex-shrink-0">
+                                      {t('following')}
                                     </span>
                                   )}
                                 </div>
