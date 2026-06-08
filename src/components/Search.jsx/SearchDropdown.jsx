@@ -212,7 +212,7 @@ initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.98 }}
                                       </span>
                                     )}
                                   </div>
-                                  <span className="text-xs text-gray-300 truncate">{item.user?.specialization}</span>
+                                  <span className="text-xs text-gray-400 truncate">{item.user?.specialization}</span>
                                 </div>
                               </>
                             ) : (

@@ -86,7 +86,7 @@ const Feed = () => {
         <div
           className={`
             fixed md:top-[55px] top-[70px] start-0 end-0 z-10
-            flex justify-start px-6
+            flex justify-start px-6 
             transition-all duration-500 ease-in-out
             ${showChoices ? "translate-y-0 opacity-100" : "-translate-y-24 opacity-0 pointer-events-none"}
           `}

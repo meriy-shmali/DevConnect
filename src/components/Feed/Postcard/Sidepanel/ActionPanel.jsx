@@ -14,7 +14,7 @@ const ActionPanel = ({
    console.log("pendingTranslateId:", pendingTranslateId, "item.id:", item.id, "isPending:", isPending);
 console.log(isPending)
   return (
-    <div className="flex md:text-xs text-[12px]  text-gray-500 dark:text-gray-300 space-x-4 ml-10 p-2">
+    <div className="flex md:text-xs text-[10px]  text-gray-500 dark:text-gray-300 space-x-4 ml-10 p-2">
       <button onClick={() => handleReplyClick(item)}>
        { t("reply")}
       </button>

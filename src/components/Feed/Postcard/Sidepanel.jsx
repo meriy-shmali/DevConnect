@@ -92,7 +92,7 @@ const SidebarPanel = ({ title, icon, items, highlightedCommentId, showFilter, on
         exit={{ x: isRTL ? -400 : 400 }}
         transition={{ type: "tween", duration: 0.2 }}
         className={`sidebar fixed end-0 top-0 md:-top-4 
-          w-[70%] sm:w-[400px] ${isRTL ? "md:w-[33%]" : "md:w-[30%]"} z-[10000]
+          w-[82%] sm:w-[400px] ${isRTL ? "md:w-[33%]" : "md:w-[30%]"} z-[10000]
           h-full md:h-screen 
           bg-white shadow-xl p-6 flex flex-col z-50 
           overflow-auto comment-scroll dark:bg-dark-post-background dark:border border-gray-700 
