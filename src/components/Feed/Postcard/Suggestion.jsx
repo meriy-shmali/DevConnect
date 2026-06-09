@@ -77,7 +77,7 @@ if (!users || users.length === 0) return null;
             <div className='border border-gray-300 dark:border-0 p-5 rounded-2xl shadow-xl mb-6 w-fit  h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'>
 
               <div className='flex justify-center items-center space-x-4'>
-                <img src={user.personal_photo_url} className='w-14 h-14 rounded-full'/>
+                <img src={user.personal_photo_url||"/default.jpg"} className='w-13 h-13 rounded-full'/>
 
                 <div className="w-fit"> 
                   <p className="font-semibold md:text-sm text-xs capitalize truncate dark:text-gray-100">{user.username}</p>
@@ -143,7 +143,7 @@ if (!users || users.length === 0) return null;
                        onClick={() => navigate(`/profile/${user.id}`)}>
 
                     <div className='flex justify-center gap-7 items-center '>
-                      <img src={user.personal_photo_url||'/public/images/default avatar1.jpg'} className='md:w-14 md:h-14 w-10 h-10 rounded-full'/>
+                      <img src={user.personal_photo_url||'/default.jpg'} className='md:w-14 md:h-14 w-10 h-10 rounded-full'/>
 
                       <div className="w-fit flex-col  space-y-1.5 "> 
                         <p className="font-semibold md:text-md text-sm capitalize truncate dark:text-gray-50">

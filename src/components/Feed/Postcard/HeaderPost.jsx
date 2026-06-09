@@ -77,7 +77,7 @@ const HeaderPost = ({ post, customClass = '',isInProfilePage = false }) => {
           onError={(e) => { e.target.src = "/images/default avatar1.jpg" }}
           alt="avatar"
         />
-
+<div></div>
         <div className="flex flex-col md:flex-row md:items-center md:gap-3 min-w-0">
           <div className="min-w-0">
             <p
@@ -88,7 +88,7 @@ const HeaderPost = ({ post, customClass = '',isInProfilePage = false }) => {
             </p>
             <p className="text-gray-500 dark:text-gray-400 text-[10px]">{formattedDate}</p>
           </div>
-
+</div>  <div className='ms-2 '>
           {shouldShowFollowLogic && (
             <div className="mt-1 md:mt-0 flex-shrink-0">
               <button
@@ -102,8 +102,8 @@ const HeaderPost = ({ post, customClass = '',isInProfilePage = false }) => {
                 {isfollowing ? t('following') : t('follow')}
               </button>
             </div>
-          )}
-        </div>
+          )}</div>
+        
       </div>
 
       {/* ── الجانب الأيمن: نوع المنشور + قائمة ── */}

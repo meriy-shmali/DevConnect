@@ -114,7 +114,7 @@ const ProfileHeader = ({ userData }) => {
       <div className="flex flex-col md:flex-row items-center gap-4">
         <div className="relative mt-4">
           <img   
-            src={userData?.data?.personal_photo_url || userData?.personal_photo_url || "/images/default-avatar.png"} 
+            src={userData?.data?.personal_photo_url || userData?.personal_photo_url || "/default.jpg"} 
             key={userData?.data?.personal_photo_url || userData?.personal_photo_url} 
             className={`w-26 h-26 md:w-18 md:h-18 rounded-full border-2 border-white shadow-lg object-cover transition-opacity ${isUploading ? 'opacity-50' : 'opacity-100'}`} 
           />

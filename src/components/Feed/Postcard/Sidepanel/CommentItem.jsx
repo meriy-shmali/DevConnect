@@ -6,7 +6,7 @@ import ActionPanel from "./ActionPanel";
 import { useState, useRef, useEffect } from "react";
 import { UseMe } from "@/hook/UseQueryMe";
 import { AnimatePresence, motion } from "framer-motion";
-
+import { useTranslation } from "react-i18next";
 const CommentItem = ({
   item,
   level = 0,
@@ -34,6 +34,8 @@ const CommentItem = ({
   highlightedCommentId,
   t
 }) => {
+  const{i18n}=useTranslation()
+  const isRtl = i18n.language === "ar";
   const [visibleReplies, setVisibleReplies] = useState(5);
   const { data } = UseMe();
   const [showFullComment, setShowFullComment] = useState(false);
@@ -120,10 +122,10 @@ const CommentItem = ({
         )}
       </div>
 
-      <div className="flex justify-between ms-12 items-start space-x-2">
+      <div className="flex justify-between ms-12   items-start space-x-2">
         {/* text */}
-        <div className="flex flex-col items-start flex-1">
-          <p className="md:text-md text-sm dark:text-gray-100 whitespace-pre-wrap break-words w-full">
+        <div className={`flex flex-col items-start ${isRtl?"ms-12":"me-12"} flex-1`}>
+          <p  className=" whitespace-pre-wrap md:text-md text-sm dark:text-gray-100 break-words w-full" dir="auto">
             {displayCommentContent}
             {shouldTruncateComment && (
               <button

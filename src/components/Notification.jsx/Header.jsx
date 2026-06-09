@@ -79,7 +79,7 @@ const Header = () => {
             className="flex items-center p-0.5 rounded-full hover:scale-105 transition-transform shrink-0"
           >
             <img 
-              src={userPhoto} 
+              src={userPhoto||"/default.jpg"} 
               className="h-8 w-8 md:h-9 md:w-9 rounded-full object-cover border border-gray-600 dark:border-gray-300" 
               alt="Profile"
             />
