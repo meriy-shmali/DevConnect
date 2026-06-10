@@ -49,7 +49,7 @@ const NotificationList = ({ isOpen, onClose, type }) => {
             exit={{ x: isRTL ? -400 : 400 }}
             transition={{ type: "tween", duration: 0.2 }}
             // 🌟 تعديل الكلاس هنا ليتغير right-0 إلى left-0 في حال العربي لمنع تداخل القائمة مع المحتوى
-            className={`sidebar fixed -top-4 ${isRTL? "md:w-[33%]":"md:w-[30%]"}  dark:border border-gray-700 w-[80%] h-full bg-white shadow-lg p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background ${isRTL ? 'start-0' : 'end-0'}`}
+            className={`sidebar fixed -top-6 md:-top-4  ${isRTL? "md:w-[33%]":"md:w-[30%]"}  dark:border border-gray-700 w-[80%] h-full bg-white shadow-lg p-6 flex flex-col z-20 mt-16 rounded-bl-2xl rounded-tl-2xl overflow-auto comment-scroll dark:bg-dark-post-background ${isRTL ? 'start-0' : 'end-0'}`}
           >
             {/* هيدر القائمة */}
             {/* 🌟 تم إضافة md:space-x-reverse و space-x-reverse لقلب محاذاة النص والأيقونة في العربي */}

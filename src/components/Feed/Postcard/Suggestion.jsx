@@ -74,7 +74,7 @@ if (!users || users.length === 0) return null;
             className="min-w-[200px] bg flex-shrink-0 snap-center "
             onClick={() => navigate(`/profile/${user.id}`)}
           >
-            <div className='border border-gray-300 dark:border-0 p-5 rounded-2xl shadow-xl mb-6 w-fit  h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'>
+            <div className='border border-gray-300 dark:border-0 p-5 rounded-2xl  mb-6 w-fit  h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'>
 
               <div className='flex justify-center items-center space-x-4'>
                 <img src={user.personal_photo_url||"/default.jpg"} className='w-13 h-13 rounded-full'/>
@@ -139,7 +139,7 @@ if (!users || users.length === 0) return null;
                   transition={{ duration: 0.3 }}
                 >
 
-                  <div className='border border-gray-300 dark:border-0 p-5 rounded-2xl shadow-xl mb-6 w-[240px]   h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'
+                  <div className='border border-gray-300 dark:border-0 p-5 rounded-2xl shadow-lg mb-6 w-[240px]   h-fit flex-col space-y-5 dark:bg-dark-post-background bg-white'
                        onClick={() => navigate(`/profile/${user.id}`)}>
 
                     <div className='flex justify-center gap-7 items-center '>

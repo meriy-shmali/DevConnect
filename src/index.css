@@ -389,8 +389,8 @@ html:not(.dark)::view-transition-new(root) {
   overflow-x: auto !important; /* السماح بالسكرول الأفقي فقط عند الحاجة */
 }
 .modal-scroll::-webkit-scrollbar {
-  width: 6px;  /* عرض السكرول العمودي */
-  height: 6px; /* ارتفاع السكرول الأفقي */
+  width: 4px;  /* عرض السكرول العمودي */
+  height: 4px; /* ارتفاع السكرول الأفقي */
 }
 
 .modal-scroll::-webkit-scrollbar-track {

@@ -99,9 +99,9 @@ const CreatepostMobile = () => {
 
                 <div className='flex justify-center  items-center'>
                     <div className='flex-col space-y-9'>
-                        <div className='flex-row justify-center items-center  text-2xl p-2 text-gray-200 text-center leading-12 '>
+                        <div className='flex-row justify-center items-center  text-2xl p-2 text-gray-200 text-center leading-10 '>
                             {t('help')}
-                            <Button className="text-[22px] border-2 rounded-[50px] ms-3 pt-1 pb-1 border-white text-gray-200 " onClick={() => post.setshow(!post.show)}>
+                            <Button className="text-[22px] border-2 mt-4 rounded-[50px] ms-3 pt-1 pb-1 border-white text-gray-200 " onClick={() => post.setshow(!post.show)}>
                                 {t('ai')}<BsStars className='size-[22px] text-amber-300'/>
                             </Button>
                         </div>

@@ -55,7 +55,7 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
         {/* أضفنا منع انتشار الحدث هنا لضمان استقرار المودال عند التعامل مع العناصر الفرعية وحالات التحميل */}
         <div 
           onClick={(e) => e.stopPropagation()} 
-          className="max-h-[50vh] md:max-h-[52vh] lg:max-h-[58vh] custom-scrollbar overflow-y-auto p-4 ml-3 pr-6 space-y-3"
+          className="max-h-[50vh] md:max-h-[52vh] lg:max-h-[58vh] custom-scrollbar overflow-y-auto preview-scroll p-4 ml-3 pr-6 space-y-3"
         >
           {isLoading ? (
             <div className="flex flex-col items-center py-10 text-gray-400">
@@ -78,7 +78,7 @@ const FollowersModal = ({ isOpen, onClose, followers, isLoading, error }) => {
                   className="flex items-center gap-8 p-2 hover:bg-gray-50  dark:hover:bg-gray-100/20 dark:border-none rounded-xl transition-all group cursor-pointer border border-transparent hover:border-gray-200"
                 >
                   <img 
-                    src={userDetail?.personal_photo_url || "/images/default-avatar.png"} 
+                    src={userDetail?.personal_photo_url || "/default.jpg"} 
                     className="w-12 h-12 rounded-full border border-gray-100 object-cover" 
                     alt={userDetail?.username || "user"}
                   />

@@ -20,7 +20,9 @@ const Feed = () => {
 
   const [category, setcategory] = useState("all");
   const [showChoices, setShowChoices] = useState(true);
-
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, [category]);
   const loadMoreRef = useRef(null);
   const lastScrollY = useRef(0);
 
