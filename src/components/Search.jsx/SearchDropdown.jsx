@@ -197,7 +197,7 @@ initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.98 }}
                             {activeTab === 'people' ? (
                               <>
                                 <img 
-                                  src={item.user?.personal_photo_url || item.user?.image || '/default-avatar.png'} 
+                                  src={item.user?.personal_photo_url || item.user?.image || '/default.jpg'} 
                                   className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover flex-shrink-0 border border-gray-100" 
                                   alt=""
                                 />
@@ -272,7 +272,7 @@ initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.98 }}
                           {activeTab === 'people' ? (
                             <>
                               <img 
-                                src={item.personal_photo_url || '/default-avatar.png'} 
+                                src={item.personal_photo_url || '/default.jpg'} 
                                 className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover flex-shrink-0" 
                                 alt="" 
                               />

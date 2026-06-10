@@ -43,7 +43,7 @@ const HeaderPanel = ({ user, createdAt, type, level, currentUserId }) => {
     // 💡 إزالة space-x واعتماد gap لمنع مشاكل قلب اللغات
     <div className="flex items-start gap-3 relative w-full">
       <img
-        src={displayPhoto}
+        src={displayPhoto||"/default.jpg"}
         className="md:w-9 md:h-9 h-8 w-8 rounded-full cursor-pointer flex-shrink-0 object-cover"
         onClick={() => profilePath && navigate(profilePath)}
         alt="avatar"

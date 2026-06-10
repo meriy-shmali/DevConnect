@@ -10,7 +10,7 @@ const PostSearchResult = ({ item }) => {
       {/* هيدر المنشور - مرن */}
       <div className="flex items-center gap-2 mb-1.5 flex-wrap">
         <img 
-          src={item.user?.personal_photo_url || '/default-avatar.png'} 
+          src={item.user?.personal_photo_url || '/default.jpg'} 
           className="w-7 h-7 rounded-full object-cover flex-shrink-0" 
           alt={item.user?.username}
         />

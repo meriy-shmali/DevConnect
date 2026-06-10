@@ -1,41 +1,41 @@
-
 import './App.css'
-import Welcomepage from './components/Welcomepage'
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom'; // ← أضيفي useLocation
 import { useEffect } from 'react';
 import { requestForToken } from './firebase/firebaseConfig';
 import { useNotificationMutation } from './hook/UseNotificationMutation';
 import { useNotificationLogic } from './hook/UseNotificationLogic';
-//import { RouterProvider } from 'react-router';
-//import { ToastContainer } from 'react-toastify';
-//import 'react-toastify/dist/ReactToastify.css';
-//import router from './Router';*/
+
+// ← أضيفي هاد الـ component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+  return null;
+}
 
 function NotificationWrapper({ children }) {
- useNotificationLogic(); // تفعيل المستمع هنا
-return children;
+  useNotificationLogic();
+  return children;
 }
+
 function App() {
-const { i18n } = useTranslation();
- const { updateToken } = useNotificationMutation(); 
+  const { i18n } = useTranslation();
+  const { updateToken } = useNotificationMutation();
 
- // طلب التوكن (هذا المنطق يبقى هنا لأنه يحتاج للعمل مرة واحدة عند التشغيل)
-useEffect(() => {
- if (updateToken?.mutate) {
- requestForToken(updateToken);
- }
-}, [i18n.language, updateToken?.mutate]); 
- return ( 
+  useEffect(() => {
+    if (updateToken?.mutate) {
+      requestForToken(updateToken);
+    }
+  }, [i18n.language, updateToken?.mutate]);
 
- <> 
-<Outlet /> 
- 
- </>
-
-
- )
+  return (
+    <>
+      <ScrollToTop /> {/* ← أضيفيها هون */}
+      <Outlet />
+    </>
+  );
 }
 
-export default App
-
+export default App;

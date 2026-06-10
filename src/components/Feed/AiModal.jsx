@@ -36,10 +36,10 @@ const AiModal = ({ open, result, onuse, onclose, onRegenerate, isPending, onTran
                     <button
                       onClick={onTranslate}
                       disabled={isPending}
-                      className="flex items-center gap-2 px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg disabled:opacity-50 transition-colors"
+                      className="flex items-center gap-2 md:px-4 md:py-2 px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-700 md:rounded-lg rounded-md disabled:opacity-50 transition-colors"
                       title="Translate description"
                     >
-                      <Languages className={`size-6 text-blue-800 transition-colors ${isPending ? "animate-pulse" : ""}`} />
+                      <Languages className={`md:size-6 size-4 text-blue-800 transition-colors ${isPending ? "animate-pulse" : ""}`} />
                     </button>
                   )}
                 </div> 
