@@ -36,6 +36,34 @@ const { data: fetchedReplies = [] } = usegetreplies(activeCommentId, !!activeCom
 };
 const [counts, setCounts] = useState({});
 const [active, setActive] = useState({});
+// بعد تعريف counts و active مباشرة
+useEffect(() => {
+  if (!items || items.length === 0) return;
+
+  setCounts(prev => {
+    const next = { ...prev };
+    items.forEach(item => {
+      // فقط إذا ما في قيمة محلية موجودة (ما نكتب فوق التعديل اليدوي)
+      if (next[item.id] === undefined) {
+        next[item.id] = {
+          useful: item.likes ?? 0,
+          not_useful: item.dislikes ?? 0,
+        };
+      }
+    });
+    return next;
+  });
+
+  setActive(prev => {
+    const next = { ...prev };
+    items.forEach(item => {
+      if (next[item.id] === undefined) {
+        next[item.id] = item.userReaction ?? null;
+      }
+    });
+    return next;
+  });
+}, [items]);
 // التعديل في useEffect الخاص بالردود
 useEffect(() => {
   if (activeCommentId && fetchedReplies && fetchedReplies.length > 0) {
@@ -332,57 +360,50 @@ editComment.mutate({ commentId: parentId, content: newText }, {
     }
   );
 };
-
-  const handleReaction = (commentId, type) => {
-   const current = active[commentId]; // like | dislike | null
-
+const handleReaction = (commentId, type) => {
+  const current = active[commentId];
   let reaction_type = type;
+  if (current === type) reaction_type = null;
 
-  // إذا ضغط نفس الزر → إلغاء التفاعل
-  if (current === type) {
-    reaction_type = null;
-  }
+  // ✅ احسب القيم الجديدة هنا قبل أي setState
+  const prevCounts = counts[commentId] || { useful: 0, not_useful: 0 };
+  let useful = prevCounts.useful;
+  let not_useful = prevCounts.not_useful;
+  if (current === "useful") useful--;
+  if (current === "not_useful") not_useful--;
+  if (reaction_type === "useful") useful++;
+  if (reaction_type === "not_useful") not_useful++;
+  const newCounts = { useful, not_useful };
 
   // تحديث UI فوراً
-  setActive(prev => ({
-    ...prev,
-    [commentId]: reaction_type
-  }));
+  setActive(prev => ({ ...prev, [commentId]: reaction_type }));
+  setCounts(prev => ({ ...prev, [commentId]: newCounts }));
 
-  setCounts(prev => {
-    const prevCounts = prev[commentId] || { useful: 0, not_useful: 0 };
-
-    let useful = prevCounts.useful;
-    let not_useful = prevCounts.not_useful;
-
-    // إزالة التفاعل السابق
-    if (current === "useful") useful--;
-    if (current === "not_useful") not_useful--;
-
-    // إضافة التفاعل الجديد
-    if (reaction_type === "useful") useful++;
-    if (reaction_type === "not_useful") not_useful++;
-
-    return {
-      ...prev,
-      [commentId]: {
-        useful,
-        not_useful
-      }
-    };
-  });
   commentreactionMutation.mutate(
+    { commentId, reaction_type },
     {
-      commentId,
-      reaction_type
-    },
-    {
-      onSuccess: (res) => {
-       
+      onSuccess: () => {
+        // ✅ هون عم نستخدم newCounts مش counts (اللي هو stale)
+        queryClient.setQueriesData({ queryKey: ['comment', postId] }, (old) => {
+          const update = (list) =>
+            list.map(c =>
+              c.id === commentId
+                ? {
+                    ...c,
+                    useful_count: newCounts.useful,
+                    not_useful_count: newCounts.not_useful,
+                    user_reaction: reaction_type,
+                  }
+                : c
+            );
+          if (!old) return old;
+          if (old.data) return { ...old, data: update(old.data) };
+          return Array.isArray(old) ? update(old) : old;
+        });
       }
     }
   );
-  };
+};
   
 const handleTranslate = (comment) => {
   const id = comment.id;
